@@ -8,6 +8,8 @@ import java.util.List;
 public class Intersector {
 
 	private final int recursiveDepth;
+	private boolean cutOffSmallLeaf = false;
+	private double cutOffLeafSize = 1.0d;
 
 	public Intersector() {
 		recursiveDepth = 10;
@@ -15,6 +17,12 @@ public class Intersector {
 
 	public Intersector(int recursiveDepth) {
 		this.recursiveDepth = recursiveDepth;
+	}
+
+	public Intersector(int recursiveDepth, double cutOffLeafSize) {
+		this.recursiveDepth = recursiveDepth;
+		cutOffSmallLeaf = true;
+		this.cutOffLeafSize = cutOffLeafSize;
 	}
 
 	public boolean intersect(Shape a, Shape b) {
@@ -26,6 +34,10 @@ public class Intersector {
 	private boolean intersectsRecursive(Shape a, Rectangle2D aBox, Shape b, Rectangle2D bBox, int depth) {
 		if (depth <= 0)
 			return true; // hit our depth check - call it a yes
+		if (cutOffSmallLeaf
+				&& (aBox.getWidth() < cutOffLeafSize || aBox.getHeight() < cutOffLeafSize || bBox.getWidth() < cutOffLeafSize || bBox
+						.getHeight() < cutOffLeafSize))
+			return true; // box is pretty small now - call it a yes
 		if (!a.intersects(aBox) || !b.intersects(bBox))
 			return false; // One box is just whitespace, no intersect here, prune!!
 		if (!aBox.intersects(bBox))
