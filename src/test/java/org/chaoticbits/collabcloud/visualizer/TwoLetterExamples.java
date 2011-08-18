@@ -13,8 +13,8 @@ import javax.imageio.ImageIO;
 
 public enum TwoLetterExamples {
 
-	AM_SIMPLE_NOT_INTERSECT(bigA(), bigM()), AM_INSIDE_NOT_INTERSECT(bigA(), insideM()), AM_INTERSECT(
-			bigA(), intersectM());
+	AM_SIMPLE_NOT_INTERSECT(bigA(), bigM()), AM_INSIDE_NOT_INTERSECT(bigA(), insideM()), AM_INTERSECT(bigA(), intersectM()), AM_INTERSECT2(
+			bigA(), intersectM2()), AM_REALLY_CLOSE_NO_INTERSECT(bigA(), reallyCloseM());
 
 	public Shape getFirst() {
 		return first;
@@ -63,6 +63,15 @@ public enum TwoLetterExamples {
 	private static Shape intersectM() {
 		Font deriveFont = getFont().deriveFont(45f);
 		return makeShape(deriveFont, getFRC(), "m", 38, 85);
+	}
+
+	private static Shape intersectM2() {
+		return makeShape(getFont(), getFRC(), "m", 10, 100);
+	}
+
+	private static Shape reallyCloseM() {
+		Font deriveFont = getFont().deriveFont(45f);
+		return makeShape(deriveFont, getFRC(), "m", 82, 70);
 	}
 
 	private static Shape makeShape(Font font, FontRenderContext frc, String string, float x, float y) {
