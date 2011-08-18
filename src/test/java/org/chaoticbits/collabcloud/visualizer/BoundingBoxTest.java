@@ -1,13 +1,7 @@
 package org.chaoticbits.collabcloud.visualizer;
 
-import static org.junit.Assert.*;
-
-import java.awt.Point;
-import java.awt.font.GlyphVector;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class BoundingBoxTest {
 
