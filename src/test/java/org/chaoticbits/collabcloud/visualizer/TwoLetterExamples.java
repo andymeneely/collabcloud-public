@@ -16,6 +16,14 @@ public enum TwoLetterExamples {
 	AM_SIMPLE_NOT_INTERSECT(bigA(), bigM()), AM_INSIDE_NOT_INTERSECT(bigA(), insideM()), AM_INTERSECT(
 			bigA(), intersectM());
 
+	public Shape getFirst() {
+		return first;
+	}
+
+	public Shape getSecond() {
+		return second;
+	};
+
 	private static Font FONT;
 	private static FontRenderContext FRC;
 
