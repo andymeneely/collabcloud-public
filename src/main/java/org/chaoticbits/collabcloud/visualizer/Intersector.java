@@ -2,13 +2,15 @@ package org.chaoticbits.collabcloud.visualizer;
 
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Intersector {
 
 	private final int recursiveDepth;
 
 	public Intersector() {
-		recursiveDepth = 20;
+		recursiveDepth = 10;
 	}
 
 	public Intersector(int recursiveDepth) {
@@ -30,22 +32,22 @@ public class Intersector {
 			return false; // Boxes don't intersect each other, no intersect here, prune!
 
 		// Ok, shapes intersect the boxes and boxes intersect each other - keep diving down
-		Rectangle2D aBoxUL = new Rectangle2D.Double(aBox.getX(), aBox.getY(), aBox.getWidth() / 2.0d, aBox.getHeight() / 2.0d);
-		Rectangle2D bBoxUL = new Rectangle2D.Double(bBox.getX(), bBox.getY(), bBox.getWidth() / 2.0d, bBox.getHeight() / 2.0d);
+		List<Rectangle2D> aBoxes = makeBoxes(aBox);
+		List<Rectangle2D> bBoxes = makeBoxes(bBox);
+		// check each sub-box with each other sub-box
+		for (Rectangle2D aSubBox : aBoxes)
+			for (Rectangle2D bSubBox : bBoxes)
+				if (intersectsRecursive(a, aSubBox, b, bSubBox, depth - 1))
+					return true; // Found a hit recursively. Done!
+		return false; // no such intersections found recursively - we're done!
+	}
 
-		Rectangle2D aBoxUR = new Rectangle2D.Double(aBox.getCenterX(), aBox.getY(), aBox.getWidth() / 2.0d, aBox.getHeight() / 2.0d);
-		Rectangle2D bBoxUR = new Rectangle2D.Double(bBox.getCenterX(), bBox.getY(), bBox.getWidth() / 2.0d, bBox.getHeight() / 2.0d);
-
-		Rectangle2D aBoxLL = new Rectangle2D.Double(aBox.getX(), aBox.getCenterY(), aBox.getWidth() / 2.0d, aBox.getHeight() / 2.0d);
-		Rectangle2D bBoxLL = new Rectangle2D.Double(bBox.getX(), bBox.getCenterY(), bBox.getWidth() / 2.0d, bBox.getHeight() / 2.0d);
-
-		Rectangle2D aBoxLR = new Rectangle2D.Double(aBox.getCenterX(), aBox.getCenterY(), aBox.getWidth() / 2.0d, aBox.getHeight() / 2.0d);
-		Rectangle2D bBoxLR = new Rectangle2D.Double(bBox.getCenterX(), bBox.getCenterY(), bBox.getWidth() / 2.0d, bBox.getHeight() / 2.0d);
-
-		boolean intersectsRecursiveUL = intersectsRecursive(a, aBoxUL, b, bBoxUL, depth - 1);
-		boolean intersectsRecursiveUR = intersectsRecursive(a, aBoxUR, b, bBoxUR, depth - 1);
-		boolean intersectsRecursiveLL = intersectsRecursive(a, aBoxLL, b, bBoxLL, depth - 1);
-		boolean intersectsRecursiveLR = intersectsRecursive(a, aBoxLR, b, bBoxLR, depth - 1);
-		return intersectsRecursiveUL || intersectsRecursiveUR || intersectsRecursiveLL || intersectsRecursiveLR;
+	private List<Rectangle2D> makeBoxes(Rectangle2D box) {
+		List<Rectangle2D> boxes = new ArrayList<Rectangle2D>(4);
+		boxes.add(new Rectangle2D.Double(box.getX(), box.getY(), box.getWidth() / 2.0d, box.getHeight() / 2.0d)); // UL
+		boxes.add(new Rectangle2D.Double(box.getCenterX(), box.getY(), box.getWidth() / 2.0d, box.getHeight() / 2.0d));// UR
+		boxes.add(new Rectangle2D.Double(box.getX(), box.getCenterY(), box.getWidth() / 2.0d, box.getHeight() / 2.0d)); // LL
+		boxes.add(new Rectangle2D.Double(box.getCenterX(), box.getCenterY(), box.getWidth() / 2.0d, box.getHeight() / 2.0d));// LR
+		return boxes;
 	}
 }
