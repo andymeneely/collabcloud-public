@@ -45,10 +45,5 @@
 			<artifactId>javaparser</artifactId>
 			<version>1.0.8</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.opennlp</groupId>
-			<artifactId>opennlp-tools</artifactId>
-			<version>1.5.1-incubating</version>
-		</dependency>
 	</dependencies>
 </project>

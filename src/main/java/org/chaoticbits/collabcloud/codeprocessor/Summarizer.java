@@ -1,12 +1,9 @@
 package org.chaoticbits.collabcloud.codeprocessor;
 
-import japa.parser.ast.BlockComment;
 import japa.parser.ast.Comment;
 import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.LineComment;
 import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
-import japa.parser.ast.body.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.expr.MethodCallExpr;
 
@@ -15,8 +12,6 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
-
-import opennlp.tools.tokenize.SimpleTokenizer;
 
 public class Summarizer extends ReturnArgVisitorAdapter<CloudWeights> {
 	private static final String WEIGHT_PROPS_PREFIX = "org.chaoticbits.collabcloud.weights.";
