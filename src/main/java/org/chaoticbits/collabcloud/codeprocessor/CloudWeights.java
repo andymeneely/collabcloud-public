@@ -29,4 +29,13 @@ public class CloudWeights {
 		weights.put(identifier, get(identifier) + 1.0d);
 	}
 
+	/**
+	 * Increments the weight for that identifier by 1.0. If the identifier does not exist, starts at 1.0.
+	 * @param identifier
+	 * @param by
+	 */
+	public void increment(String identifier, double by) {
+		weights.put(identifier, get(identifier) + by);
+	}
+
 }

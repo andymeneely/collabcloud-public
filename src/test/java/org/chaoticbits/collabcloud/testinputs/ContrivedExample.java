@@ -8,6 +8,7 @@ public class ContrivedExample {
 		methodCalledMultipleTimes();
 		methodCalledMultipleTimes();
 		methodCalledMultipleTimes();
+		methodCalledMultipleTimes();
 		Math.random();
 	}
 

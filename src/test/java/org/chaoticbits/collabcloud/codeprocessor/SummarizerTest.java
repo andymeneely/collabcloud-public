@@ -39,31 +39,37 @@ public class SummarizerTest {
 	@Test
 	public void methodCalls() throws Exception {
 		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
-		assertEquals("methods called 4 times, declared once ", 5.0d, weights.get("methodCalledMultipleTimes"), 0.0000001);
+		assertEquals("methods called 5 times (*0.25), declared once ", 2.25d, weights.get("methodCalledMultipleTimes"), 0.0000001);
 	}
 	
 	@Test
 	public void externalMethodCalls() throws Exception {
 		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
-		assertEquals("external method calls", 1.0d, weights.get("random"), 0.0000001);
+		assertEquals("external method calls", 0.25d, weights.get("random"), 0.0000001);
 	}
 	
 	@Test
 	public void inlineComments() throws Exception {
 		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
-		assertEquals("inline comments are included", 1.0d, weights.get("inline!"), 0.0000001);
+		assertEquals("inline comments are included", 0.25d, weights.get("inline!"), 0.0000001);
 	}
 	
 	@Test
 	public void blockComments() throws Exception {
 		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
-		assertEquals("block comments are included", 1.0d, weights.get("block!"), 0.0000001);
+		assertEquals("block comments are included", 0.25d, weights.get("block!"), 0.0000001);
 	}
 	
 	@Test
 	public void javadocComments() throws Exception {
 		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
-		assertEquals("javadoc comments are included", 2.0d, weights.get("* Javadoc!"), 0.0000001);
+		assertEquals("javadoc comments are included", 0.5d, weights.get("* Javadoc!"), 0.0000001);
+	}
+	
+	@Test
+	public void classOrInterfaceName() throws Exception {
+		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
+		assertEquals("include the compilation unit name", 2.0d, weights.get("ContrivedExample"), 0.0000001);
 	}
 
 	private File source(String name) {
