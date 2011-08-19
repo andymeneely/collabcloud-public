@@ -11,9 +11,7 @@ public class ContrivedExample {
 		Math.random();
 	}
 
-	/*
-	 * Block!
-	 */
+	/* block! */
 	private static void methodCalledMultipleTimes() {
 		int localVariable = 0;
 		localVariable = localVariable + 1;

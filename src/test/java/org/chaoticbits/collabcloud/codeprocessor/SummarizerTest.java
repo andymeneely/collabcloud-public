@@ -2,8 +2,11 @@ package org.chaoticbits.collabcloud.codeprocessor;
 
 import static org.junit.Assert.assertEquals;
 import japa.parser.JavaParser;
+import japa.parser.ParseException;
+import japa.parser.ast.CompilationUnit;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.Test;
 
@@ -42,7 +45,7 @@ public class SummarizerTest {
 	@Test
 	public void externalMethodCalls() throws Exception {
 		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
-		assertEquals("external method calls", 1.0d, weights.get("Math.random"), 0.0000001);
+		assertEquals("external method calls", 1.0d, weights.get("random"), 0.0000001);
 	}
 	
 	@Test
@@ -60,11 +63,16 @@ public class SummarizerTest {
 	@Test
 	public void javadocComments() throws Exception {
 		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
-		assertEquals("javadoc comments are included", 1.0d, weights.get("javadoc!"), 0.0000001);
+		assertEquals("javadoc comments are included", 2.0d, weights.get("* Javadoc!"), 0.0000001);
 	}
 
 	private File source(String name) {
 		return new File("src/test/java/org/chaoticbits/collabcloud/testinputs/" + name);
+	}
+	
+	public static void main(String[] args) throws ParseException, IOException {
+		CompilationUnit unit = JavaParser.parse(new File("src/test/java/org/chaoticbits/collabcloud/testinputs/ContrivedExample.java"));
+		System.out.println(unit);
 	}
 
 }
