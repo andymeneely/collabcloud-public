@@ -1,7 +1,11 @@
 package org.chaoticbits.collabcloud.codeprocessor;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Map.Entry;
@@ -50,4 +54,18 @@ public class CloudWeights {
 		return str;
 	}
 
+	/**
+	 * Return a list of entries in the map, sorted by the weight, descending.
+	 * @return
+	 */
+	public List<Entry<String, Double>> sortedEntries() {
+		List<Entry<String, Double>> entries = new ArrayList<Map.Entry<String, Double>>();
+		entries.addAll(weights.entrySet());
+		Collections.sort(entries, new Comparator<Entry<String, Double>>() {
+			public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
+				return o2.getValue().compareTo(o1.getValue());
+			}
+		});
+		return entries;
+	}
 }
