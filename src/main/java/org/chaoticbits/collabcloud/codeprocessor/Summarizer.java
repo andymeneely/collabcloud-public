@@ -86,33 +86,34 @@ public class Summarizer extends ReturnArgVisitorAdapter<CloudWeights> {
 		return weights;
 	}
 
-	@Override
-	public CloudWeights visit(BlockComment n, CloudWeights weights) {
-		super.visit(n, weights);
-		// TODO this should be chopped up using cue.language
-		return tokenizeComment(n, weights);
-	}
-
-	@Override
-	public CloudWeights visit(LineComment n, CloudWeights weights) {
-		super.visit(n, weights);
-		return tokenizeComment(n, weights);
-	}
-
-	@Override
-	public CloudWeights visit(JavadocComment n, CloudWeights weights) {
-		super.visit(n, weights);
-		return tokenizeComment(n, weights);
-	}
-
-	private CloudWeights tokenizeComment(Comment n, CloudWeights weights) {
-		String[] tokenize = SimpleTokenizer.INSTANCE.tokenize(n.getContent());
-		for (String string : tokenize) {
-			String token = string.toLowerCase();
-			if(!excludeWords.contains(token))
-				weights.increment(token, weight("commentToken"));
-		}
-		return weights;
-	}
+	// TODO Tokenize and parse comments in a smarter way, e.g. ignore @param and @author tags. Ignore Java
+	// allusions, e.g. IOException
+	// private CloudWeights tokenizeComment(Comment n, CloudWeights weights) {
+	// String[] tokenize = SimpleTokenizer.INSTANCE.tokenize(n.getContent());
+	//
+	// for (String string : tokenize) {
+	// String token = string.toLowerCase();
+	// if(!excludeWords.contains(token))
+	// weights.increment(token, weight("commentToken"));
+	// }
+	// return weights;
+	// }
+	// @Override
+	// public CloudWeights visit(BlockComment n, CloudWeights weights) {
+	// super.visit(n, weights);
+	// return tokenizeComment(n, weights);
+	// }
+	//
+	// @Override
+	// public CloudWeights visit(LineComment n, CloudWeights weights) {
+	// super.visit(n, weights);
+	// return tokenizeComment(n, weights);
+	// }
+	//
+	// @Override
+	// public CloudWeights visit(JavadocComment n, CloudWeights weights) {
+	// super.visit(n, weights);
+	// return tokenizeComment(n, weights);
+	// }
 
 }
