@@ -10,6 +10,14 @@ import japa.parser.ast.expr.MethodCallExpr;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * A visitor that travels the AST of a Java compilation unit and counts stuff that is useful in summarizing
+ * that unit. For example, the name of the unit, the names of methods declared, called, etc. This returns a
+ * {@link CloudWeights} object, which is basically a map of the weights.
+ * 
+ * @author andy
+ * 
+ */
 public class Summarizer extends ReturnArgVisitorAdapter<CloudWeights> {
 	private static final String WEIGHT_PROPS_PREFIX = "org.chaoticbits.collabcloud.weights.";
 	private Properties props;
@@ -67,6 +75,7 @@ public class Summarizer extends ReturnArgVisitorAdapter<CloudWeights> {
 		weights.increment(n.getName(), weight("enumType"));
 		return weights;
 	}
+
 	@Override
 	public CloudWeights visit(EnumConstantDeclaration n, CloudWeights weights) {
 		super.visit(n, weights);
