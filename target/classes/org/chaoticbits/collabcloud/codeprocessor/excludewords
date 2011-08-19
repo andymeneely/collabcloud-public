@@ -194,3 +194,6 @@ hashCode
 clone
 finalize
 equals
+printStackTrace
+valueOf
+println

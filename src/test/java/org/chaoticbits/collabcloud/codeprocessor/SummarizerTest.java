@@ -49,27 +49,34 @@ public class SummarizerTest {
 	}
 	
 	@Test
-	public void inlineComments() throws Exception {
-		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
-		assertEquals("inline comments are included", 0.25d, weights.get("inline!"), 0.0000001);
-	}
-	
-	@Test
-	public void blockComments() throws Exception {
-		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
-		assertEquals("block comments are included", 0.25d, weights.get("block!"), 0.0000001);
-	}
-	
-	@Test
-	public void javadocComments() throws Exception {
-		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
-		assertEquals("javadoc comments are included", 0.5d, weights.get("* Javadoc!"), 0.0000001);
-	}
-	
-	@Test
 	public void classOrInterfaceName() throws Exception {
 		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
 		assertEquals("include the compilation unit name", 2.0d, weights.get("ContrivedExample"), 0.0000001);
+	}
+	
+	@Test
+	public void enumDeclaration() throws Exception {
+		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
+		assertEquals("include the enum declaration", 0.6d, weights.get("FRUIT"), 0.0000001);
+	}
+	
+	@Test
+	public void enumConstants() throws Exception {
+		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
+		assertEquals("include the enum declaration", 0.25d, weights.get("Apples"), 0.0000001);
+		assertEquals("include the enum declaration", 0.25d, weights.get("Bananas"), 0.0000001);
+		assertEquals("include the enum declaration", 0.25d, weights.get("Oranges"), 0.0000001);
+	}
+	
+	@Test
+	public void ignoreToString() throws Exception {
+		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
+		assertEquals("ignore toString declaration and call", 0.0d, weights.get("toString"), 0.0000001);
+	}
+	@Test
+	public void ignoreHashCode() throws Exception {
+		CloudWeights weights = JavaParser.parse(source("ContrivedExample.java")).accept(new Summarizer(), new CloudWeights());
+		assertEquals("ignore hashCode declaration and call", 0.0d, weights.get("hashCode"), 0.0000001);
 	}
 
 	private File source(String name) {

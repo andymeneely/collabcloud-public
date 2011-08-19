@@ -1,22 +1,18 @@
 package org.chaoticbits.collabcloud.codeprocessor;
 
-import japa.parser.ast.Comment;
-import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
+import japa.parser.ast.body.EnumConstantDeclaration;
+import japa.parser.ast.body.EnumDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.expr.MethodCallExpr;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Properties;
-import java.util.Scanner;
-import java.util.Set;
 
 public class Summarizer extends ReturnArgVisitorAdapter<CloudWeights> {
 	private static final String WEIGHT_PROPS_PREFIX = "org.chaoticbits.collabcloud.weights.";
 	private Properties props;
-	private Set<String> excludeWords;
 
 	public Summarizer() {
 		props = new Properties();
@@ -26,10 +22,6 @@ public class Summarizer extends ReturnArgVisitorAdapter<CloudWeights> {
 			System.err.println("No weights.properties found in this package");
 			e.printStackTrace();
 		}
-		excludeWords = new HashSet<String>();
-		Scanner scanner = new Scanner(getClass().getResourceAsStream("excludewords"));
-		while (scanner.hasNextLine())
-			excludeWords.add(scanner.nextLine());
 	}
 
 	private double weight(String key) {
@@ -70,14 +62,15 @@ public class Summarizer extends ReturnArgVisitorAdapter<CloudWeights> {
 	}
 
 	@Override
-	public CloudWeights visit(CompilationUnit n, CloudWeights weights) {
+	public CloudWeights visit(EnumDeclaration n, CloudWeights weights) {
 		super.visit(n, weights);
-		if (n.getComments() != null) {
-			for (Comment comment : n.getComments()) {
-				// TODO this should be chopped up using cue.language
-				comment.accept(this, weights);
-			}
-		}
+		weights.increment(n.getName(), weight("enumType"));
+		return weights;
+	}
+	@Override
+	public CloudWeights visit(EnumConstantDeclaration n, CloudWeights weights) {
+		super.visit(n, weights);
+		weights.increment(n.getName(), weight("enumConstant"));
 		return weights;
 	}
 
@@ -109,6 +102,17 @@ public class Summarizer extends ReturnArgVisitorAdapter<CloudWeights> {
 	// public CloudWeights visit(JavadocComment n, CloudWeights weights) {
 	// super.visit(n, weights);
 	// return tokenizeComment(n, weights);
+	// }
+	// @Override
+	// public CloudWeights visit(CompilationUnit n, CloudWeights weights) {
+	// super.visit(n, weights);
+	// if (n.getComments() != null) {
+	// for (Comment comment : n.getComments()) {
+	// // TODO this should be chopped up using cue.language
+	// comment.accept(this, weights);
+	// }
+	// }
+	// return weights;
 	// }
 
 }
