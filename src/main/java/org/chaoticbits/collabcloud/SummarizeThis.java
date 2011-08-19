@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.codeprocessor;
+package org.chaoticbits.collabcloud;
 
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
@@ -7,6 +7,9 @@ import japa.parser.ast.CompilationUnit;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+
+import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
+import org.chaoticbits.collabcloud.codeprocessor.Summarizer;
 
 public class SummarizeThis {
 
