@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.codeprocessor;
+package org.chaoticbits.collabcloud.codeprocessor.java;
 
 import japa.parser.ast.BlockComment;
 import japa.parser.ast.CompilationUnit;

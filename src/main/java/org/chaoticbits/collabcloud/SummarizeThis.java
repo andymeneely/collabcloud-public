@@ -25,7 +25,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
-import org.chaoticbits.collabcloud.codeprocessor.Summarizer;
+import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummarizeVisitor;
 import org.chaoticbits.collabcloud.visualizer.Intersector;
 import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 
@@ -57,7 +57,7 @@ public class SummarizeThis {
 		CloudWeights weights = new CloudWeights();
 		for (File file : files) {
 			CompilationUnit unit = JavaParser.parse(file);
-			weights = unit.accept(new Summarizer(), weights);
+			weights = unit.accept(new JavaSummarizeVisitor(), weights);
 		}
 		return weights;
 	}

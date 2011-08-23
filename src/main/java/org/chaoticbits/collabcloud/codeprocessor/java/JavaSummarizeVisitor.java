@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.codeprocessor;
+package org.chaoticbits.collabcloud.codeprocessor.java;
 
 import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
@@ -10,6 +10,8 @@ import japa.parser.ast.expr.MethodCallExpr;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
+
 /**
  * A visitor that travels the AST of a Java compilation unit and counts stuff that is useful in summarizing
  * that unit. For example, the name of the unit, the names of methods declared, called, etc. This returns a
@@ -18,11 +20,11 @@ import java.util.Properties;
  * @author andy
  * 
  */
-public class Summarizer extends ReturnArgVisitorAdapter<CloudWeights> {
+public class JavaSummarizeVisitor extends ReturnArgVisitorAdapter<CloudWeights> {
 	private static final String WEIGHT_PROPS_PREFIX = "org.chaoticbits.collabcloud.weights.";
 	private Properties props;
 
-	public Summarizer() {
+	public JavaSummarizeVisitor() {
 		props = new Properties();
 		try {
 			props.load(getClass().getResourceAsStream("weights.properties"));
