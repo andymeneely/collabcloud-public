@@ -80,7 +80,7 @@ public class SummarizeRepo {
 		g2d.fillRect(0, 0, 800, 800);
 		g2d.setColor(Color.DARK_GRAY);
 		g2d.drawRect(0, 0, WIDTH - 1, HEIGHT - 1);
-		Font font = new Font("Courier New", Font.PLAIN, 150);
+		Font font = new Font("Courier New", Font.BOLD, 150);
 		FontRenderContext frc = new FontRenderContext(null, true, true);
 		Set<Shape> placedShapes = new HashSet<Shape>();
 		Intersector intersector = new Intersector(10, 15.0d);
