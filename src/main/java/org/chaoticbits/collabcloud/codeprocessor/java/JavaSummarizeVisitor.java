@@ -21,7 +21,7 @@ import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
  * 
  */
 public class JavaSummarizeVisitor extends ReturnArgVisitorAdapter<CloudWeights> {
-	private static final String WEIGHT_PROPS_PREFIX = "org.chaoticbits.collabcloud.weights.";
+	private static final String WEIGHT_PROPS_PREFIX = "org.chaoticbits.collabcloud.weights.java.";
 	private Properties props;
 
 	public JavaSummarizeVisitor() {

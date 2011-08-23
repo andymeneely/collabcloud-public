@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * A simple wrapper for the table of identifiers and mappings to weights
@@ -45,6 +46,17 @@ public class CloudWeights {
 			weights.put(identifier, get(identifier) + by);
 	}
 
+	/**
+	 * Multiplies the weight for that identifier by the specified number. If the identifier does not exist,
+	 * starts at 0.0*by. Checks the excludewords list as well
+	 * @param identifier
+	 * @param by
+	 */
+	public void multiply(String identifier, double by) {
+		if (!excludeWords.contains(identifier))
+			weights.put(identifier, get(identifier) * by);
+	}
+
 	@Override
 	public String toString() {
 		String str = "";
@@ -67,5 +79,13 @@ public class CloudWeights {
 			}
 		});
 		return entries;
+	}
+
+	/**
+	 * Return a list of entries in the map, as is
+	 * @return
+	 */
+	public Set<Entry<String, Double>> unsortedEntries() {
+		return weights.entrySet();
 	}
 }
