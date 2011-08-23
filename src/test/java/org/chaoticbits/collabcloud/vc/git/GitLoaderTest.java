@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class GitLoaderTest {
 
-	private static final String SECOND_COMMIT_ID = "bac7225dfb6ce2eb84c38f019defad21197514b6";
+	public static final String SECOND_COMMIT_ID = "bac7225dfb6ce2eb84c38f019defad21197514b6";
 
 	private static final File GIT_DIR = new File("testgitrepo/.git");
 

@@ -17,6 +17,7 @@ import org.chaoticbits.collabcloud.vc.IVersionControlLoader;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
+import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
@@ -25,7 +26,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 public class GitLoader implements IVersionControlLoader {
 
-	private static final double IN_DIFF_MULTIPLIER = 2.0;
+	private static final double IN_DIFF_MULTIPLIER = 1.1;
 	
 
 	private FileRepository repo;
@@ -33,6 +34,11 @@ public class GitLoader implements IVersionControlLoader {
 
 	public GitLoader(File repoDir) throws IOException {
 		repo = new FileRepositoryBuilder().setGitDir(repoDir).readEnvironment().findGitDir().build();
+	}
+	
+	public GitLoader(File repoDir, String sinceSHA1) throws IOException {
+		repo = new FileRepositoryBuilder().setGitDir(repoDir).readEnvironment().findGitDir().build();
+		since = repo.resolve(sinceSHA1);
 	}
 
 	public Set<Developer> getDevelopers() {
@@ -87,7 +93,8 @@ public class GitLoader implements IVersionControlLoader {
 	private RevWalk loadRevWalk() {
 		RevWalk rw = new RevWalk(repo);
 		try {
-			rw.markStart(rw.parseCommit(repo.resolve("HEAD")));
+			ObjectId head = repo.resolve(Constants.HEAD);
+			rw.markStart(rw.parseCommit(head));
 			rw.markUninteresting(rw.parseCommit(since));
 		} catch (MissingObjectException e) {
 			System.err.println("Error loading git repo.");

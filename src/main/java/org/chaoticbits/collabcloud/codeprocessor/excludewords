@@ -197,3 +197,4 @@ equals
 printStackTrace
 valueOf
 println
+copyOf
