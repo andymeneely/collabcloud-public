@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.gitconnect;
+package org.chaoticbits.collabcloud.vc.git;
 
 import static org.junit.Assert.assertEquals;
 
