@@ -1,21 +1,29 @@
 package org.chaoticbits.collabcloud.gitconnect;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.LogCommand;
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.diff.MyersDiff;
+import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.StopWalkException;
+import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.TreeWalk;
 import org.junit.Test;
 
 public class GetDevelopersTest {
@@ -58,9 +66,19 @@ public class GetDevelopersTest {
 				return this;
 			}
 		});
-		for (RevCommit revCommit : rw) {
-			System.out.println(revCommit.getCommitTime() + "\t" + revCommit.getFullMessage());
-		}
+		// for (RevCommit revCommit : rw) {
+		// System.out.println(revCommit.getCommitTime() + "\t" + revCommit.getFullMessage());
+		// }
+	}
 
+	@Test
+	public void printDiff() throws Exception {
+		FileRepository repo = new FileRepositoryBuilder().setGitDir(GIT_DIR).readEnvironment().findGitDir().build();
+		ObjectId until = repo.resolve("HEAD");
+		RevCommit headCommit = new RevWalk(repo).parseCommit(until);
+		DiffFormatter df = new DiffFormatter(System.out);
+		df.setRepository(repo);
+		df.format(headCommit.getParent(0), headCommit);
+		System.out.flush();
 	}
 }
