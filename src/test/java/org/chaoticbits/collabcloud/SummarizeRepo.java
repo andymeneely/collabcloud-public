@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -98,7 +99,7 @@ public class SummarizeRepo {
 				boolean canPlace = true;
 				Point2D next = itr.next();
 				Shape nextShape = glyph.getOutline((float) next.getX(), (float) next.getY());
-				// TODO Need a priority queue for quick cache-hits
+				// TODO Need a priority queue for quick cache-hits		
 				for (Shape placed : placedShapes) {
 					if (intersector.intersect(nextShape, placed)) {
 						canPlace = false;

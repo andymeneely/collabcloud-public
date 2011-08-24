@@ -38,8 +38,8 @@ public class GitLoaderTest {
 		ObjectId since = gitLoader.getRepo().resolve(SECOND_COMMIT_ID);
 		gitLoader.markSince(since);
 		Set<ISummarizable> artifacts = gitLoader.getFilesChanged();
-		assertTrue(artifacts.contains(new JavaClassArtifact("mancala/player/TimedNegaScoutPlayer.java")));
-		assertTrue(artifacts.contains(new JavaClassArtifact("mancala/player/GreedyPlayer.java")));
+		assertTrue(artifacts.contains(new JavaClassArtifact(new File("mancala/player/TimedNegaScoutPlayer.java"))));
+		assertTrue(artifacts.contains(new JavaClassArtifact(new File("mancala/player/GreedyPlayer.java"))));
 		assertEquals("Only 2 files changed", 2, artifacts.size());
 	}
 

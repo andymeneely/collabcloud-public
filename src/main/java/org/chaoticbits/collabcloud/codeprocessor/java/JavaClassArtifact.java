@@ -1,24 +1,26 @@
 package org.chaoticbits.collabcloud.codeprocessor.java;
 
+import java.io.File;
+
 import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
 
 public class JavaClassArtifact implements ISummarizable {
 
-	private String path = "";
+	private File file;
 
-	public JavaClassArtifact(String path) {
-		this.path = path;
+	public JavaClassArtifact(File path) {
+		this.file = path;
 	}
 
-	public String getPath() {
-		return path;
+	public File getFile() {
+		return file;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((path == null) ? 0 : path.hashCode());
+		result = prime * result + ((file == null) ? 0 : file.hashCode());
 		return result;
 	}
 
@@ -31,16 +33,16 @@ public class JavaClassArtifact implements ISummarizable {
 		if (getClass() != obj.getClass())
 			return false;
 		JavaClassArtifact other = (JavaClassArtifact) obj;
-		if (path == null) {
-			if (other.path != null)
+		if (file == null) {
+			if (other.file != null)
 				return false;
-		} else if (!path.equals(other.path))
+		} else if (!file.equals(other.file))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return path;
+		return file.toString();
 	}
 }

@@ -84,7 +84,7 @@ public class GitLoader implements IVersionControlLoader {
 		while (scanner.hasNext()) {
 			String line = scanner.nextLine();
 			if (line.startsWith("+++") || line.startsWith("---")) {
-				set.add(new JavaClassArtifact(line.substring(6)));
+				set.add(new JavaClassArtifact(new File(line.substring(6))));
 			}
 		}
 		return set;
