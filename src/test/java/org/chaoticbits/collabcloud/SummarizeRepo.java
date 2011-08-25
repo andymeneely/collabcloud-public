@@ -98,25 +98,28 @@ public class SummarizeRepo {
 		for (Entry<String, Double> entry : entries) {
 			log.info("Laying out " + entry.getKey() + "...");
 			// TODO Convert weights to font sizes
-			font = font.deriveFont(30f * (float) Math.log(entry.getValue()));
+			// font = font.deriveFont(25f * (float) Math.log(entry.getValue()));
+			font = font.deriveFont(20f * (float) Math.sqrt(entry.getValue()));
 			char[] chars = entry.getKey().toCharArray();
-			GlyphVector glyph = font.layoutGlyphVector(frc, chars, 0, chars.length, Font.LAYOUT_LEFT_TO_RIGHT);
 			// TODO Need a placement strategy
 			Point2D center = getStartingPlace();
-			SpiralIterator itr = new SpiralIterator(center, 500.0d, 1000);
+			SpiralIterator itr = new SpiralIterator(center, 400.0d, 500);
 			while (itr.hasNext()) {
 				Point2D next = itr.next();
-				Shape nextShape = glyph.getOutline((float) next.getX(), (float) next.getY());
+				Shape nextShape = font.layoutGlyphVector(frc, chars, 0, chars.length, Font.LAYOUT_LEFT_TO_RIGHT).getOutline((float) next.getX(),
+						(float) next.getY());
 				if (!placedShapes.hitNCache(nextShape)) {
 					int randColor = (int) (Math.random() * 150.0f + 25.0f);
 					g2d.setTransform(transform);
-					//TODO Color it according to type and weight, not random
+					// TODO Color it according to type and weight, not random
 					g2d.setColor(new Color(randColor, randColor, randColor));
 					g2d.fill(nextShape);
 					break;
 				} else {
-					if (entry.getKey().equals("player"))
-						g2d.fillRect((int) next.getX(), (int) next.getY(), 1, 1);
+					if (entry.getKey().equals("getClass")) {
+//						 g2d.fill(nextShape);
+//						g2d.fillRect((int) next.getX(), (int) next.getY(), 3, 3);
+					}
 				}
 			}
 		}
@@ -126,7 +129,7 @@ public class SummarizeRepo {
 	}
 
 	private static java.awt.geom.Point2D.Double getStartingPlace() {
-//		return new Point2D.Double(rand.nextInt(300) + 150f, rand.nextInt(300) + 150.0f);
-		return new Point2D.Double(350,400);
+		// return new Point2D.Double(rand.nextInt(300) + 150f, rand.nextInt(300) + 150.0f);
+		return new Point2D.Double(325, 400);
 	}
 }
