@@ -11,16 +11,15 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -31,12 +30,21 @@ import org.chaoticbits.collabcloud.vc.git.GitLoader;
 import org.chaoticbits.collabcloud.vc.git.GitLoaderTest;
 import org.chaoticbits.collabcloud.visualizer.Intersector;
 import org.chaoticbits.collabcloud.visualizer.LastHitCache;
+import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 
 public class SummarizeRepo {
 	private static final File TEST_BED = new File("testgitrepo");
+	private static final Random rand = new Random(12345L);
 
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SummarizeRepo.class);
+
+	private static final Intersector intersector = new Intersector(10, 15.0d);
+	private static final IHitCheck<Shape> checker = new IHitCheck<Shape>() {
+		public boolean hits(Shape a, Shape b) {
+			return intersector.intersect(a, b);
+		}
+	};
 
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 800;
@@ -82,42 +90,43 @@ public class SummarizeRepo {
 		g2d.fillRect(0, 0, 800, 800);
 		g2d.setColor(Color.DARK_GRAY);
 		g2d.drawRect(0, 0, WIDTH - 1, HEIGHT - 1);
+		AffineTransform transform = g2d.getTransform();
 		Font font = new Font("Courier New", Font.BOLD, 150);
 		FontRenderContext frc = new FontRenderContext(null, true, true);
-		LastHitCache<Shape> placedShapes = new LastHitCache<Shape>();
-		Intersector intersector = new Intersector(10, 15.0d);
+		LastHitCache<Shape> placedShapes = new LastHitCache<Shape>(checker);
 		List<Entry<String, Double>> entries = weights.sortedEntries();
 		for (Entry<String, Double> entry : entries) {
 			log.info("Laying out " + entry.getKey() + "...");
 			// TODO Convert weights to font sizes
-			font = font.deriveFont(35f * (float) Math.log(entry.getValue()));
+			font = font.deriveFont(30f * (float) Math.log(entry.getValue()));
 			char[] chars = entry.getKey().toCharArray();
 			GlyphVector glyph = font.layoutGlyphVector(frc, chars, 0, chars.length, Font.LAYOUT_LEFT_TO_RIGHT);
 			// TODO Need a placement strategy
-			Point2D center = new Point2D.Double(Math.random() * 300 + 250.0f, Math.random() * 300 + 250.0f);
-			SpiralIterator itr = new SpiralIterator(center, 200.0d, 50);
+			Point2D center = getStartingPlace();
+			SpiralIterator itr = new SpiralIterator(center, 500.0d, 1000);
 			while (itr.hasNext()) {
-				boolean canPlace = true;
 				Point2D next = itr.next();
 				Shape nextShape = glyph.getOutline((float) next.getX(), (float) next.getY());
-				// TODO Need a priority queue for quick cache-hits		
-				for (Shape placed : placedShapes) {
-					if (intersector.intersect(nextShape, placed)) {
-						canPlace = false;
-						break;
-					}
-				}
-				if (canPlace) {
+				if (!placedShapes.hitNCache(nextShape)) {
 					int randColor = (int) (Math.random() * 150.0f + 25.0f);
+					g2d.setTransform(transform);
+					//TODO Color it according to type and weight, not random
 					g2d.setColor(new Color(randColor, randColor, randColor));
 					g2d.fill(nextShape);
-					placedShapes.add(nextShape);
 					break;
+				} else {
+					if (entry.getKey().equals("player"))
+						g2d.fillRect((int) next.getX(), (int) next.getY(), 1, 1);
 				}
 			}
 		}
 		log.info("Writing image...");
 		ImageIO.write(bi, "PNG", new File("output/summarizerepo.png"));
 		log.info("Done!");
+	}
+
+	private static java.awt.geom.Point2D.Double getStartingPlace() {
+//		return new Point2D.Double(rand.nextInt(300) + 150f, rand.nextInt(300) + 150.0f);
+		return new Point2D.Double(350,400);
 	}
 }
