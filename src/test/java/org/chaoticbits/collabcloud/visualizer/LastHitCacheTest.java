@@ -1,7 +1,10 @@
 package org.chaoticbits.collabcloud.visualizer;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Iterator;
 
 import org.junit.Test;
 
@@ -43,4 +46,6 @@ public class LastHitCacheTest {
 		assertTrue("hits are in ascending order", cache.lastHitTime("c") < cache.lastHitTime("b"));
 		assertTrue("cache contains b", cache.contains("b"));
 	}
+
+	
 }

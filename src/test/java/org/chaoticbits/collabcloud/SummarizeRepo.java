@@ -30,6 +30,7 @@ import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummarizeVisitor;
 import org.chaoticbits.collabcloud.vc.git.GitLoader;
 import org.chaoticbits.collabcloud.vc.git.GitLoaderTest;
 import org.chaoticbits.collabcloud.visualizer.Intersector;
+import org.chaoticbits.collabcloud.visualizer.LastHitCache;
 import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 
 public class SummarizeRepo {
@@ -83,7 +84,7 @@ public class SummarizeRepo {
 		g2d.drawRect(0, 0, WIDTH - 1, HEIGHT - 1);
 		Font font = new Font("Courier New", Font.BOLD, 150);
 		FontRenderContext frc = new FontRenderContext(null, true, true);
-		Set<Shape> placedShapes = new HashSet<Shape>();
+		LastHitCache<Shape> placedShapes = new LastHitCache<Shape>();
 		Intersector intersector = new Intersector(10, 15.0d);
 		List<Entry<String, Double>> entries = weights.sortedEntries();
 		for (Entry<String, Double> entry : entries) {

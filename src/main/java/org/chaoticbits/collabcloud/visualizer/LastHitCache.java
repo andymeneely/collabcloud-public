@@ -2,10 +2,11 @@ package org.chaoticbits.collabcloud.visualizer;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-public class LastHitCache<E> implements Comparator<E> {
+public class LastHitCache<E> implements Comparator<E>, Iterable<E> {
 
 	private final Map<E, Long> lastHit = new HashMap<E, Long>();
 	private final PriorityQueue<E> priorityQ = new PriorityQueue<E>(100, this);
@@ -21,6 +22,10 @@ public class LastHitCache<E> implements Comparator<E> {
 	public void add(E obj) {
 		lastHit.put(obj, System.currentTimeMillis() + (tieBreaker++));
 		priorityQ.add(obj);
+	}
+
+	public Iterator<E> iterator() {
+		return priorityQ.iterator();
 	}
 
 	public int compare(E o1, E o2) {
