@@ -1,47 +1,62 @@
 package org.chaoticbits.collabcloud.visualizer;
 
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
-import java.util.PriorityQueue;
 
-public class LastHitCache<E> implements Comparator<E>, Iterable<E> {
+/**
+ * A cache of objects that checks if the incoming object hits (e.g. shape intersect) any of the previous
+ * shapes. If a hit is not recorded, the object is added to the cache. If a hit is found, then the hit object
+ * gets pushed to the top of the list.
+ * @author andy
+ * 
+ * @param <E>
+ */
+public class LastHitCache<E> {
+	private static int hitCounter = 0;
 
-	private final Map<E, Long> lastHit = new HashMap<E, Long>();
-	private final PriorityQueue<E> priorityQ = new PriorityQueue<E>(100, this);
-	private long tieBreaker = 0;
-
-	public boolean contains(E obj) {
-		boolean contains = priorityQ.contains(obj);
-		if (contains)
-			lastHit.put(obj, System.currentTimeMillis() + (tieBreaker++));
-		return contains;
+	public static interface IHitCheck<E> {
+		public boolean hits(E obj1, E obj2);
 	}
 
-	public void add(E obj) {
-		lastHit.put(obj, System.currentTimeMillis() + (tieBreaker++));
-		priorityQ.add(obj);
+	private final Map<E, Integer> lastHit = new HashMap<E, Integer>();
+	private LinkedList<E> list = new LinkedList<E>();
+	private final IHitCheck<E> checker;
+
+	public LastHitCache(IHitCheck<E> checker) {
+		this.checker = checker;
 	}
 
-	public Iterator<E> iterator() {
-		return priorityQ.iterator();
-	}
-
-	public int compare(E o1, E o2) {
-		Long o1HitTime = lastHit.get(o1);
-		Long o2HitTime = lastHit.get(o2);
-		checkNull(o1, o1HitTime);
-		checkNull(o2, o2HitTime);
-		return o1HitTime.compareTo(o2HitTime);
-	}
-
-	public Long lastHitTime(E obj) {
-		return lastHit.get(obj);
-	}
-
-	private void checkNull(E o1, Long o1HitTime) throws IllegalAccessError {
-		if (o1HitTime == null)
-			throw new IllegalAccessError("No hit time recorded for " + o1.toString());
+	/**
+	 * Check the cache for a hit.
+	 * <ul>
+	 * <li>If a hit is found, then the hit object gets pushed to the top of the list. obj is not added to the
+	 * cache</li>
+	 * <li>If a hit is not found, then obj gets added to the top of the cache</li>
+	 * </ul>
+	 * @param obj
+	 * @return
+	 */
+	public boolean hitNCache(E obj) {
+		if (list.isEmpty()) {
+			list.add(obj);
+			lastHit.put(obj, hitCounter++);
+			return false;
+		}
+		LinkedList<E> newList = new LinkedList<E>();
+		do {
+			E potentialHit = list.poll();
+			if (checker.hits(obj, potentialHit)) {
+				newList.addFirst(potentialHit);// add potential to the front of the cache
+				newList.addAll(list); // add the tail of the old list
+				list = newList; // replace the list
+				return true; // and don't add obj to the cache.
+			} else {
+				newList.addLast(potentialHit);
+			}
+		} while (!list.isEmpty());
+		newList.addFirst(obj);
+		list = newList; // replace the list since went all the way through it
+		return false;
 	}
 }
