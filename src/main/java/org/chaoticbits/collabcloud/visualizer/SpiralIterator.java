@@ -10,6 +10,12 @@ public class SpiralIterator implements Iterable<Point2D>, Iterator<Point2D> {
 	private double i;
 	private double step;
 
+	/**
+	 * Iterate over a center in a spiral
+	 * @param center
+	 * @param maxSize
+	 * @param numSteps
+	 */
 	public SpiralIterator(Point2D center, double maxSize, int numSteps) {
 		this.center = center;
 		this.maxSteps = numSteps;
