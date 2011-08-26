@@ -37,9 +37,9 @@ import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 
 public class SummarizeRepo {
-	private static final File TEST_BED = new File("testgitrepo");
-	// private static final File THIS_REPO = new File("");
-	// private static final String THIS_REPO_SECOND_COMMIT_ID = "4cfde077a84185b06117bcff5d47c53644463b1f";
+	// private static final File TEST_BED = new File("testgitrepo");
+	private static final File THIS_REPO = new File("");
+	private static final String THIS_REPO_SECOND_COMMIT_ID = "4cfde077a84185b06117bcff5d47c53644463b1f";
 	private static final Random rand = new Random(1234567L);
 
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SummarizeRepo.class);
@@ -57,11 +57,11 @@ public class SummarizeRepo {
 
 	public static void main(String[] args) throws ParseException, IOException {
 		PropertyConfigurator.configure("log4j.properties");
-		CloudWeights weights = getWeights(TEST_BED);
-		weights = new GitLoader(new File(TEST_BED.getAbsolutePath() + "/.git"), GitLoaderTest.SECOND_COMMIT_ID).crossWithDiff(weights, modifier );
-		// CloudWeights weights = getWeights(new File(THIS_REPO.getAbsolutePath() + "/src"));
-		// weights = new GitLoader(new File(THIS_REPO.getAbsolutePath() + "/.git"),
-		// THIS_REPO_SECOND_COMMIT_ID).crossWithDiff(weights);
+		// CloudWeights weights = getWeights(TEST_BED);
+		// weights = new GitLoader(new File(TEST_BED.getAbsolutePath() + "/.git"),
+		// GitLoaderTest.SECOND_COMMIT_ID).crossWithDiff(weights, modifier );
+		CloudWeights weights = getWeights(new File(THIS_REPO.getAbsolutePath() + "/src"));
+		weights = new GitLoader(new File(THIS_REPO.getAbsolutePath() + "/.git"), THIS_REPO_SECOND_COMMIT_ID).crossWithDiff(weights, modifier);
 		System.out.println("==Weights after Diff Adjustment==");
 		System.out.println(weights);
 		layoutWords(weights);
@@ -104,13 +104,14 @@ public class SummarizeRepo {
 		FontRenderContext frc = new FontRenderContext(null, true, true);
 		LastHitCache<Shape> placedShapes = new LastHitCache<Shape>(checker);
 		List<Entry<ISummaryToken, Double>> entries = weights.sortedEntries();
+		float fontMultiplier = 150f / (float) Math.log(entries.get(0).getValue());
 		// Collections.shuffle(entries, rand);
 		for (Entry<ISummaryToken, Double> entry : entries) {
 			// TODO Convert weights to font sizes
-			float fontSize = 25f * (float) Math.log(entry.getValue());
+			float fontSize = fontMultiplier * (float) Math.log(entry.getValue());
 			if (fontSize < 6f)
 				continue;
-			log.info("Laying out " + entry.getKey() + "...");
+			log.info("Laying out " + entry.getKey() + "...[" + entry.getValue() + "]");
 			font = font.deriveFont(fontSize);
 
 			// font = font.deriveFont(20f * (float) Math.sqrt(entry.getValue()));
