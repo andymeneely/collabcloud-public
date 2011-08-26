@@ -38,7 +38,7 @@ public class SummarizeRepo {
 
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SummarizeRepo.class);
 
-	private static final Intersector intersector = new Intersector(10, 15.0d);
+	private static final Intersector intersector = new Intersector(10, 0.5d);
 	private static final IHitCheck<Shape> checker = new IHitCheck<Shape>() {
 		public boolean hits(Shape a, Shape b) {
 			return intersector.intersect(a, b);
