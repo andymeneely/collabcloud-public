@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.visualizer;
+package org.chaoticbits.collabcloud;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -19,6 +19,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
+
+import org.chaoticbits.collabcloud.visualizer.Intersector;
 
 public class RandomFun {
 
