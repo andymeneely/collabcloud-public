@@ -25,6 +25,8 @@ import javax.imageio.ImageIO;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
+import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
+import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummarizeVisitor;
 import org.chaoticbits.collabcloud.vc.git.GitLoader;
 import org.chaoticbits.collabcloud.vc.git.GitLoaderTest;
@@ -40,6 +42,7 @@ public class SummarizeRepo {
 	private static final Random rand = new Random(1234567L);
 
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SummarizeRepo.class);
+	private static IWeightModifier modifier = new MultiplyModifier(1.1);
 
 	private static final Intersector intersector = new Intersector(10, 0.1d);
 	private static final IHitCheck<Shape> checker = new IHitCheck<Shape>() {
@@ -54,7 +57,7 @@ public class SummarizeRepo {
 	public static void main(String[] args) throws ParseException, IOException {
 		PropertyConfigurator.configure("log4j.properties");
 		CloudWeights weights = getWeights(TEST_BED);
-		weights = new GitLoader(new File(TEST_BED.getAbsolutePath() + "/.git"), GitLoaderTest.SECOND_COMMIT_ID).crossWithDiff(weights);
+		weights = new GitLoader(new File(TEST_BED.getAbsolutePath() + "/.git"), GitLoaderTest.SECOND_COMMIT_ID).crossWithDiff(weights, modifier );
 		// CloudWeights weights = getWeights(new File(THIS_REPO.getAbsolutePath() + "/src"));
 		// weights = new GitLoader(new File(THIS_REPO.getAbsolutePath() + "/.git"),
 		// THIS_REPO_SECOND_COMMIT_ID).crossWithDiff(weights);

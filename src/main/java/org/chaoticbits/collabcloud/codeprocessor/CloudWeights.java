@@ -57,6 +57,16 @@ public class CloudWeights {
 			weights.put(identifier, get(identifier) * by);
 	}
 
+	/**
+	 * Multiplies the weight for that identifier by the specified number. If the identifier does not exist,
+	 * starts at 0.0*by. Checks the excludewords list as well
+	 * @param identifier
+	 * @param by
+	 */
+	public void put(String identifier, Double value) {
+		weights.put(identifier, value);
+	}
+
 	@Override
 	public String toString() {
 		String str = "";

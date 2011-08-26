@@ -12,6 +12,7 @@ import java.util.Set;
 import org.chaoticbits.collabcloud.Developer;
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
+import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassArtifact;
 import org.chaoticbits.collabcloud.vc.IVersionControlLoader;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -122,7 +123,7 @@ public class GitLoader implements IVersionControlLoader {
 		return since;
 	}
 
-	public CloudWeights crossWithDiff(CloudWeights weights) throws IOException {
+	public CloudWeights crossWithDiff(CloudWeights weights, IWeightModifier modifier) throws IOException {
 		String diffsString = buildDiffString();
 		Scanner scanner = new Scanner(diffsString);
 		while (scanner.hasNext()) {
@@ -130,7 +131,8 @@ public class GitLoader implements IVersionControlLoader {
 			Set<Entry<String, Double>> unsortedEntries = weights.unsortedEntries();
 			for (Entry<String, Double> entry : unsortedEntries) {
 				if (line.contains(entry.getKey())) {
-					weights.multiply(entry.getKey(), IN_DIFF_MULTIPLIER);
+					weights.put(entry.getKey(), modifier.modify(entry.getValue()));
+					
 					// weights.increment(entry.getKey(), IN_DIFF_INCREMENTER);
 				}
 			}

@@ -1,6 +1,5 @@
 package org.chaoticbits.collabcloud.vc.git;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -10,6 +9,8 @@ import java.util.Set;
 import org.chaoticbits.collabcloud.Developer;
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
+import org.chaoticbits.collabcloud.codeprocessor.IncrementModifier;
+import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassArtifact;
 import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Test;
@@ -44,7 +45,7 @@ public class GitLoaderTest {
 	}
 
 	@Test
-	public void updateCloudWeights() throws Exception {
+	public void updateCloudWeightsMultiply() throws Exception {
 		CloudWeights weights = new CloudWeights(); // Not the real cloud weights - contrived
 		weights.increment("TimedNegaScoutPlayer", 1.0);
 		weights.increment("GreedyPlayer", 1.0);
@@ -56,12 +57,33 @@ public class GitLoaderTest {
 		ObjectId since = gitLoader.getRepo().resolve(SECOND_COMMIT_ID);
 		gitLoader.markSince(since);
 
-		gitLoader.crossWithDiff(weights);
+		gitLoader.crossWithDiff(weights, new MultiplyModifier(2.0));
 		assertEquals("getPlay was hit a lot", 128.0, weights.get("getPlay"), 0.0001);
 		assertEquals("setLot was not hit at all", 1.0, weights.get("setLog"), 0.0001);
 		assertEquals("play was not there", 0.0, weights.get("play"), 0.0001);
 		assertEquals("GreedyPlayer was there", 64.0, weights.get("GreedyPlayer"), 0.0001);
 		assertEquals("TimedNegaScoutPlayer was there", 512.0, weights.get("TimedNegaScoutPlayer"), 0.0001);
+	}
+	
+	@Test
+	public void updateCloudWeightsIncrements() throws Exception {
+		CloudWeights weights = new CloudWeights(); // Not the real cloud weights - contrived
+		weights.increment("TimedNegaScoutPlayer", 1.0);
+		weights.increment("GreedyPlayer", 1.0);
+		weights.increment("getPlay", 1.0); // Is in the diff
+		weights.increment("setLog", 1.0); // In the file, not the diff
+		weights.increment("play", 0.0); // In the file, not the cloud summary, and in the diff
+
+		GitLoader gitLoader = new GitLoader(GIT_DIR);
+		ObjectId since = gitLoader.getRepo().resolve(SECOND_COMMIT_ID);
+		gitLoader.markSince(since);
+
+		gitLoader.crossWithDiff(weights, new IncrementModifier(1.0));
+		assertEquals("getPlay was hit a lot", 8.0, weights.get("getPlay"), 0.0001);
+		assertEquals("setLot was not hit at all", 1.0, weights.get("setLog"), 0.0001);
+		assertEquals("play was only in the diff, not the cloud summary", 23.0, weights.get("play"), 0.0001);
+		assertEquals("GreedyPlayer was there", 7.0, weights.get("GreedyPlayer"), 0.0001);
+		assertEquals("TimedNegaScoutPlayer was there", 10.0, weights.get("TimedNegaScoutPlayer"), 0.0001);
 	}
 
 	// private static final int SECONDS_PER_DAY = 86400;
