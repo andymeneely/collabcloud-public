@@ -33,14 +33,14 @@ public class Intersector {
 
 	private boolean intersectsRecursive(Shape a, Rectangle2D aBox, Shape b, Rectangle2D bBox, int depth) {
 		if (depth <= 0)
-			return true; // hit our depth check - call it a yes
+			return boxesIntersect(aBox, bBox); // hit our depth check - call it at whatever the boxes say
 		if (cutOffSmallLeaf
 				&& (aBox.getWidth() < cutOffLeafSize || aBox.getHeight() < cutOffLeafSize || bBox.getWidth() < cutOffLeafSize || bBox
 						.getHeight() < cutOffLeafSize))
-			return true; // box is pretty small now - call it a yes
+			return boxesIntersect(aBox, bBox); // box is very small now - call it at the boxes now
 		if (!a.intersects(aBox) || !b.intersects(bBox))
 			return false; // One box is just whitespace, no intersect here, prune!!
-		if (!aBox.intersects(bBox))
+		if (!boxesIntersect(aBox, bBox))
 			return false; // Boxes don't intersect each other, no intersect here, prune!
 
 		// Ok, shapes intersect the boxes and boxes intersect each other - keep diving down
@@ -52,6 +52,10 @@ public class Intersector {
 				if (intersectsRecursive(a, aSubBox, b, bSubBox, depth - 1))
 					return true; // Found a hit recursively. Done!
 		return false; // no such intersections found recursively - we're done!
+	}
+
+	private boolean boxesIntersect(Rectangle2D aBox, Rectangle2D bBox) {
+		return aBox.intersects(bBox);
 	}
 
 	private List<Rectangle2D> makeBoxes(Rectangle2D box) {
