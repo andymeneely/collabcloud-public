@@ -58,4 +58,12 @@ public class ShapeIntersectTest {
 		Shape second = WordExample.APPLES_ORANGES_INTERSECT.getSecond();
 		assertTrue("they do intersect at a low depth", new Intersector(10).intersect(first, second));
 	}
+	
+	@Test(timeout=1000)//disable this on debug...
+	public void cutoffLeafTest() throws Exception {
+		Shape first = WordExample.AM_INSIDE_NOT_INTERSECT.getFirst();
+		Shape second = WordExample.AM_INSIDE_NOT_INTERSECT.getSecond();
+		Intersector intersector = new Intersector(1000, 0.5d);
+		assertFalse("a tougher intersection to not find with the cutoff leaf", intersector.intersect(first, second));
+	}
 }
