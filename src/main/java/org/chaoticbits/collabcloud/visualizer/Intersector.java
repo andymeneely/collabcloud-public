@@ -36,10 +36,10 @@ public class Intersector {
 			return aBox.intersects(bBox); // hit our depth check - call it at whatever the boxes say
 		if (cutOffSmallLeaf && boxesTooSmall(aBox, bBox))
 			return aBox.intersects(bBox); // box is very small now - call it at the boxes now
-		if (!a.intersects(aBox) || !b.intersects(bBox))
-			return false; // One box is just whitespace, no intersect here, prune!!
 		if (!aBox.intersects(bBox))
 			return false; // Boxes don't intersect each other, no intersect here, prune!
+		if (!a.intersects(aBox) || !b.intersects(bBox))
+			return false; // One box is just whitespace, no intersect here, prune!!
 
 		// Ok, shapes intersect the boxes and boxes intersect each other - keep diving down
 		List<Rectangle2D> aBoxes = makeBoxes(aBox);
