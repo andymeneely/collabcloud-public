@@ -14,8 +14,8 @@ import javax.imageio.ImageIO;
 public enum WordExample {
 
 	AM_SIMPLE_NOT_INTERSECT(bigA(), bigM()), AM_INSIDE_NOT_INTERSECT(bigA(), insideM()), AM_INTERSECT(bigA(), intersectM()), AM_INTERSECT2(
-			bigA(), intersectM2()), AM_REALLY_CLOSE_NO_INTERSECT(bigA(), reallyCloseM()), APPLES_ORANGES_NO_INTERSECT(apples(),
-			orangesNoIntersect()), APPLES_ORANGES_INTERSECT(apples(), oranges());
+			bigA(), intersectM2()), AM_REALLY_CLOSE_NO_INTERSECT(bigA(), reallyCloseM()), AM_REALLY_CLOSE_INTERSECT(bigA(),
+			reallyCloseMIntersect()), APPLES_ORANGES_NO_INTERSECT(apples(), orangesNoIntersect()), APPLES_ORANGES_INTERSECT(apples(), oranges());
 
 	public Shape getFirst() {
 		return first;
@@ -73,6 +73,11 @@ public enum WordExample {
 	private static Shape reallyCloseM() {
 		Font deriveFont = getFont().deriveFont(45f);
 		return makeShape(deriveFont, getFRC(), "m", 82, 70);
+	}
+	
+	private static Shape reallyCloseMIntersect() {
+		Font deriveFont = getFont().deriveFont(45f);
+		return makeShape(deriveFont, getFRC(), "m", 81, 94);
 	}
 
 	private static Shape apples() {

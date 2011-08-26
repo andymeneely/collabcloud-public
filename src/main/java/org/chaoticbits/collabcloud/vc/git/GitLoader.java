@@ -27,7 +27,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 public class GitLoader implements IVersionControlLoader {
 
 	private static final double IN_DIFF_MULTIPLIER = 1.1;
-	
+	// private static final double IN_DIFF_INCREMENTER = 1;
 
 	private FileRepository repo;
 	private ObjectId since;
@@ -35,7 +35,7 @@ public class GitLoader implements IVersionControlLoader {
 	public GitLoader(File repoDir) throws IOException {
 		repo = new FileRepositoryBuilder().setGitDir(repoDir).readEnvironment().findGitDir().build();
 	}
-	
+
 	public GitLoader(File repoDir, String sinceSHA1) throws IOException {
 		repo = new FileRepositoryBuilder().setGitDir(repoDir).readEnvironment().findGitDir().build();
 		since = repo.resolve(sinceSHA1);
@@ -131,6 +131,7 @@ public class GitLoader implements IVersionControlLoader {
 			for (Entry<String, Double> entry : unsortedEntries) {
 				if (line.contains(entry.getKey())) {
 					weights.multiply(entry.getKey(), IN_DIFF_MULTIPLIER);
+					// weights.increment(entry.getKey(), IN_DIFF_INCREMENTER);
 				}
 			}
 		}

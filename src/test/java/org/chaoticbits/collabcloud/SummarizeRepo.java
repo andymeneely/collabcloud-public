@@ -12,6 +12,7 @@ import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,11 +35,13 @@ import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 
 public class SummarizeRepo {
 	private static final File TEST_BED = new File("testgitrepo");
-	private static final Random rand = new Random(12345L);
+	// private static final File THIS_REPO = new File("");
+	// private static final String THIS_REPO_SECOND_COMMIT_ID = "4cfde077a84185b06117bcff5d47c53644463b1f";
+	private static final Random rand = new Random(1234567L);
 
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SummarizeRepo.class);
 
-	private static final Intersector intersector = new Intersector(10, 0.5d);
+	private static final Intersector intersector = new Intersector(10, 0.1d);
 	private static final IHitCheck<Shape> checker = new IHitCheck<Shape>() {
 		public boolean hits(Shape a, Shape b) {
 			return intersector.intersect(a, b);
@@ -50,15 +53,18 @@ public class SummarizeRepo {
 
 	public static void main(String[] args) throws ParseException, IOException {
 		PropertyConfigurator.configure("log4j.properties");
-		CloudWeights weights = getWeights();
+		CloudWeights weights = getWeights(TEST_BED);
 		weights = new GitLoader(new File(TEST_BED.getAbsolutePath() + "/.git"), GitLoaderTest.SECOND_COMMIT_ID).crossWithDiff(weights);
+		// CloudWeights weights = getWeights(new File(THIS_REPO.getAbsolutePath() + "/src"));
+		// weights = new GitLoader(new File(THIS_REPO.getAbsolutePath() + "/.git"),
+		// THIS_REPO_SECOND_COMMIT_ID).crossWithDiff(weights);
 		System.out.println("==Weights after Diff Adjustment==");
 		System.out.println(weights);
 		layoutWords(weights);
 	}
 
-	private static CloudWeights getWeights() throws ParseException, IOException {
-		List<File> files = recurseFiles(TEST_BED);
+	private static CloudWeights getWeights(File dir) throws ParseException, IOException {
+		List<File> files = recurseFiles(dir);
 		CloudWeights weights = new CloudWeights();
 		for (File file : files) {
 			CompilationUnit unit = JavaParser.parse(file);
@@ -94,17 +100,22 @@ public class SummarizeRepo {
 		FontRenderContext frc = new FontRenderContext(null, true, true);
 		LastHitCache<Shape> placedShapes = new LastHitCache<Shape>(checker);
 		List<Entry<String, Double>> entries = weights.sortedEntries();
+		// Collections.shuffle(entries, rand);
 		for (Entry<String, Double> entry : entries) {
-			log.info("Laying out " + entry.getKey() + "...");
 			// TODO Convert weights to font sizes
-			// font = font.deriveFont(25f * (float) Math.log(entry.getValue()));
-			font = font.deriveFont(20f * (float) Math.sqrt(entry.getValue()));
+			float fontSize = 25f * (float) Math.log(entry.getValue());
+			if (fontSize < 6f)
+				continue;
+			log.info("Laying out " + entry.getKey() + "...");
+			font = font.deriveFont(fontSize);
+
+			// font = font.deriveFont(20f * (float) Math.sqrt(entry.getValue()));
 			char[] chars = entry.getKey().toCharArray();
 			// TODO Need a placement strategy
 			Point2D center = getStartingPlace();
-			SpiralIterator itr = new SpiralIterator(center, 400.0d, 500);
-			while (itr.hasNext()) {
-				Point2D next = itr.next();
+			SpiralIterator spiral = new SpiralIterator(center, 400.0d, 500);
+			while (spiral.hasNext()) {
+				Point2D next = spiral.next();
 				Shape nextShape = font.layoutGlyphVector(frc, chars, 0, chars.length, Font.LAYOUT_LEFT_TO_RIGHT).getOutline((float) next.getX(),
 						(float) next.getY());
 				if (!placedShapes.hitNCache(nextShape)) {
@@ -116,8 +127,8 @@ public class SummarizeRepo {
 					break;
 				} else {
 					if (entry.getKey().equals("getClass")) {
-//						 g2d.fill(nextShape);
-//						g2d.fillRect((int) next.getX(), (int) next.getY(), 3, 3);
+						// g2d.fill(nextShape);
+						g2d.fillRect((int) next.getX(), (int) next.getY(), 3, 3);
 					}
 				}
 			}
@@ -129,6 +140,6 @@ public class SummarizeRepo {
 
 	private static java.awt.geom.Point2D.Double getStartingPlace() {
 		// return new Point2D.Double(rand.nextInt(300) + 150f, rand.nextInt(300) + 150.0f);
-		return new Point2D.Double(325, 400);
+		return new Point2D.Double(250, 400);
 	}
 }
