@@ -12,7 +12,6 @@ import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -122,7 +121,7 @@ public class SummarizeRepo {
 				Shape nextShape = font.layoutGlyphVector(frc, chars, 0, chars.length, Font.LAYOUT_LEFT_TO_RIGHT).getOutline((float) next.getX(),
 						(float) next.getY());
 				if (!placedShapes.hitNCache(nextShape)) {
-					int randColor = (int) (Math.random() * 150.0f + 25.0f);
+					int randColor = (int) (rand.nextFloat() * 150.0f + 25.0f);
 					g2d.setTransform(transform);
 					// TODO Color it according to type and weight, not random
 					g2d.setColor(new Color(randColor, randColor, randColor));

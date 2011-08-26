@@ -27,9 +27,6 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 public class GitLoader implements IVersionControlLoader {
 
-	private static final double IN_DIFF_MULTIPLIER = 1.1;
-	// private static final double IN_DIFF_INCREMENTER = 1;
-
 	private FileRepository repo;
 	private ObjectId since;
 
@@ -132,8 +129,6 @@ public class GitLoader implements IVersionControlLoader {
 			for (Entry<String, Double> entry : unsortedEntries) {
 				if (line.contains(entry.getKey())) {
 					weights.put(entry.getKey(), modifier.modify(entry.getValue()));
-					
-					// weights.increment(entry.getKey(), IN_DIFF_INCREMENTER);
 				}
 			}
 		}
