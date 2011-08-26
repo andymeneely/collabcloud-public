@@ -18,8 +18,8 @@ import java.util.Set;
  * 
  */
 public class CloudWeights {
-	private Map<String, Double> weights = new LinkedHashMap<String, Double>();
-	private HashSet<String> excludeWords;
+	private final Map<ISummaryToken, Double> weights = new LinkedHashMap<ISummaryToken, Double>();
+	private final HashSet<String> excludeWords;
 
 	public CloudWeights() {
 		excludeWords = new HashSet<String>();
@@ -28,8 +28,13 @@ public class CloudWeights {
 			excludeWords.add(scanner.nextLine());
 	}
 
-	public Double get(String identifier) {
-		Double weight = weights.get(identifier);
+	/**
+	 * Return the weight for the given summary token
+	 * @param token
+	 * @return
+	 */
+	public Double get(ISummaryToken token) {
+		Double weight = weights.get(token);
 		if (weight == null)
 			return 0.0d;
 		return weight;
@@ -38,40 +43,29 @@ public class CloudWeights {
 	/**
 	 * Increments the weight for that identifier by the specified number. If the identifier does not exist,
 	 * starts at 0.0+by. Checks the excludewords list as well
-	 * @param identifier
+	 * @param token
 	 * @param by
 	 */
-	public void increment(String identifier, double by) {
-		if (!excludeWords.contains(identifier))
-			weights.put(identifier, get(identifier) + by);
+	public void increment(ISummaryToken token, double by) {
+		if (!excludeWords.contains(token.getToken()))
+			weights.put(token, get(token) + by);
 	}
 
 	/**
 	 * Multiplies the weight for that identifier by the specified number. If the identifier does not exist,
 	 * starts at 0.0*by. Checks the excludewords list as well
-	 * @param identifier
+	 * @param token
 	 * @param by
 	 */
-	public void multiply(String identifier, double by) {
-		if (!excludeWords.contains(identifier))
-			weights.put(identifier, get(identifier) * by);
-	}
-
-	/**
-	 * Multiplies the weight for that identifier by the specified number. If the identifier does not exist,
-	 * starts at 0.0*by. Checks the excludewords list as well
-	 * @param identifier
-	 * @param by
-	 */
-	public void put(String identifier, Double value) {
-		weights.put(identifier, value);
+	public void put(ISummaryToken token, Double value) {
+		weights.put(token, value);
 	}
 
 	@Override
 	public String toString() {
 		String str = "";
-		for (Entry<String, Double> entry : weights.entrySet()) {
-			str += entry.getKey() + ":\t" + entry.getValue() + "\n";
+		for (Entry<ISummaryToken, Double> entry : weights.entrySet()) {
+			str += entry.getKey().getFullName() + ":\t" + entry.getValue() + "\n";
 		}
 		return str;
 	}
@@ -80,11 +74,11 @@ public class CloudWeights {
 	 * Return a list of entries in the map, sorted by the weight, descending.
 	 * @return
 	 */
-	public List<Entry<String, Double>> sortedEntries() {
-		List<Entry<String, Double>> entries = new ArrayList<Map.Entry<String, Double>>();
+	public List<Entry<ISummaryToken, Double>> sortedEntries() {
+		List<Entry<ISummaryToken, Double>> entries = new ArrayList<Map.Entry<ISummaryToken, Double>>();
 		entries.addAll(weights.entrySet());
-		Collections.sort(entries, new Comparator<Entry<String, Double>>() {
-			public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
+		Collections.sort(entries, new Comparator<Entry<ISummaryToken, Double>>() {
+			public int compare(Entry<ISummaryToken, Double> o1, Entry<ISummaryToken, Double> o2) {
 				return o2.getValue().compareTo(o1.getValue());
 			}
 		});
@@ -95,7 +89,7 @@ public class CloudWeights {
 	 * Return a list of entries in the map, as is
 	 * @return
 	 */
-	public Set<Entry<String, Double>> unsortedEntries() {
+	public Set<Entry<ISummaryToken, Double>> unsortedEntries() {
 		return weights.entrySet();
 	}
 }

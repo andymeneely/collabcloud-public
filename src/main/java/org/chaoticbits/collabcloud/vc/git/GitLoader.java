@@ -12,6 +12,7 @@ import java.util.Set;
 import org.chaoticbits.collabcloud.Developer;
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
+import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassArtifact;
 import org.chaoticbits.collabcloud.vc.IVersionControlLoader;
@@ -125,9 +126,9 @@ public class GitLoader implements IVersionControlLoader {
 		Scanner scanner = new Scanner(diffsString);
 		while (scanner.hasNext()) {
 			String line = scanner.nextLine();
-			Set<Entry<String, Double>> unsortedEntries = weights.unsortedEntries();
-			for (Entry<String, Double> entry : unsortedEntries) {
-				if (line.contains(entry.getKey())) {
+			Set<Entry<ISummaryToken, Double>> unsortedEntries = weights.unsortedEntries();
+			for (Entry<ISummaryToken, Double> entry : unsortedEntries) {
+				if (line.contains(entry.getKey().getToken())) {
 					weights.put(entry.getKey(), modifier.modify(entry.getValue()));
 				}
 			}

@@ -24,8 +24,10 @@ import javax.imageio.ImageIO;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
+import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
 import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
+import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassArtifact;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummarizeVisitor;
 import org.chaoticbits.collabcloud.vc.git.GitLoader;
 import org.chaoticbits.collabcloud.vc.git.GitLoaderTest;
@@ -70,7 +72,7 @@ public class SummarizeRepo {
 		CloudWeights weights = new CloudWeights();
 		for (File file : files) {
 			CompilationUnit unit = JavaParser.parse(file);
-			weights = unit.accept(new JavaSummarizeVisitor(), weights);
+			weights = unit.accept(new JavaSummarizeVisitor(new JavaClassArtifact(file)), weights);
 		}
 		return weights;
 	}
@@ -101,9 +103,9 @@ public class SummarizeRepo {
 		Font font = new Font("Courier New", Font.BOLD, 150);
 		FontRenderContext frc = new FontRenderContext(null, true, true);
 		LastHitCache<Shape> placedShapes = new LastHitCache<Shape>(checker);
-		List<Entry<String, Double>> entries = weights.sortedEntries();
+		List<Entry<ISummaryToken, Double>> entries = weights.sortedEntries();
 		// Collections.shuffle(entries, rand);
-		for (Entry<String, Double> entry : entries) {
+		for (Entry<ISummaryToken, Double> entry : entries) {
 			// TODO Convert weights to font sizes
 			float fontSize = 25f * (float) Math.log(entry.getValue());
 			if (fontSize < 6f)
@@ -112,7 +114,7 @@ public class SummarizeRepo {
 			font = font.deriveFont(fontSize);
 
 			// font = font.deriveFont(20f * (float) Math.sqrt(entry.getValue()));
-			char[] chars = entry.getKey().toCharArray();
+			char[] chars = entry.getKey().getToken().toCharArray();
 			// TODO Need a placement strategy
 			Point2D center = getStartingPlace();
 			SpiralIterator spiral = new SpiralIterator(center, 400.0d, 500);

@@ -25,6 +25,8 @@ import javax.imageio.ImageIO;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
+import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
+import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassArtifact;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummarizeVisitor;
 import org.chaoticbits.collabcloud.visualizer.Intersector;
 import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
@@ -57,7 +59,7 @@ public class SummarizeThis {
 		CloudWeights weights = new CloudWeights();
 		for (File file : files) {
 			CompilationUnit unit = JavaParser.parse(file);
-			weights = unit.accept(new JavaSummarizeVisitor(), weights);
+			weights = unit.accept(new JavaSummarizeVisitor(new JavaClassArtifact(file)), weights);
 		}
 		return weights;
 	}
@@ -76,12 +78,12 @@ public class SummarizeThis {
 		FontRenderContext frc = new FontRenderContext(null, true, true);
 		Set<Shape> placedShapes = new HashSet<Shape>();
 		Intersector intersector = new Intersector(10, 15.0d);
-		List<Entry<String, Double>> entries = weights.sortedEntries();
-		for (Entry<String, Double> entry : entries) {
+		List<Entry<ISummaryToken, Double>> entries = weights.sortedEntries();
+		for (Entry<ISummaryToken, Double> entry : entries) {
 			log.info("Laying out " + entry.getKey() + "...");
 			// TODO Convert weights to font sizes
 			font = font.deriveFont(35f * (float) Math.log(entry.getValue()));
-			char[] chars = entry.getKey().toCharArray();
+			char[] chars = entry.getKey().getToken().toCharArray();
 			GlyphVector glyph = font.layoutGlyphVector(frc, chars, 0, chars.length, 0);
 			// TODO Need a placement strategy
 			Point2D center = new Point2D.Double(Math.random() * 300 + 250.0f, Math.random() * 300 + 250.0f);
