@@ -37,15 +37,20 @@ import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 
 public class SummarizeRepo {
-	// private static final File TEST_BED = new File("testgitrepo");
-	private static final File THIS_REPO = new File("");
-	private static final String THIS_REPO_SECOND_COMMIT_ID = "4cfde077a84185b06117bcff5d47c53644463b1f";
+	private static final int STARTING_POINT_JITTER = 10;
+	private static final double LEAF_CUTOFF = 1.0d;
+	private static final int SPIRAL_STEPS = 500;
+	private static final double SPIRAL_MAX_RADIUS = 400.0d;
+	private static final double SQUASHDOWN = 2.5;
+	private static final File TEST_BED = new File("testgitrepo");
+	// private static final File THIS_REPO = new File("");
+	// private static final String THIS_REPO_SECOND_COMMIT_ID = "4cfde077a84185b06117bcff5d47c53644463b1f";
 	private static final Random rand = new Random(1234567L);
 
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SummarizeRepo.class);
 	private static IWeightModifier modifier = new MultiplyModifier(1.1);
 
-	private static final Intersector intersector = new Intersector(10, 0.1d);
+	private static final Intersector intersector = new Intersector(10, LEAF_CUTOFF);
 	private static final IHitCheck<Shape> checker = new IHitCheck<Shape>() {
 		public boolean hits(Shape a, Shape b) {
 			return intersector.intersect(a, b);
@@ -57,11 +62,11 @@ public class SummarizeRepo {
 
 	public static void main(String[] args) throws ParseException, IOException {
 		PropertyConfigurator.configure("log4j.properties");
-		// CloudWeights weights = getWeights(TEST_BED);
-		// weights = new GitLoader(new File(TEST_BED.getAbsolutePath() + "/.git"),
-		// GitLoaderTest.SECOND_COMMIT_ID).crossWithDiff(weights, modifier );
-		CloudWeights weights = getWeights(new File(THIS_REPO.getAbsolutePath() + "/src"));
-		weights = new GitLoader(new File(THIS_REPO.getAbsolutePath() + "/.git"), THIS_REPO_SECOND_COMMIT_ID).crossWithDiff(weights, modifier);
+		CloudWeights weights = getWeights(TEST_BED);
+		weights = new GitLoader(new File(TEST_BED.getAbsolutePath() + "/.git"), GitLoaderTest.SECOND_COMMIT_ID).crossWithDiff(weights, modifier);
+		// CloudWeights weights = getWeights(new File(THIS_REPO.getAbsolutePath() + "/src"));
+		// weights = new GitLoader(new File(THIS_REPO.getAbsolutePath() + "/.git"),
+		// THIS_REPO_SECOND_COMMIT_ID).crossWithDiff(weights, modifier);
 		System.out.println("==Weights after Diff Adjustment==");
 		System.out.println(weights);
 		layoutWords(weights);
@@ -104,11 +109,12 @@ public class SummarizeRepo {
 		FontRenderContext frc = new FontRenderContext(null, true, true);
 		LastHitCache<Shape> placedShapes = new LastHitCache<Shape>(checker);
 		List<Entry<ISummaryToken, Double>> entries = weights.sortedEntries();
-		float fontMultiplier = 150f / (float) Math.log(entries.get(0).getValue());
+		float fontMultiplier = 75f / (float) Math.log(entries.get(0).getValue());
 		// Collections.shuffle(entries, rand);
 		for (Entry<ISummaryToken, Double> entry : entries) {
 			// TODO Convert weights to font sizes
 			float fontSize = fontMultiplier * (float) Math.log(entry.getValue());
+			// float fontSize = fontMultiplier * (float) Math.sqrt(entry.getValue());
 			if (fontSize < 6f)
 				continue;
 			log.info("Laying out " + entry.getKey() + "...[" + entry.getValue() + "]");
@@ -118,7 +124,7 @@ public class SummarizeRepo {
 			char[] chars = entry.getKey().getToken().toCharArray();
 			// TODO Need a placement strategy
 			Point2D center = getStartingPlace();
-			SpiralIterator spiral = new SpiralIterator(center, 400.0d, 500);
+			SpiralIterator spiral = new SpiralIterator(center, SPIRAL_MAX_RADIUS, SPIRAL_STEPS, SQUASHDOWN);
 			while (spiral.hasNext()) {
 				Point2D next = spiral.next();
 				Shape nextShape = font.layoutGlyphVector(frc, chars, 0, chars.length, Font.LAYOUT_LEFT_TO_RIGHT).getOutline((float) next.getX(),
@@ -145,6 +151,6 @@ public class SummarizeRepo {
 
 	private static java.awt.geom.Point2D.Double getStartingPlace() {
 		// return new Point2D.Double(rand.nextInt(300) + 150f, rand.nextInt(300) + 150.0f);
-		return new Point2D.Double(250, 400);
+		return new Point2D.Double(300 + rand.nextDouble() * STARTING_POINT_JITTER, 400 + rand.nextDouble() * STARTING_POINT_JITTER);
 	}
 }
