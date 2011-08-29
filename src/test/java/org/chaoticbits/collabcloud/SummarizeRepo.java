@@ -1,8 +1,6 @@
 package org.chaoticbits.collabcloud;
 
-import japa.parser.JavaParser;
 import japa.parser.ParseException;
-import japa.parser.ast.CompilationUnit;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -15,7 +13,6 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -27,8 +24,7 @@ import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
 import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
-import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassArtifact;
-import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummarizeVisitor;
+import org.chaoticbits.collabcloud.codeprocessor.java.JavaProjectSummarizer;
 import org.chaoticbits.collabcloud.vc.git.GitLoader;
 import org.chaoticbits.collabcloud.vc.git.GitLoaderTest;
 import org.chaoticbits.collabcloud.visualizer.Intersector;
@@ -62,36 +58,15 @@ public class SummarizeRepo {
 
 	public static void main(String[] args) throws ParseException, IOException {
 		PropertyConfigurator.configure("log4j.properties");
-		CloudWeights weights = getWeights(TEST_BED);
+		CloudWeights weights = new JavaProjectSummarizer().summarize(TEST_BED);
 		weights = new GitLoader(new File(TEST_BED.getAbsolutePath() + "/.git"), GitLoaderTest.SECOND_COMMIT_ID).crossWithDiff(weights, modifier);
-		// CloudWeights weights = getWeights(new File(THIS_REPO.getAbsolutePath() + "/src"));
-		// weights = new GitLoader(new File(THIS_REPO.getAbsolutePath() + "/.git"),
-		// THIS_REPO_SECOND_COMMIT_ID).crossWithDiff(weights, modifier);
+		// CloudWeights weights = new JavaProjectSummarizer().summarize(new File(THIS_REPO.getAbsolutePath()
+		// + "/src"));
+		// weights = new GitLoader(new File(THIS_REPO.getAbsolutePath() +
+		// "/.git"),THIS_REPO_SECOND_COMMIT_ID).crossWithDiff(weights, modifier);
 		System.out.println("==Weights after Diff Adjustment==");
 		System.out.println(weights);
 		layoutWords(weights);
-	}
-
-	private static CloudWeights getWeights(File dir) throws ParseException, IOException {
-		List<File> files = recurseFiles(dir);
-		CloudWeights weights = new CloudWeights();
-		for (File file : files) {
-			CompilationUnit unit = JavaParser.parse(file);
-			weights = unit.accept(new JavaSummarizeVisitor(new JavaClassArtifact(file)), weights);
-		}
-		return weights;
-	}
-
-	private static List<File> recurseFiles(File topDir) {
-		List<File> list = new ArrayList<File>();
-		File[] files = topDir.listFiles();
-		for (File file : files) {
-			if (file.isDirectory())
-				list.addAll(recurseFiles(file));
-			else if (file.getName().endsWith(".java"))
-				list.add(file);
-		}
-		return list;
 	}
 
 	private static void layoutWords(CloudWeights weights) throws IOException {
