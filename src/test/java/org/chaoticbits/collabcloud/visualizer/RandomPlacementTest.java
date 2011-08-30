@@ -1,14 +1,14 @@
 package org.chaoticbits.collabcloud.visualizer;
 
-import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
-import org.easymock.classextension.EasyMock;
-import org.easymock.classextension.IMocksControl;
+import org.easymock.EasyMock;
+import org.easymock.IMocksControl;
 import org.junit.Test;
 
 public class RandomPlacementTest {
@@ -20,6 +20,7 @@ public class RandomPlacementTest {
 		ctrl = EasyMock.createControl();
 		Random rand = ctrl.createMock(Random.class);
 		RandomPlacement p = new RandomPlacement(rand, new Rectangle2D.Double(80, 50, 10, 20));
+		
 		expect(rand.nextDouble()).andReturn(0.0);
 		expect(rand.nextDouble()).andReturn(1.0);
 		ctrl.replay();

@@ -1,6 +1,6 @@
 package org.chaoticbits.collabcloud.codeprocessor;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.util.Collections;
