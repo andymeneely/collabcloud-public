@@ -1,5 +1,6 @@
 package org.chaoticbits.collabcloud.visualizer;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -48,5 +49,14 @@ public class SpiralIteratorTest {
 		} catch (IllegalStateException e) {
 			Assert.assertEquals("Not supported.", e.getMessage());
 		}
+	}
+	
+	@Test
+	public void squashdown() throws Exception {
+		SpiralIterator itr = new SpiralIterator(new Point2D.Double(250, 250), 100.0d, 4, 2.5);
+		assertTrue(itr.hasNext());
+		assertEquals("start at center", new Point2D.Double(250, 250), itr.next());
+		assertTrue(itr.hasNext());
+		assertEquals("larger, but squashed", new Point2D.Double(311.95, 246.69), itr.next());
 	}
 }
