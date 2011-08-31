@@ -1,5 +1,6 @@
 package org.chaoticbits.collabcloud.visualizer;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -18,17 +19,17 @@ public class SpiralIteratorTest {
 	public void iterateOver100Width() throws Exception {
 		SpiralIterator itr = new SpiralIterator(new Point2D.Double(250, 250), 100.0d, 4);
 		assertTrue(itr.hasNext());
-		assertEquals("start at center", new Point2D.Double(250, 250), itr.next());
+		assertPointEquals("start at center", new Point2D.Double(250, 250), itr.next());
 		assertTrue(itr.hasNext());
-		assertEquals("larger", new Point2D.Double(274.78, 246.69), itr.next());
+		assertPointEquals("larger", new Point2D.Double(274.78, 246.69), itr.next());
 		assertTrue(itr.hasNext());
-		assertEquals("larger", new Point2D.Double(298.25, 236.88), itr.next());
+		assertPointEquals("larger", new Point2D.Double(298.25, 236.88), itr.next());
 		assertTrue(itr.hasNext());
-		assertEquals("largest", new Point2D.Double(319.13, 220.92), itr.next());
+		assertPointEquals("largest", new Point2D.Double(319.13, 220.92), itr.next());
 		assertFalse("No more", itr.hasNext());
 	}
 
-	private void assertEquals(String message, Point2D exp, Point2D actual) {
+	private void assertPointEquals(String message, Point2D exp, Point2D actual) {
 		org.junit.Assert.assertEquals(message + "(x)", exp.getX(), actual.getX(), 0.01);
 		org.junit.Assert.assertEquals(message + "(y)", exp.getY(), actual.getY(), 0.01);
 	}
@@ -54,8 +55,32 @@ public class SpiralIteratorTest {
 	public void squashdown() throws Exception {
 		SpiralIterator itr = new SpiralIterator(new Point2D.Double(250, 250), 100.0d, 4, 2.5);
 		assertTrue(itr.hasNext());
-		assertEquals("start at center", new Point2D.Double(250, 250), itr.next());
+		assertPointEquals("start at center", new Point2D.Double(250, 250), itr.next());
 		assertTrue(itr.hasNext());
-		assertEquals("larger, but squashed", new Point2D.Double(311.95, 246.69), itr.next());
+		assertPointEquals("larger, but squashed", new Point2D.Double(311.95, 246.69), itr.next());
+	}
+	
+	@Test
+	public void initCenter() throws Exception {
+		SpiralIterator itr = new SpiralIterator(100.0d, 4, 2.5);
+		try{
+			itr.next();
+			fail("exception should have been thrown");
+		}catch(IllegalAccessError error){
+			assertEquals("Initialize spiral center first.", error.getMessage());
+		}
+		itr.initCenter(new Point2D.Double(250, 250));
+		itr.next(); //no exception!
+	}
+	@Test
+	public void initCenterAgain() throws Exception {
+		Point2D.Double center = new Point2D.Double(250, 250);
+		SpiralIterator itr = new SpiralIterator(center, 100.0d, 4, 2.5);
+		try{
+			itr.initCenter(center);
+			fail("exception should have been thrown");
+		}catch(IllegalAccessError error){
+			assertEquals("Center already intialized!", error.getMessage());
+		}
 	}
 }
