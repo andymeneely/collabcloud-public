@@ -1,6 +1,6 @@
 package org.chaoticbits.collabcloud.visualizer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -69,18 +69,17 @@ public class SpiralIteratorTest {
 		}catch(IllegalAccessError error){
 			assertEquals("Initialize spiral center first.", error.getMessage());
 		}
-		itr.initCenter(new Point2D.Double(250, 250));
+		itr.resetCenter(new Point2D.Double(250, 250));
 		itr.next(); //no exception!
 	}
+	
 	@Test
-	public void initCenterAgain() throws Exception {
-		Point2D.Double center = new Point2D.Double(250, 250);
-		SpiralIterator itr = new SpiralIterator(center, 100.0d, 4, 2.5);
-		try{
-			itr.initCenter(center);
-			fail("exception should have been thrown");
-		}catch(IllegalAccessError error){
-			assertEquals("Center already intialized!", error.getMessage());
-		}
+	public void resetCenter() throws Exception {
+		SpiralIterator itr = new SpiralIterator(new Point2D.Double(250, 250), 100.0d, 4);
+		assertPointEquals("start at center", new Point2D.Double(250, 250), itr.next());
+		assertPointEquals("larger", new Point2D.Double(274.78, 246.69), itr.next());
+		itr.resetCenter(new Point2D.Double(150, 150));
+		assertPointEquals("start at a different center", new Point2D.Double(150, 150), itr.next());
+		assertPointEquals("larger, different center", new Point2D.Double(174.78, 146.69), itr.next());
 	}
 }

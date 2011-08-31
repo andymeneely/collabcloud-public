@@ -57,10 +57,13 @@ public class SpiralIterator implements Iterable<Point2D>, Iterator<Point2D> {
 		this.step = maxSize / numSteps;
 	}
 	
-	public void initCenter(Point2D center){
-		if(this.center!=null)
-			throw new IllegalAccessError("Center already intialized!");
+	/**
+	 * Resets the iterator to a new center. 
+	 * @param center
+	 */
+	public void resetCenter(Point2D center){
 		this.center = center;
+		this.i=0.0d;
 	}
 
 	public Iterator<Point2D> iterator() {
