@@ -22,7 +22,7 @@ public class JavaProjectSummarizerTest {
 
 	@Test
 	public void testProject() throws Exception {
-		IMocksControl ctrl = EasyMock.createStrictControl();
+		IMocksControl ctrl = EasyMock.createControl();
 		JavaProjectSummarizer summarizer = new JavaProjectSummarizer();
 		PowerMock.mockStatic(JavaParser.class);
 		CompilationUnit unit = PowerMock.createMock(CompilationUnit.class);
@@ -35,9 +35,9 @@ public class JavaProjectSummarizerTest {
 		expect(mockFile.isDirectory()).andReturn(false).anyTimes();
 		expect(mockFile.getName()).andReturn("a.java").anyTimes();
 		expect(JavaParser.parse(mockFile)).andReturn(unit).once();
-//		expect(unit.accept((JavaSummarizeVisitor) EasyMock.anyObject(), (CloudWeights) EasyMock.anyObject())).andReturn(weights).once();
+		expect(unit.accept((JavaSummarizeVisitor) EasyMock.anyObject(), (CloudWeights) EasyMock.anyObject())).andReturn(weights).once();
 		ctrl.replay();
-		PowerMock.replay();
+		PowerMock.replay(JavaParser.class, unit);
 
 		summarizer.summarize(mockDir);
 
