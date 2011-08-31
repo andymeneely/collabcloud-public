@@ -1,7 +1,6 @@
 package org.chaoticbits.collabcloud.codeprocessor.java;
 
 import static org.easymock.EasyMock.expect;
-import static org.powermock.api.easymock.PowerMock.*;
 import japa.parser.JavaParser;
 import japa.parser.ast.CompilationUnit;
 
