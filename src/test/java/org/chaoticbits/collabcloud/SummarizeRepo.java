@@ -24,6 +24,8 @@ import org.chaoticbits.collabcloud.visualizer.LayoutTokens;
 import org.chaoticbits.collabcloud.visualizer.RandomPlacement;
 import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 import org.chaoticbits.collabcloud.visualizer.color.RandomGrey;
+import org.chaoticbits.collabcloud.visualizer.font.BoundedLogFont;
+import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
 
 public class SummarizeRepo {
 	private static final double LEAF_CUTOFF = 1.0d;
@@ -41,6 +43,7 @@ public class SummarizeRepo {
 	private static IWeightModifier modifier = new MultiplyModifier(1.1);
 	private static Font INITIAL_FONT = new Font("Courier New", Font.BOLD, 150);
 	private static IColorScheme COLOR_SCHEME = new RandomGrey(RAND, 25, 175);
+	private static double MAX_FONT_SIZE = 75.0d;
 
 	private static final Intersector intersector = new Intersector(10, LEAF_CUTOFF);
 	private static final IHitCheck<Shape> checker = new IHitCheck<Shape>() {
@@ -64,7 +67,8 @@ public class SummarizeRepo {
 		// "/.git"),THIS_REPO_SECOND_COMMIT_ID).crossWithDiff(weights, modifier);
 		// System.out.println("==Weights after Diff Adjustment==");
 		// System.out.println(weights);
-		new LayoutTokens(WIDTH, HEIGHT, INITIAL_FONT, RAND, checker, PLACE_STRATEGY, spiral, COLOR_SCHEME).makeImage(weights, new File(
+		IFontTransformer FONT_TRANSFORMER = new BoundedLogFont(INITIAL_FONT, weights, MAX_FONT_SIZE);
+		new LayoutTokens(WIDTH, HEIGHT, FONT_TRANSFORMER, checker, PLACE_STRATEGY, spiral, COLOR_SCHEME).makeImage(weights, new File(
 				"output/summarizerepo.png"), "PNG");
 	}
 
