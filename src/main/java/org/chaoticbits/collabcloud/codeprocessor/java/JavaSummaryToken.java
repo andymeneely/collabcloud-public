@@ -14,9 +14,9 @@ public class JavaSummaryToken implements ISummaryToken {
 	private JavaClassArtifact summarizable;
 	private String fullName;
 	private String token;
-	private String type;
+	private JavaTokenType type;
 
-	public JavaSummaryToken(JavaClassArtifact summarizable, String fullName, String token, String type) {
+	public JavaSummaryToken(JavaClassArtifact summarizable, String fullName, String token, JavaTokenType type) {
 		this.summarizable = summarizable;
 		this.fullName = fullName;
 		this.token = token;
@@ -35,7 +35,7 @@ public class JavaSummaryToken implements ISummaryToken {
 		return fullName;
 	}
 
-	public String getType() {
+	public JavaTokenType getType() {
 		return type;
 	}
 

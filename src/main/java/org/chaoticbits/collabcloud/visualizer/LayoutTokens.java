@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
 import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
+import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
 
 public class LayoutTokens {

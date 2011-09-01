@@ -13,17 +13,17 @@ import org.apache.log4j.PropertyConfigurator;
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
 import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
+import org.chaoticbits.collabcloud.codeprocessor.java.JavaColorScheme;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaProjectSummarizer;
 import org.chaoticbits.collabcloud.vc.git.GitLoader;
 import org.chaoticbits.collabcloud.vc.git.GitLoaderTest;
-import org.chaoticbits.collabcloud.visualizer.IColorScheme;
 import org.chaoticbits.collabcloud.visualizer.IPlaceStrategy;
 import org.chaoticbits.collabcloud.visualizer.Intersector;
 import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.LayoutTokens;
 import org.chaoticbits.collabcloud.visualizer.RandomPlacement;
 import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
-import org.chaoticbits.collabcloud.visualizer.color.RandomGrey;
+import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
 import org.chaoticbits.collabcloud.visualizer.font.BoundedLogFont;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
 
@@ -31,7 +31,7 @@ public class SummarizeRepo {
 	private static final double LEAF_CUTOFF = 1.0d;
 	private static final int SPIRAL_STEPS = 500;
 	private static final double SPIRAL_MAX_RADIUS = 400.0d;
-	private static final double SQUASHDOWN = 2;
+	private static final double SQUASHDOWN = 1;
 	private static final SpiralIterator spiral = new SpiralIterator(SPIRAL_MAX_RADIUS, SPIRAL_STEPS, SQUASHDOWN);
 	private static final File TEST_BED = new File("testgitrepo");
 	// private static final File THIS_REPO = new File("");
@@ -42,7 +42,8 @@ public class SummarizeRepo {
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SummarizeRepo.class);
 	private static IWeightModifier modifier = new MultiplyModifier(1.1);
 	private static Font INITIAL_FONT = new Font("Courier New", Font.BOLD, 150);
-	private static IColorScheme COLOR_SCHEME = new RandomGrey(RAND, 25, 175);
+//	private static IColorScheme COLOR_SCHEME = new RandomGrey(RAND, 25, 175);
+	private static IColorScheme COLOR_SCHEME = new JavaColorScheme(RAND,50);
 	private static double MAX_FONT_SIZE = 75.0d;
 
 	private static final Intersector intersector = new Intersector(10, LEAF_CUTOFF);

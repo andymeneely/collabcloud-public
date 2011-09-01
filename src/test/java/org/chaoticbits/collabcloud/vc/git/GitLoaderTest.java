@@ -22,11 +22,11 @@ public class GitLoaderTest {
 
 	private static final File GIT_DIR = new File("testgitrepo/.git");
 
-	private JavaSummaryToken timedNegaScout = new JavaSummaryToken(null, "", "TimedNegaScout", "");
-	private JavaSummaryToken greedyPlayer = new JavaSummaryToken(null, "", "GreedyPlayer", "");
-	private JavaSummaryToken getPlay = new JavaSummaryToken(null, "", "getPlay", "");
-	private JavaSummaryToken setLog = new JavaSummaryToken(null, "", "setLog", "");
-	private JavaSummaryToken play = new JavaSummaryToken(null, "", "play", "");
+	private JavaSummaryToken timedNegaScout = new JavaSummaryToken(null, "", "TimedNegaScout", null);
+	private JavaSummaryToken greedyPlayer = new JavaSummaryToken(null, "", "GreedyPlayer", null);
+	private JavaSummaryToken getPlay = new JavaSummaryToken(null, "", "getPlay", null);
+	private JavaSummaryToken setLog = new JavaSummaryToken(null, "", "setLog", null);
+	private JavaSummaryToken play = new JavaSummaryToken(null, "", "play", null);
 
 	@Test
 	public void allThreeDevs() throws Exception {

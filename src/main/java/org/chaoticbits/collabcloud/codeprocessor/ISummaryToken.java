@@ -8,6 +8,6 @@ public interface ISummaryToken {
 	
 	abstract public String getFullName();
 	
-	abstract public String getType();
+	abstract public ITokenType getType();
 	
 }

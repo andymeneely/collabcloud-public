@@ -1,5 +1,9 @@
 package org.chaoticbits.collabcloud.codeprocessor.java;
 
+import static org.chaoticbits.collabcloud.codeprocessor.java.JavaTokenType.CLASS;
+import static org.chaoticbits.collabcloud.codeprocessor.java.JavaTokenType.ENUM;
+import static org.chaoticbits.collabcloud.codeprocessor.java.JavaTokenType.METHOD;
+import static org.chaoticbits.collabcloud.codeprocessor.java.JavaTokenType.PACKAGE;
 import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.EnumConstantDeclaration;
@@ -48,7 +52,7 @@ public class JavaSummarizeVisitor extends ReturnArgVisitorAdapter<CloudWeights> 
 	@Override
 	public CloudWeights visit(MethodDeclaration n, CloudWeights weights) {
 		super.visit(n, weights);
-		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName(), n.getName(), "method");
+		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName(), n.getName(), METHOD);
 		weights.increment(token, weight("methodDeclaration"));
 		return weights;
 	}
@@ -56,7 +60,7 @@ public class JavaSummarizeVisitor extends ReturnArgVisitorAdapter<CloudWeights> 
 	@Override
 	public CloudWeights visit(PackageDeclaration n, CloudWeights weights) {
 		super.visit(n, weights);
-		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName().toString(), n.getName().getName(), "package");
+		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName().toString(), n.getName().getName(), PACKAGE);
 		weights.increment(token, weight("package"));
 		return weights;
 	}
@@ -64,7 +68,7 @@ public class JavaSummarizeVisitor extends ReturnArgVisitorAdapter<CloudWeights> 
 	@Override
 	public CloudWeights visit(MethodCallExpr n, CloudWeights weights) {
 		super.visit(n, weights);
-		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName(), n.getName(), "method");
+		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName(), n.getName(), METHOD);
 		weights.increment(token, weight("methodCall"));
 		return weights;
 	}
@@ -72,7 +76,7 @@ public class JavaSummarizeVisitor extends ReturnArgVisitorAdapter<CloudWeights> 
 	@Override
 	public CloudWeights visit(ClassOrInterfaceDeclaration n, CloudWeights weights) {
 		super.visit(n, weights);
-		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName(), n.getName(), "class");
+		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName(), n.getName(), CLASS);
 		weights.increment(token, weight("classOrInterfaceDeclaration"));
 		return weights;
 	}
@@ -80,7 +84,7 @@ public class JavaSummarizeVisitor extends ReturnArgVisitorAdapter<CloudWeights> 
 	@Override
 	public CloudWeights visit(EnumDeclaration n, CloudWeights weights) {
 		super.visit(n, weights);
-		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName(), n.getName(), "enum");
+		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName(), n.getName(), ENUM);
 		weights.increment(token, weight("enumType"));
 		return weights;
 	}
@@ -88,7 +92,7 @@ public class JavaSummarizeVisitor extends ReturnArgVisitorAdapter<CloudWeights> 
 	@Override
 	public CloudWeights visit(EnumConstantDeclaration n, CloudWeights weights) {
 		super.visit(n, weights);
-		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName(), n.getName(), "enum");
+		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName(), n.getName(), ENUM);
 		weights.increment(token, weight("enumConstant"));
 		return weights;
 	}

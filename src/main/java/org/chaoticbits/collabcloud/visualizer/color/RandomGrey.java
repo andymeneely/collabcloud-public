@@ -5,7 +5,6 @@ import java.util.Random;
 
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
-import org.chaoticbits.collabcloud.visualizer.IColorScheme;
 
 public class RandomGrey implements IColorScheme {
 
