@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.visualizer;
+package org.chaoticbits.collabcloud.visualizer.color;
 
 import java.awt.Color;
 
