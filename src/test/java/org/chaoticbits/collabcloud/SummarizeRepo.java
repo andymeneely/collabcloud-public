@@ -17,15 +17,15 @@ import org.chaoticbits.collabcloud.codeprocessor.java.JavaColorScheme;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaProjectSummarizer;
 import org.chaoticbits.collabcloud.vc.git.GitLoader;
 import org.chaoticbits.collabcloud.vc.git.GitLoaderTest;
-import org.chaoticbits.collabcloud.visualizer.IPlaceStrategy;
 import org.chaoticbits.collabcloud.visualizer.Intersector;
 import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.LayoutTokens;
-import org.chaoticbits.collabcloud.visualizer.RandomPlacement;
 import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
 import org.chaoticbits.collabcloud.visualizer.font.BoundedLogFont;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
+import org.chaoticbits.collabcloud.visualizer.place.IPlaceStrategy;
+import org.chaoticbits.collabcloud.visualizer.place.RandomPlacement;
 
 public class SummarizeRepo {
 	private static final double LEAF_CUTOFF = 1.0d;

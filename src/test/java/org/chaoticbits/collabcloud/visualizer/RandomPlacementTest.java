@@ -7,6 +7,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
+import org.chaoticbits.collabcloud.visualizer.place.RandomPlacement;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Test;

@@ -20,6 +20,7 @@ import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
 import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
+import org.chaoticbits.collabcloud.visualizer.place.IPlaceStrategy;
 
 public class LayoutTokens {
 	private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
