@@ -60,7 +60,7 @@ public class JavaSummarizeVisitor extends ReturnArgVisitorAdapter<CloudWeights> 
 	@Override
 	public CloudWeights visit(PackageDeclaration n, CloudWeights weights) {
 		super.visit(n, weights);
-		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName().toString(), n.getName().getName(), PACKAGE);
+		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName().toString(), n.getName().toString(), PACKAGE);
 		weights.increment(token, weight("package"));
 		return weights;
 	}
