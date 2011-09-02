@@ -24,6 +24,7 @@ import org.chaoticbits.collabcloud.visualizer.place.IPlaceStrategy;
 
 public class LayoutTokens {
 	private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
+	private static final boolean DEBUG_SPIRALS = true;
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LayoutTokens.class);
 	private final int width;
 	private final int height;
@@ -35,7 +36,6 @@ public class LayoutTokens {
 
 	public LayoutTokens(int width, int height, IFontTransformer fontTrans, IHitCheck<Shape> checker, IPlaceStrategy placeStrategy,
 			SpiralIterator spiral, IColorScheme colorScheme) {
-		super();
 		this.width = width;
 		this.height = height;
 		this.fontTrans = fontTrans;
@@ -74,6 +74,9 @@ public class LayoutTokens {
 					g2d.setColor(colorScheme.lookup(entry.getKey(), weights));
 					g2d.fill(nextShape);
 					break;
+				} else {
+					if (DEBUG_SPIRALS && entry.getKey().getToken().equals("GreedyPlayer"))
+						g2d.fillRect((int) next.getX(), (int) next.getY(), 2, 2);
 				}
 			}
 		}
