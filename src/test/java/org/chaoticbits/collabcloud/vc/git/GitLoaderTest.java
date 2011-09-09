@@ -22,7 +22,7 @@ public class GitLoaderTest {
 
 	private static final File GIT_DIR = new File("testgitrepo/.git");
 
-	private JavaSummaryToken timedNegaScout = new JavaSummaryToken(null, "", "TimedNegaScout", null);
+	private JavaSummaryToken timedNegaScout = new JavaSummaryToken(null, "", "TimedNegaScoutPlayer", null);
 	private JavaSummaryToken greedyPlayer = new JavaSummaryToken(null, "", "GreedyPlayer", null);
 	private JavaSummaryToken getPlay = new JavaSummaryToken(null, "", "getPlay", null);
 	private JavaSummaryToken setLog = new JavaSummaryToken(null, "", "setLog", null);
@@ -65,8 +65,8 @@ public class GitLoaderTest {
 		gitLoader.markSince(since);
 
 		gitLoader.crossWithDiff(weights, new MultiplyModifier(2.0));
-		assertEquals("TimedNegaScoutPlayer was there", 512.0, weights.get(timedNegaScout), 0.0001);
-		assertEquals("GreedyPlayer was there", 64.0, weights.get(greedyPlayer), 0.0001);
+		assertEquals("TimedNegaScoutPlayer was there", 64.0, weights.get(timedNegaScout), 0.0001);
+		assertEquals("GreedyPlayer was there", 16.0, weights.get(greedyPlayer), 0.0001);
 		assertEquals("getPlay was hit a lot", 128.0, weights.get(getPlay), 0.0001);
 		assertEquals("setLot was not hit at all", 1.0, weights.get(setLog), 0.0001);
 		assertEquals("play was not there", 0.0, weights.get(play), 0.0001);
@@ -86,8 +86,8 @@ public class GitLoaderTest {
 		gitLoader.markSince(since);
 
 		gitLoader.crossWithDiff(weights, new IncrementModifier(1.0));
-		assertEquals("TimedNegaScoutPlayer was there", 10.0, weights.get(timedNegaScout), 0.0001);
-		assertEquals("GreedyPlayer was there", 7.0, weights.get(greedyPlayer), 0.0001);
+		assertEquals("TimedNegaScoutPlayer was there", 7.0, weights.get(timedNegaScout), 0.0001);
+		assertEquals("GreedyPlayer was there", 5.0, weights.get(greedyPlayer), 0.0001);
 		assertEquals("setLot was not hit at all", 1.0, weights.get(setLog), 0.0001);
 		assertEquals("getPlay was hit a lot", 8.0, weights.get(getPlay), 0.0001);
 		assertEquals("play was only in the diff, not the cloud summary", 0.0, weights.get(play), 0.0001);

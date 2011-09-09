@@ -5,14 +5,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 
 import org.chaoticbits.collabcloud.Developer;
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
-import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassSummarizable;
 import org.chaoticbits.collabcloud.vc.IVersionControlLoader;
@@ -30,6 +28,7 @@ public class GitLoader implements IVersionControlLoader {
 
 	private FileRepository repo;
 	private ObjectId since;
+	private final GitDiffParser diffParser = new GitDiffParser();
 
 	public GitLoader(File repoDir) throws IOException {
 		repo = new FileRepositoryBuilder().setGitDir(repoDir).readEnvironment().findGitDir().build();
@@ -68,7 +67,8 @@ public class GitLoader implements IVersionControlLoader {
 		Iterator<RevCommit> itr = rw.iterator();
 		while (itr.hasNext()) {
 			RevCommit commit = itr.next();
-			RevCommit parent = commit.getParent(0); // TODO Handle multiple parents
+			RevCommit parent = commit.getParent(0); // TODO Handle multiple
+													// parents
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			DiffFormatter formatter = new DiffFormatter(out);
 			formatter.setRepository(repo);
@@ -122,16 +122,9 @@ public class GitLoader implements IVersionControlLoader {
 	}
 
 	public CloudWeights crossWithDiff(CloudWeights weights, IWeightModifier modifier) throws IOException {
-		String diffsString = buildDiffString();
-		Scanner scanner = new Scanner(diffsString);
-		while (scanner.hasNext()) {
-			String line = scanner.nextLine();
-			Set<Entry<ISummaryToken, Double>> unsortedEntries = weights.unsortedEntries();
-			for (Entry<ISummaryToken, Double> entry : unsortedEntries) {
-				if (line.contains(entry.getKey().getToken())) {
-					weights.put(entry.getKey(), modifier.modify(entry.getValue()));
-				}
-			}
+		Scanner scanner = new Scanner(buildDiffString());
+		while (scanner.hasNextLine()) {
+			diffParser.processTextLine(weights, modifier, scanner.nextLine());
 		}
 		return weights;
 	}
