@@ -47,7 +47,7 @@ public class SummarizeRepo {
 	private static Font INITIAL_FONT = new Font("Courier New", Font.BOLD, 150);
 	// private static IColorScheme COLOR_SCHEME = new RandomGrey(RAND, 25, 175);
 	private static IColorScheme COLOR_SCHEME = new JavaColorScheme(RAND, 50);
-	private static double MAX_FONT_SIZE = 50.0d;
+	private static double MAX_FONT_SIZE = 70.0d;
 
 	private static final Intersector intersector = new Intersector(10, LEAF_CUTOFF);
 	private static final IHitCheck<Shape> checker = new IHitCheck<Shape>() {

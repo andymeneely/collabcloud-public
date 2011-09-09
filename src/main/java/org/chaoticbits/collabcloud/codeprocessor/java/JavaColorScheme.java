@@ -1,6 +1,10 @@
 package org.chaoticbits.collabcloud.codeprocessor.java;
 
-import static org.chaoticbits.collabcloud.codeprocessor.java.JavaTokenType.*;
+import static org.chaoticbits.collabcloud.codeprocessor.java.JavaTokenType.CLASS;
+import static org.chaoticbits.collabcloud.codeprocessor.java.JavaTokenType.ENUM;
+import static org.chaoticbits.collabcloud.codeprocessor.java.JavaTokenType.METHOD;
+import static org.chaoticbits.collabcloud.codeprocessor.java.JavaTokenType.PACKAGE;
+
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;

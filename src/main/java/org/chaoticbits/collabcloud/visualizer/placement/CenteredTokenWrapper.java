@@ -1,8 +1,6 @@
 package org.chaoticbits.collabcloud.visualizer.placement;
 
-import java.awt.Font;
 import java.awt.Shape;
-import java.awt.font.FontRenderContext;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
