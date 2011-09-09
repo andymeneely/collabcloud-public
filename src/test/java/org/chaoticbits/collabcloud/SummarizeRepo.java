@@ -43,11 +43,11 @@ public class SummarizeRepo {
 			400, 50, 50)));
 
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SummarizeRepo.class);
-	private static IWeightModifier modifier = new MultiplyModifier(2.0);
+	private static IWeightModifier modifier = new MultiplyModifier(1.5);
 	private static Font INITIAL_FONT = new Font("Courier New", Font.BOLD, 150);
 	// private static IColorScheme COLOR_SCHEME = new RandomGrey(RAND, 25, 175);
 	private static IColorScheme COLOR_SCHEME = new JavaColorScheme(RAND, 50);
-	private static double MAX_FONT_SIZE = 50.0d;
+	private static double MAX_FONT_SIZE = 75.0d;
 
 	private static final Intersector intersector = new Intersector(10, LEAF_CUTOFF);
 	private static final IHitCheck<Shape> checker = new IHitCheck<Shape>() {
