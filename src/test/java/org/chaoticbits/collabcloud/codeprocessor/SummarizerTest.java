@@ -8,16 +8,17 @@ import japa.parser.ast.CompilationUnit;
 import java.io.File;
 import java.io.IOException;
 
-import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassArtifact;
+import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassSummarizable;
+import org.chaoticbits.collabcloud.codeprocessor.java.JavaPackageSummarizable;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummarizeVisitor;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummaryToken;
 import org.junit.Test;
 
 public class SummarizerTest {
 
-	private final JavaClassArtifact contrivedExample = new JavaClassArtifact(source("ContrivedExample.java"));
-	private final JavaClassArtifact helloWorld = new JavaClassArtifact(source("HelloWorld.java"));
-	private final JavaClassArtifact isPrime = new JavaClassArtifact(source("IsPrime.java"));
+	private final JavaClassSummarizable contrivedExample = new JavaClassSummarizable(source("ContrivedExample.java"));
+	private final JavaClassSummarizable helloWorld = new JavaClassSummarizable(source("HelloWorld.java"));
+	private final JavaClassSummarizable isPrime = new JavaClassSummarizable(source("IsPrime.java"));
 
 	@Test
 	public void declaredMethod() throws Exception {
@@ -35,7 +36,11 @@ public class SummarizerTest {
 	@Test
 	public void packageNames() throws Exception {
 		CloudWeights weights = JavaParser.parse(isPrime.getFile()).accept(new JavaSummarizeVisitor(isPrime), new CloudWeights());
-		assertEquals("include last word of package name", 1.0d, lookUp(weights, isPrime, "testinputs"), 0.0000001);
+		assertEquals(
+				"include last word of package name",
+				1.0d,
+				lookUp(weights, new JavaPackageSummarizable("org.chaoticbits.collabcloud.testinputs"),
+						"org.chaoticbits.collabcloud.testinputs"), 0.0000001);
 	}
 
 	@Test
@@ -105,7 +110,7 @@ public class SummarizerTest {
 		System.out.println(unit);
 	}
 
-	private double lookUp(CloudWeights weights, JavaClassArtifact artifact, String token) {
+	private double lookUp(CloudWeights weights, ISummarizable artifact, String token) {
 		return weights.get(new JavaSummaryToken(artifact, null, token, null));
 	}
 

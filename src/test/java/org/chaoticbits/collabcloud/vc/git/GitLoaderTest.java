@@ -11,7 +11,7 @@ import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
 import org.chaoticbits.collabcloud.codeprocessor.IncrementModifier;
 import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
-import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassArtifact;
+import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassSummarizable;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummaryToken;
 import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Test;
@@ -46,8 +46,8 @@ public class GitLoaderTest {
 		ObjectId since = gitLoader.getRepo().resolve(SECOND_COMMIT_ID);
 		gitLoader.markSince(since);
 		Set<ISummarizable> artifacts = gitLoader.getFilesChanged();
-		assertTrue(artifacts.contains(new JavaClassArtifact(new File("mancala/player/TimedNegaScoutPlayer.java"))));
-		assertTrue(artifacts.contains(new JavaClassArtifact(new File("mancala/player/GreedyPlayer.java"))));
+		assertTrue(artifacts.contains(new JavaClassSummarizable(new File("mancala/player/TimedNegaScoutPlayer.java"))));
+		assertTrue(artifacts.contains(new JavaClassSummarizable(new File("mancala/player/GreedyPlayer.java"))));
 		assertEquals("Only 2 files changed", 2, artifacts.size());
 	}
 

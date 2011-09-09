@@ -10,7 +10,7 @@ public class JavaSummaryTokenTest {
 
 	@Test
 	public void testToString() throws Exception {
-		assertEquals("name(full name)", new JavaSummaryToken(null, "full name", "name", null).toString());
+		assertEquals("name(null, full name, null)", new JavaSummaryToken(null, "full name", "name", null).toString());
 	}
 	
 	@Test

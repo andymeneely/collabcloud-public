@@ -25,7 +25,7 @@ public class JavaProjectSummarizer implements IProjectSummarizer {
 			CompilationUnit unit;
 			try {
 				unit = JavaParser.parse(file);
-				weights = unit.accept(new JavaSummarizeVisitor(new JavaClassArtifact(file)), weights);
+				weights = unit.accept(new JavaSummarizeVisitor(new JavaClassSummarizable(file)), weights);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

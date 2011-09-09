@@ -4,11 +4,11 @@ import java.io.File;
 
 import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
 
-public class JavaClassArtifact implements ISummarizable {
+public class JavaClassSummarizable implements ISummarizable {
 
 	private File file;
 
-	public JavaClassArtifact(File path) {
+	public JavaClassSummarizable(File path) {
 		this.file = path;
 	}
 
@@ -32,7 +32,7 @@ public class JavaClassArtifact implements ISummarizable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JavaClassArtifact other = (JavaClassArtifact) obj;
+		JavaClassSummarizable other = (JavaClassSummarizable) obj;
 		if (file == null) {
 			if (other.file != null)
 				return false;

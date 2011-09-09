@@ -14,7 +14,7 @@ import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
 import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
-import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassArtifact;
+import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassSummarizable;
 import org.chaoticbits.collabcloud.vc.IVersionControlLoader;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
@@ -83,7 +83,7 @@ public class GitLoader implements IVersionControlLoader {
 		while (scanner.hasNext()) {
 			String line = scanner.nextLine();
 			if (line.startsWith("+++") || line.startsWith("---")) {
-				set.add(new JavaClassArtifact(new File(line.substring(6))));
+				set.add(new JavaClassSummarizable(new File(line.substring(6))));
 			}
 		}
 		return set;

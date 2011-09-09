@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
+import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
 
 /**
  * A visitor that travels the AST of a Java compilation unit and counts stuff that is useful in summarizing
@@ -27,9 +28,9 @@ import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 public class JavaSummarizeVisitor extends ReturnArgVisitorAdapter<CloudWeights> {
 	private static final String WEIGHT_PROPS_PREFIX = "org.chaoticbits.collabcloud.weights.java.";
 	private Properties props;
-	private final JavaClassArtifact summarizable;
+	private final ISummarizable summarizable;
 
-	public JavaSummarizeVisitor(JavaClassArtifact summarizable) {
+	public JavaSummarizeVisitor(JavaClassSummarizable summarizable) {
 		this.summarizable = summarizable;
 		props = new Properties();
 		try {
@@ -60,7 +61,8 @@ public class JavaSummarizeVisitor extends ReturnArgVisitorAdapter<CloudWeights> 
 	@Override
 	public CloudWeights visit(PackageDeclaration n, CloudWeights weights) {
 		super.visit(n, weights);
-		JavaSummaryToken token = new JavaSummaryToken(summarizable, n.getName().toString(), n.getName().getName(), PACKAGE);
+		String name = n.getName().toString();
+		JavaSummaryToken token = new JavaSummaryToken(new JavaPackageSummarizable(name), name, name, PACKAGE);
 		weights.increment(token, weight("package"));
 		return weights;
 	}

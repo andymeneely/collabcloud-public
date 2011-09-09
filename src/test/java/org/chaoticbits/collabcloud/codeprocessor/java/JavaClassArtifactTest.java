@@ -11,7 +11,7 @@ public class JavaClassArtifactTest {
 	@Test
 	public void testToString() throws Exception {
 		File file = new File("testgitrepo");
-		JavaClassArtifact artifact = new JavaClassArtifact(file);
+		JavaClassSummarizable artifact = new JavaClassSummarizable(file);
 		assertEquals(file.toString(), artifact.toString());
 	}
 }

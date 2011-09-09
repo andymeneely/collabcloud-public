@@ -12,13 +12,12 @@ import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
  */
 public class JavaSummaryToken implements ISummaryToken {
 
-	private JavaClassArtifact summarizable;
+	private ISummarizable summarizable;
 	private String fullName;
 	private String token;
 	private JavaTokenType type;
 
-	public JavaSummaryToken(JavaClassArtifact summarizable, String fullName,
-			String token, JavaTokenType type) {
+	public JavaSummaryToken(ISummarizable summarizable, String fullName, String token, JavaTokenType type) {
 		this.summarizable = summarizable;
 		this.fullName = fullName;
 		this.token = token;
@@ -67,13 +66,13 @@ public class JavaSummaryToken implements ISummaryToken {
 	}
 
 	private boolean sameParent(JavaSummaryToken obj) {
-		if(summarizable==null)
-			return summarizable==obj.summarizable;
-		return this.summarizable==obj.summarizable || summarizable.equals(obj.summarizable);
+		if (summarizable == null)
+			return summarizable == obj.summarizable;
+		return this.summarizable == obj.summarizable || summarizable.equals(obj.summarizable);
 	}
 
 	@Override
 	public String toString() {
-		return token + "(" + fullName + ")";
+		return token + "(" + type + ", " + fullName + ", " + summarizable + ")";
 	}
 }
