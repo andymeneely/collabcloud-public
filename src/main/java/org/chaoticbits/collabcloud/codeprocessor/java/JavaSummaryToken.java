@@ -4,7 +4,8 @@ import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
 import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
 
 /**
- * A specific element of a Java class. Could be a method name, variable name, package name, etc.
+ * A specific element of a Java class. Could be a method name, variable name,
+ * package name, etc.
  * 
  * @author andy
  * 
@@ -16,7 +17,8 @@ public class JavaSummaryToken implements ISummaryToken {
 	private String token;
 	private JavaTokenType type;
 
-	public JavaSummaryToken(JavaClassArtifact summarizable, String fullName, String token, JavaTokenType type) {
+	public JavaSummaryToken(JavaClassArtifact summarizable, String fullName,
+			String token, JavaTokenType type) {
 		this.summarizable = summarizable;
 		this.fullName = fullName;
 		this.token = token;
@@ -61,12 +63,17 @@ public class JavaSummaryToken implements ISummaryToken {
 				return false;
 		} else if (!token.equals(other.token))
 			return false;
-		return true;
+		return sameParent(other);
+	}
+
+	private boolean sameParent(JavaSummaryToken obj) {
+		if(summarizable==null)
+			return summarizable==obj.summarizable;
+		return this.summarizable==obj.summarizable || summarizable.equals(obj.summarizable);
 	}
 
 	@Override
 	public String toString() {
 		return token + "(" + fullName + ")";
 	}
-
 }
