@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,7 +21,14 @@ import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
 import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
+import org.chaoticbits.collabcloud.visualizer.placement.IPlaceStrategy;
 
+/**
+ * The main class for laying out tokens on an image.
+ * 
+ * @author Andy
+ * 
+ */
 public class LayoutTokens {
 	private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LayoutTokens.class);
@@ -34,7 +42,6 @@ public class LayoutTokens {
 
 	public LayoutTokens(int width, int height, IFontTransformer fontTrans, IHitCheck<Shape> checker, IPlaceStrategy placeStrategy,
 			SpiralIterator spiral, IColorScheme colorScheme) {
-		super();
 		this.width = width;
 		this.height = height;
 		this.fontTrans = fontTrans;
@@ -64,11 +71,15 @@ public class LayoutTokens {
 
 			log.debug("Laying out " + entry.getKey() + "...[" + entry.getValue() + "]");
 			char[] chars = entry.getKey().getToken().toCharArray();
-			spiral.resetCenter(placeStrategy.getStartingPlace(entry.getKey()));
+			
+			GlyphVector glyph = font.createGlyphVector(FONT_RENDER_CONTEXT, chars);
+			spiral.resetCenter(placeStrategy.getStartingPlace(entry.getKey(), glyph.getOutline()));
 			while (spiral.hasNext()) {
-				Point2D next = spiral.next();
-				Shape nextShape = font.layoutGlyphVector(FONT_RENDER_CONTEXT, chars, 0, chars.length, Font.LAYOUT_LEFT_TO_RIGHT).getOutline(
-						(float) next.getX(), (float) next.getY());
+				Point2D next = spiral.next();			
+				// Shape nextShape = font.layoutGlyphVector(FONT_RENDER_CONTEXT,
+				// chars, 0, chars.length, Font.LAYOUT_LEFT_TO_RIGHT)
+				// .getOutline((float) next.getX(), (float) next.getY());
+				Shape nextShape = glyph.getOutline((float) next.getX(),(float) next.getY());
 				if (!placedShapes.hitNCache(nextShape)) {
 					g2d.setColor(colorScheme.lookup(entry.getKey(), weights));
 					g2d.fill(nextShape);
