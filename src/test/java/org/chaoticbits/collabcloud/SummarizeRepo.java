@@ -23,11 +23,10 @@ import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.LayoutTokens;
 import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
-import org.chaoticbits.collabcloud.visualizer.font.BoundedLogFont;
 import org.chaoticbits.collabcloud.visualizer.font.BoundedSqrtFont;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
-import org.chaoticbits.collabcloud.visualizer.place.IPlaceStrategy;
 import org.chaoticbits.collabcloud.visualizer.place.ParentNetworkPlacement;
+import org.chaoticbits.collabcloud.visualizer.placement.IPlaceStrategy;
 
 public class SummarizeRepo {
 	private static final double LEAF_CUTOFF = 1.0d;

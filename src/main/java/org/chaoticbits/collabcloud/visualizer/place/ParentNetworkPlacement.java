@@ -1,11 +1,13 @@
 package org.chaoticbits.collabcloud.visualizer.place;
 
 import java.awt.Dimension;
+import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.Set;
 
 import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
+import org.chaoticbits.collabcloud.visualizer.placement.IPlaceStrategy;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
@@ -37,7 +39,7 @@ public class ParentNetworkPlacement implements IPlaceStrategy {
 		this.center = center;
 	}
 
-	public Point2D getStartingPlace(ISummaryToken token) {
+	public Point2D getStartingPlace(ISummaryToken token, Shape shape) {
 		if (layout == null)
 			computeLayout();
 		return centered(token);
@@ -75,4 +77,5 @@ public class ParentNetworkPlacement implements IPlaceStrategy {
 	private boolean sameParent(ISummaryToken tokenA, ISummaryToken tokenB) {
 		return tokenA.getParentSummarizable() != null && tokenA.getParentSummarizable().equals(tokenB.getParentSummarizable());
 	}
+
 }

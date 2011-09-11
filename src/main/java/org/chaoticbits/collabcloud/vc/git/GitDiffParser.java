@@ -25,8 +25,6 @@ public class GitDiffParser {
 					weights.put(entry.getKey(), modifier.modify(entry.getValue()));
 			}
 		}
-		int i=0;
-		i++;
 	}
 
 	private boolean ignoreIt(String line) {
