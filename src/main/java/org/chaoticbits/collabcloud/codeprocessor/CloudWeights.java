@@ -92,4 +92,12 @@ public class CloudWeights {
 	public Set<Entry<ISummaryToken, Double>> unsortedEntries() {
 		return weights.entrySet();
 	}
+
+	/**
+	 * All tokens in the map
+	 * @return
+	 */
+	public Set<ISummaryToken> tokens() {
+		return weights.keySet();
+	}
 }

@@ -36,7 +36,7 @@ public class JavaColorScheme implements IColorScheme {
 	private void initColorMap() {
 		colorMap.put(CLASS, new Color(166, 4, 0));
 		colorMap.put(METHOD, new Color(0, 96, 100));
-		colorMap.put(PACKAGE, new Color(166, 77, 0));
+		colorMap.put(PACKAGE, new Color(166, 81, 0));
 		colorMap.put(ENUM, new Color(0, 130, 9));
 
 	}
