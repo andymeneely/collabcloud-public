@@ -67,7 +67,7 @@ public class LayoutTokens {
 		LastHitCache<Shape> placedShapes = new LastHitCache<Shape>(checker);
 		List<Entry<ISummaryToken, Double>> entries = weights.sortedEntries();
 		for (Entry<ISummaryToken, Double> entry : entries) {
-			Font font = fontTrans.transform(entry.getValue());
+			Font font = fontTrans.transform(entry.getKey(), entry.getValue());
 
 			log.debug("Laying out " + entry.getKey() + "...[" + entry.getValue() + "]");
 			char[] chars = entry.getKey().getToken().toCharArray();

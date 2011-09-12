@@ -1,31 +1,31 @@
 package org.chaoticbits.collabcloud.visualizer.font;
 
 import java.awt.Font;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
+import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
 
 public class BoundedSqrtNonParametricFont implements IFontTransformer {
 
-	private final double additive;
-	private final double multiplier;
 	private final Font initialFont;
+	private final Map<ISummaryToken, Integer> rankMap = new HashMap<ISummaryToken, Integer>();
+	private double multiplier = 1.0;
 
 	public BoundedSqrtNonParametricFont(Font initialFont, CloudWeights weights, double maxFontSize) {
 		this.initialFont = initialFont;
-//		List<Entry<ISummaryToken, Double>> entries = weights.sortedEntries();
-//		double rank = entries.size();
-//		for (Entry<ISummaryToken, Double> entry : unsortedEntries) {
-//			if (max < entry.getValue())
-//				max = entry.getValue();
-//			if (entry.getValue() < minBelowZero)
-//				minBelowZero = entry.getValue();
-//		}
-//		multiplier = maxFontSize / Math.sqrt(max);
-//		additive = minBelowZero;
-		throw new IllegalStateException("unimplemented!");
+		List<Entry<ISummaryToken, Double>> entries = weights.sortedEntries();
+		int rank = entries.size();
+		for (Entry<ISummaryToken, Double> entry : entries) {
+			rankMap.put(entry.getKey(), rank--);
+		}
+		multiplier = maxFontSize / Math.cbrt(entries.size());
 	}
 
-	public Font transform(Double weight) {
-		return initialFont.deriveFont((float) (multiplier * (Math.sqrt(weight + additive))));
+	public Font transform(ISummaryToken token, Double weight) {
+		return initialFont.deriveFont((float) (multiplier * Math.cbrt(rankMap.get(token))));
 	}
 }

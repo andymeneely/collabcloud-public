@@ -29,9 +29,9 @@ public class BoundedSqrtFontTest {
 		weights.put(ctrl.createMock(ISummaryToken.class), 10d);
 		IFontTransformer trans = new BoundedSqrtFont(font, weights, 75);
 		ctrl.replay();
-		assertEquals(75d, trans.transform(1000d).getSize2D(), 0.001);
-		assertEquals(53.033d, trans.transform(500d).getSize2D(), 0.001);
-		assertEquals(2.371d, trans.transform(1d).getSize2D(), 0.001);
+		assertEquals(75d, trans.transform(null, 1000d).getSize2D(), 0.001);
+		assertEquals(53.033d, trans.transform(null, 500d).getSize2D(), 0.001);
+		assertEquals(2.371d, trans.transform(null, 1d).getSize2D(), 0.001);
 		ctrl.verify();
 	}
 
@@ -43,7 +43,7 @@ public class BoundedSqrtFontTest {
 		weights.put(ctrl.createMock(ISummaryToken.class), -10d);
 		IFontTransformer trans = new BoundedSqrtFont(font, weights, 75);
 		ctrl.replay();
-		assertEquals(74.624d, trans.transform(1000d).getSize2D(), 0.001);
+		assertEquals(74.624d, trans.transform(null, 1000d).getSize2D(), 0.001);
 		ctrl.verify();
 	}
 }

@@ -29,9 +29,9 @@ public class BoundedLogFontTest {
 		weights.put(ctrl.createMock(ISummaryToken.class), 10d);
 		IFontTransformer trans = new BoundedLogFont(font, weights, 75);
 		ctrl.replay();
-		assertEquals(75d, trans.transform(1000d).getSize2D(), 0.001);
-		assertEquals(67.474d, trans.transform(500d).getSize2D(), 0.001);
-		assertEquals(0d, trans.transform(1d).getSize2D(), 0.001);
+		assertEquals(75d, trans.transform(null, 1000d).getSize2D(), 0.001);
+		assertEquals(67.474d, trans.transform(null, 500d).getSize2D(), 0.001);
+		assertEquals(0d, trans.transform(null, 1d).getSize2D(), 0.001);
 		ctrl.verify();
 	}
 
@@ -43,7 +43,7 @@ public class BoundedLogFontTest {
 		weights.put(ctrl.createMock(ISummaryToken.class), -10d);
 		IFontTransformer trans = new BoundedLogFont(font, weights, 75);
 		ctrl.replay();
-		assertEquals(74.89d, trans.transform(1000d).getSize2D(), 0.001);
+		assertEquals(74.89d, trans.transform(null, 1000d).getSize2D(), 0.001);
 		ctrl.verify();
 	}
 }

@@ -23,10 +23,13 @@ import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.LayoutTokens;
 import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
+import org.chaoticbits.collabcloud.visualizer.font.BoundedLogFont;
+import org.chaoticbits.collabcloud.visualizer.font.BoundedNonParametricSqrtFontTest;
 import org.chaoticbits.collabcloud.visualizer.font.BoundedSqrtFont;
+import org.chaoticbits.collabcloud.visualizer.font.BoundedSqrtNonParametricFont;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
+import org.chaoticbits.collabcloud.visualizer.place.IPlaceStrategy;
 import org.chaoticbits.collabcloud.visualizer.place.ParentNetworkPlacement;
-import org.chaoticbits.collabcloud.visualizer.placement.IPlaceStrategy;
 
 public class SummarizeRepo {
 	private static final double LEAF_CUTOFF = 1.0d;
@@ -61,11 +64,11 @@ public class SummarizeRepo {
 	public static void main(String[] args) throws ParseException, IOException {
 		PropertyConfigurator.configure("log4j.properties");
 
-//		CloudWeights weights = testBed();
-		 CloudWeights weights = thisRepo();
+		CloudWeights weights = testBed();
+		// CloudWeights weights = thisRepo();
 		// System.out.println("==Weights after Diff Adjustment==");
 		// System.out.println(weights);
-		IFontTransformer FONT_TRANSFORMER = new BoundedSqrtFont(INITIAL_FONT, weights, MAX_FONT_SIZE);
+		IFontTransformer FONT_TRANSFORMER = new BoundedLogFont(INITIAL_FONT, weights, MAX_FONT_SIZE);
 		IPlaceStrategy networkPlaceStrategy = new ParentNetworkPlacement(weights.tokens(), new Dimension(300, 300), new Point2D.Double(
 				WIDTH / 2, HEIGHT / 2));
 		new LayoutTokens(WIDTH, HEIGHT, FONT_TRANSFORMER, checker, networkPlaceStrategy, spiral, COLOR_SCHEME).makeImage(weights, new File(

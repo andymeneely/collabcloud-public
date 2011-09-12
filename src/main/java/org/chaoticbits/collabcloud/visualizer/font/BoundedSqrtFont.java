@@ -28,7 +28,7 @@ public class BoundedSqrtFont implements IFontTransformer {
 		additive = minBelowZero;
 	}
 
-	public Font transform(Double weight) {
+	public Font transform(ISummaryToken token, Double weight) {
 		return initialFont.deriveFont((float) (multiplier * (Math.sqrt(weight + additive))));
 	}
 }
