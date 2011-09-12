@@ -24,12 +24,10 @@ import org.chaoticbits.collabcloud.visualizer.LayoutTokens;
 import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
 import org.chaoticbits.collabcloud.visualizer.font.BoundedLogFont;
-import org.chaoticbits.collabcloud.visualizer.font.BoundedNonParametricSqrtFontTest;
-import org.chaoticbits.collabcloud.visualizer.font.BoundedSqrtFont;
-import org.chaoticbits.collabcloud.visualizer.font.BoundedSqrtNonParametricFont;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
-import org.chaoticbits.collabcloud.visualizer.place.IPlaceStrategy;
-import org.chaoticbits.collabcloud.visualizer.place.ParentNetworkPlacement;
+import org.chaoticbits.collabcloud.visualizer.placement.CenteredTokenWrapper;
+import org.chaoticbits.collabcloud.visualizer.placement.IPlaceStrategy;
+import org.chaoticbits.collabcloud.visualizer.placement.ParentNetworkPlacement;
 
 public class SummarizeRepo {
 	private static final double LEAF_CUTOFF = 1.0d;
@@ -69,8 +67,8 @@ public class SummarizeRepo {
 		// System.out.println("==Weights after Diff Adjustment==");
 		// System.out.println(weights);
 		IFontTransformer FONT_TRANSFORMER = new BoundedLogFont(INITIAL_FONT, weights, MAX_FONT_SIZE);
-		IPlaceStrategy networkPlaceStrategy = new ParentNetworkPlacement(weights.tokens(), new Dimension(300, 300), new Point2D.Double(
-				WIDTH / 2, HEIGHT / 2));
+		IPlaceStrategy networkPlaceStrategy = new CenteredTokenWrapper(new ParentNetworkPlacement(weights.tokens(), new Dimension(300, 300), new Point2D.Double(
+				2 * WIDTH / 3, 2 * HEIGHT / 3)));
 		new LayoutTokens(WIDTH, HEIGHT, FONT_TRANSFORMER, checker, networkPlaceStrategy, spiral, COLOR_SCHEME).makeImage(weights, new File(
 				"output/summarizerepo.png"), "PNG");
 	}

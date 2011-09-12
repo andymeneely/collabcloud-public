@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.visualizer.place;
+package org.chaoticbits.collabcloud.visualizer.placement;
 
 import java.awt.Dimension;
 import java.awt.Shape;
@@ -7,7 +7,6 @@ import java.awt.geom.Point2D.Double;
 import java.util.Set;
 
 import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
-import org.chaoticbits.collabcloud.visualizer.placement.IPlaceStrategy;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;

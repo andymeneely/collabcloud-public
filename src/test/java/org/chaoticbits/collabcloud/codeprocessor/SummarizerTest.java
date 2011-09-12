@@ -39,8 +39,8 @@ public class SummarizerTest {
 		assertEquals(
 				"include last word of package name",
 				1.0d,
-				lookUp(weights, new JavaPackageSummarizable("org.chaoticbits.collabcloud.testinputs"),
-						"org.chaoticbits.collabcloud.testinputs"), 0.0000001);
+				lookUp(weights, new JavaPackageSummarizable("org.chaoticbits.collabcloud.testinputs"), "org.chaoticbits.collabcloud.testinputs"),
+				0.0000001);
 	}
 
 	@Test
@@ -53,8 +53,8 @@ public class SummarizerTest {
 	public void methodCalls() throws Exception {
 		CloudWeights weights = JavaParser.parse(contrivedExample.getFile()).accept(new JavaSummarizeVisitor(contrivedExample),
 				new CloudWeights());
-		assertEquals("methods called 5 times (*0.25), declared once ", 2.25d,
-				lookUp(weights, contrivedExample, "methodCalledMultipleTimes"), 0.0000001);
+		assertEquals("methods called 5 times (*0.25), declared once ", 2.25d, lookUp(weights, contrivedExample, "methodCalledMultipleTimes"),
+				0.0000001);
 	}
 
 	@Test
