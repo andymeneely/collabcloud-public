@@ -35,7 +35,7 @@ public class SummarizerTest {
 	@Test
 	public void packageNames() throws Exception {
 		CloudWeights weights = JavaParser.parse(isPrime.getFile()).accept(new JavaSummarizeVisitor(isPrime), new CloudWeights());
-		assertEquals("include last word of package name", 1.0d, lookUp(weights, "testinputs"), 0.0000001);
+		assertEquals("token is entire package name", 1.0d, lookUp(weights, "org.chaoticbits.collabcloud.testinputs"), 0.0000001);
 	}
 
 	@Test
