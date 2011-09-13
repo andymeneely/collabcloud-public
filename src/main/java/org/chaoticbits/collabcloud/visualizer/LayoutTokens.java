@@ -7,6 +7,7 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,6 +19,7 @@ import javax.imageio.ImageIO;
 
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
+import org.chaoticbits.collabcloud.codeprocessor.java.JavaTokenType;
 import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
@@ -30,7 +32,7 @@ import org.chaoticbits.collabcloud.visualizer.placement.IPlaceStrategy;
  * 
  */
 public class LayoutTokens {
-	private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(null, true, true);
+	private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(new AffineTransform(), true, true);
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LayoutTokens.class);
 	private final int width;
 	private final int height;
@@ -55,6 +57,7 @@ public class LayoutTokens {
 		log.info("Laying out tokens...");
 		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
+		g2d.setTransform(new AffineTransform()); // fixes upside down problem
 		setRenderingHints(g2d);
 		layoutTokens(g2d, weights);
 		log.info("Writing image...");
@@ -70,24 +73,21 @@ public class LayoutTokens {
 			Font font = fontTrans.transform(entry.getKey(), entry.getValue());
 
 			log.debug("Laying out " + entry.getKey() + "...[" + entry.getValue() + "]");
-			char[] chars = entry.getKey().getToken().toCharArray();
-			
-			GlyphVector glyph = font.createGlyphVector(FONT_RENDER_CONTEXT, chars);
+
+			GlyphVector glyph = font.createGlyphVector(FONT_RENDER_CONTEXT, entry.getKey().getToken());
 			spiral.resetCenter(placeStrategy.getStartingPlace(entry.getKey(), glyph.getOutline()));
 			while (spiral.hasNext()) {
-				Point2D next = spiral.next();			
-				// Shape nextShape = font.layoutGlyphVector(FONT_RENDER_CONTEXT,
-				// chars, 0, chars.length, Font.LAYOUT_LEFT_TO_RIGHT)
-				// .getOutline((float) next.getX(), (float) next.getY());
-				Shape nextShape = glyph.getOutline((float) next.getX(),(float) next.getY());
+				Point2D next = spiral.next();
+				Shape nextShape = glyph.getOutline((float) next.getX(), (float) next.getY());
 				if (!placedShapes.hitNCache(nextShape)) {
 					g2d.setColor(colorScheme.lookup(entry.getKey(), weights));
 					g2d.fill(nextShape);
 					break;
 				}
+				if (true && entry.getKey().getType() == JavaTokenType.CLASS)
+					g2d.fillRect((int) next.getX(), (int) next.getY(), 3, 3);
 			}
 		}
-
 	}
 
 	private void setRenderingHints(Graphics2D g2d) {
