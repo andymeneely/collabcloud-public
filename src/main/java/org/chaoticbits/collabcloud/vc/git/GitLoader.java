@@ -24,8 +24,15 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
+/**
+ * Uses JGit to parse the given Git repository and traverses the commits to
+ * 
+ * @author andy
+ * 
+ */
 public class GitLoader implements IVersionControlLoader {
-
+	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(GitLoader.class);
+	
 	private FileRepository repo;
 	private ObjectId since;
 	private final GitDiffParser diffParser = new GitDiffParser();
@@ -69,6 +76,7 @@ public class GitLoader implements IVersionControlLoader {
 			RevCommit commit = itr.next();
 			RevCommit parent = commit.getParent(0); // TODO Handle multiple
 													// parents
+			log.debug("Building diffstring, visiting commit: " + commit.getId().name());
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			DiffFormatter formatter = new DiffFormatter(out);
 			formatter.setRepository(repo);
@@ -92,6 +100,7 @@ public class GitLoader implements IVersionControlLoader {
 	private RevWalk loadRevWalk() {
 		RevWalk rw = new RevWalk(repo);
 		try {
+			log.debug("Loading revwalk...");
 			ObjectId head = repo.resolve(Constants.HEAD);
 			rw.markStart(rw.parseCommit(head));
 			rw.markUninteresting(rw.parseCommit(since));

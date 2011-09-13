@@ -19,7 +19,6 @@ import javax.imageio.ImageIO;
 
 import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
-import org.chaoticbits.collabcloud.codeprocessor.java.JavaTokenType;
 import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
@@ -71,9 +70,7 @@ public class LayoutTokens {
 		List<Entry<ISummaryToken, Double>> entries = weights.sortedEntries();
 		for (Entry<ISummaryToken, Double> entry : entries) {
 			Font font = fontTrans.transform(entry.getKey(), entry.getValue());
-
 			log.debug("Laying out " + entry.getKey() + "...[" + entry.getValue() + "]");
-
 			GlyphVector glyph = font.createGlyphVector(FONT_RENDER_CONTEXT, entry.getKey().getToken());
 			spiral.resetCenter(placeStrategy.getStartingPlace(entry.getKey(), glyph.getOutline()));
 			while (spiral.hasNext()) {
@@ -84,8 +81,8 @@ public class LayoutTokens {
 					g2d.fill(nextShape);
 					break;
 				}
-				if (true && entry.getKey().getType() == JavaTokenType.CLASS)
-					g2d.fillRect((int) next.getX(), (int) next.getY(), 3, 3);
+//				if (entry.getKey().getType() == JavaTokenType.CLASS)
+//					g2d.fillRect((int) next.getX(), (int) next.getY(), 3, 3);
 			}
 		}
 	}

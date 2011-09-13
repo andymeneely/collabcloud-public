@@ -17,15 +17,15 @@ public class BoundedLogFont implements IFontTransformer {
 		this.initialFont = initialFont;
 		Set<Entry<ISummaryToken, Double>> unsortedEntries = weights.unsortedEntries();
 		double max = 0.0d;
-		double minBelowZero = 0.0;
+		double minBelowOne = 1.0;
 		for (Entry<ISummaryToken, Double> entry : unsortedEntries) {
 			if (max < entry.getValue())
 				max = entry.getValue();
-			if (entry.getValue() < minBelowZero)
-				minBelowZero = entry.getValue();
+			if (entry.getValue() < minBelowOne)
+				minBelowOne = entry.getValue();
 		}
 		multiplier = maxFontSize / Math.log(max);
-		additive = minBelowZero;
+		additive = minBelowOne;
 	}
 
 	public Font transform(ISummaryToken token, Double weight) {

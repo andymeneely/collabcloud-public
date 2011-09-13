@@ -32,25 +32,25 @@ import org.chaoticbits.collabcloud.visualizer.placement.ParentNetworkPlacement;
 
 public class SummarizeRepo {
 	private static final double LEAF_CUTOFF = 1.0d;
-	private static final int SPIRAL_STEPS = 500;
-	private static final double SPIRAL_MAX_RADIUS = 200.0d;
+	private static final int SPIRAL_STEPS = 1000;
+	private static final double SPIRAL_MAX_RADIUS = 250.0d;
 	private static final double SQUASHDOWN = 1;
 	private static final SpiralIterator spiral = new SpiralIterator(SPIRAL_MAX_RADIUS, SPIRAL_STEPS, SQUASHDOWN);
 	private static final File TEST_BED = new File("testgitrepo");
 	private static final File THIS_REPO = new File("");
 	private static final String THIS_REPO_SECOND_COMMIT_ID = "4cfde077a84185b06117bcff5d47c53644463b1f";
 	private static final File JENKINS_REPO = new File("c:/data/jenkins");
-	private static final String JENKINS_BACK_LIMIT_COMMIT_ID = "d0060fdc376fbb982620c26a04edee201e33292c";
+	private static final String JENKINS_BACK_LIMIT_COMMIT_ID = "df1094651bdefeda57d974a97907521eb21aef7b";
 	private static final Random RAND = new Random();
 	// private static final IPlaceStrategy RANDOM_PLACE_STRATEGY = new RandomPlacement(RAND, new
 	// Rectangle2D.Double(300, 400, 50, 50));
 
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SummarizeRepo.class);
 	private static IWeightModifier modifier = new MultiplyModifier(1.2);
-	private static Font INITIAL_FONT = new Font("Lucida Sans", Font.BOLD, 150);
+	private static Font INITIAL_FONT = new Font("Gill Sans MT Condensed", Font.BOLD, 150);
 	// private static IColorScheme COLOR_SCHEME = new RandomGrey(RAND, 25, 175);
-	private static IColorScheme COLOR_SCHEME = new JavaColorScheme(RAND, 50);
-	private static double MAX_FONT_SIZE = 75.0d;
+	private static IColorScheme COLOR_SCHEME = new JavaColorScheme(RAND, 20);
+	private static double MAX_FONT_SIZE = 50.0d;
 
 	private static final Intersector intersector = new Intersector(10, LEAF_CUTOFF);
 	private static final IHitCheck<Shape> checker = new IHitCheck<Shape>() {
@@ -82,8 +82,8 @@ public class SummarizeRepo {
 		log.info("Summarizing the project...");
 		CloudWeights weights = new JavaProjectSummarizer().summarize(new File(JENKINS_REPO.getAbsolutePath()));
 		log.info("Weighting against the repo...");
-		weights = new GitLoader(new File(JENKINS_REPO.getAbsolutePath() + "/.git"), JENKINS_BACK_LIMIT_COMMIT_ID).crossWithDiff(weights,
-				modifier);
+//		weights = new GitLoader(new File(JENKINS_REPO.getAbsolutePath() + "/.git"), JENKINS_BACK_LIMIT_COMMIT_ID).crossWithDiff(weights,
+//				modifier);
 		return weights;
 	}
 
