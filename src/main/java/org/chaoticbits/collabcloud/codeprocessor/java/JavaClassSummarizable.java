@@ -36,7 +36,7 @@ public class JavaClassSummarizable implements ISummarizable {
 		if (file == null) {
 			if (other.file != null)
 				return false;
-		} else if (!file.equals(other.file))
+		} else if (!file.getAbsolutePath().equals(other.file.getAbsolutePath()))
 			return false;
 		return true;
 	}

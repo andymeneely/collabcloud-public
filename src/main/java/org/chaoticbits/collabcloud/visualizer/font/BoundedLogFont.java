@@ -8,8 +8,7 @@ import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
 
 public class BoundedLogFont implements IFontTransformer {
-
-	private final double additive;
+	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(BoundedLogFont.class);
 	private final double multiplier;
 	private final Font initialFont;
 
@@ -17,18 +16,16 @@ public class BoundedLogFont implements IFontTransformer {
 		this.initialFont = initialFont;
 		Set<Entry<ISummaryToken, Double>> unsortedEntries = weights.unsortedEntries();
 		double max = 0.0d;
-		double minBelowOne = 1.0;
 		for (Entry<ISummaryToken, Double> entry : unsortedEntries) {
 			if (max < entry.getValue())
 				max = entry.getValue();
-			if (entry.getValue() < minBelowOne)
-				minBelowOne = entry.getValue();
 		}
 		multiplier = maxFontSize / Math.log(max);
-		additive = minBelowOne;
 	}
 
 	public Font transform(ISummaryToken token, Double weight) {
-		return initialFont.deriveFont((float) (multiplier * (Math.log(weight + additive))));
+		float fontSize = (float) (multiplier * (Math.log(weight + 1.0)));
+		log.trace(token.getToken() + " gets font " + fontSize);
+		return initialFont.deriveFont(fontSize);
 	}
 }
