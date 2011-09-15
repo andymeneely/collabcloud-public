@@ -1,0 +1,22 @@
+h1. Ideas
+
+* Integerate the bug tracking system - what has been fixed? what has been worked on for a feature?
+* Make it like TagCrowd where it's not a graphic but links to the original source code
+* Visualizing code churn - could be helpful to testers 
+* Incorporate code clone detection. Type one and type two are particularly fast to detect 
+* What should we do for a code review? 
+* Filter out code that is semantically the same (could use code clone for this)
+* Code clone is the lowest hanging fruit here
+* Could be beneficial for security testing. 
+* Weight this visualization against Fortify static analysis
+* Weight this against Findbugs static analysis
+* How does this affect the security posture of the system?
+* Visualizing the collaboration
+* Take test coverage hits here
+* What should we test? Use dJUnit or EclEmma coverage to get parts not hit  
+* Symbolic/Concolic analysis gives you different paths and branches, which you can weight against this clodu
+* Use this against catch-and-release testing - inject 
+* Mutation testing can be incorporated into this as well
+* Performance and load testing, profiling - what is the slowest part of this code?
+* Network latency, pingback, or other slow components. Which component is slow the system?
+* Self-healing wireless mesh networks
