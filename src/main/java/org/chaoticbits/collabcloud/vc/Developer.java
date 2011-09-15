@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud;
+package org.chaoticbits.collabcloud.vc;
 
 public class Developer {
 	private String name = "";

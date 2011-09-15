@@ -4,7 +4,7 @@ import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
+import org.chaoticbits.collabcloud.ISummaryToken;
 
 /**
  * Calls the inner placement strategy, but then moves the token up and to the

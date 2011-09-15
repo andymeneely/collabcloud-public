@@ -1,7 +1,7 @@
 package org.chaoticbits.collabcloud.codeprocessor.java;
 
-import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
-import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
+import org.chaoticbits.collabcloud.ISummarizable;
+import org.chaoticbits.collabcloud.ISummaryToken;
 
 /**
  * A specific element of a Java class. Could be a method name, variable name,

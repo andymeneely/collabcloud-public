@@ -8,6 +8,8 @@ import japa.parser.ast.CompilationUnit;
 import java.io.File;
 import java.io.IOException;
 
+import org.chaoticbits.collabcloud.CloudWeights;
+import org.chaoticbits.collabcloud.ISummarizable;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassSummarizable;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaPackageSummarizable;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummarizeVisitor;

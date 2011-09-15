@@ -21,7 +21,7 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph;
  * @author andy
  * 
  */
-public class ParentNetworkPlacement implements IPlaceStrategy {
+public class ContributionNetworkPlacement implements IPlaceStrategy {
 
 	private final Set<ISummaryToken> tokens;
 	private AbstractLayout<ISummaryToken, Long> layout;
@@ -32,7 +32,7 @@ public class ParentNetworkPlacement implements IPlaceStrategy {
 	 * Requires all tokens up front - with parent summarizeables
 	 * @param allTokens
 	 */
-	public ParentNetworkPlacement(Set<ISummaryToken> allTokens, Dimension size, Point2D center) {
+	public ContributionNetworkPlacement(Set<ISummaryToken> allTokens, Dimension size, Point2D center) {
 		this.tokens = allTokens;
 		this.size = size;
 		this.center = center;

@@ -8,11 +8,11 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
 
-import org.chaoticbits.collabcloud.Developer;
-import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
-import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
+import org.chaoticbits.collabcloud.CloudWeights;
+import org.chaoticbits.collabcloud.ISummarizable;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassSummarizable;
+import org.chaoticbits.collabcloud.vc.Developer;
 import org.chaoticbits.collabcloud.vc.IVersionControlLoader;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;

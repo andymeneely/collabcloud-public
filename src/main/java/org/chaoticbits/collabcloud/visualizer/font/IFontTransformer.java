@@ -2,7 +2,7 @@ package org.chaoticbits.collabcloud.visualizer.font;
 
 import java.awt.Font;
 
-import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
+import org.chaoticbits.collabcloud.ISummaryToken;
 
 public interface IFontTransformer {
 

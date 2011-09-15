@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
-import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
-import org.chaoticbits.collabcloud.codeprocessor.ITokenType;
+import org.chaoticbits.collabcloud.CloudWeights;
+import org.chaoticbits.collabcloud.ISummaryToken;
+import org.chaoticbits.collabcloud.ITokenType;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
 
 public class JavaColorScheme implements IColorScheme {

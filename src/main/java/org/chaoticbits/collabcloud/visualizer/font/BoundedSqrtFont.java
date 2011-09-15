@@ -4,8 +4,8 @@ import java.awt.Font;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
-import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
+import org.chaoticbits.collabcloud.CloudWeights;
+import org.chaoticbits.collabcloud.ISummaryToken;
 
 public class BoundedSqrtFont implements IFontTransformer {
 

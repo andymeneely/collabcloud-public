@@ -6,7 +6,7 @@ import japa.parser.ast.CompilationUnit;
 
 import java.io.File;
 
-import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
+import org.chaoticbits.collabcloud.CloudWeights;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Test;

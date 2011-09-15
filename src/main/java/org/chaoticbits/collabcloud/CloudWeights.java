@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.codeprocessor;
+package org.chaoticbits.collabcloud;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
+
 
 /**
  * A simple wrapper for the table of identifiers and mappings to weights

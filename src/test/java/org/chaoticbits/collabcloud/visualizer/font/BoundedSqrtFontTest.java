@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Font;
 
-import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
-import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
+import org.chaoticbits.collabcloud.CloudWeights;
+import org.chaoticbits.collabcloud.ISummaryToken;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Before;

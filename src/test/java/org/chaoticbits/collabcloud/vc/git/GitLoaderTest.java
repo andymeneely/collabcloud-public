@@ -6,13 +6,13 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.Set;
 
-import org.chaoticbits.collabcloud.Developer;
-import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
-import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
+import org.chaoticbits.collabcloud.CloudWeights;
+import org.chaoticbits.collabcloud.ISummarizable;
 import org.chaoticbits.collabcloud.codeprocessor.IncrementModifier;
 import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassSummarizable;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummaryToken;
+import org.chaoticbits.collabcloud.vc.Developer;
 import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Test;
 

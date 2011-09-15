@@ -2,7 +2,7 @@ package org.chaoticbits.collabcloud.codeprocessor.java;
 
 import java.io.File;
 
-import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
+import org.chaoticbits.collabcloud.ISummarizable;
 
 public class JavaClassSummarizable implements ISummarizable {
 

@@ -14,8 +14,8 @@ import japa.parser.ast.expr.MethodCallExpr;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
-import org.chaoticbits.collabcloud.codeprocessor.ISummarizable;
+import org.chaoticbits.collabcloud.CloudWeights;
+import org.chaoticbits.collabcloud.ISummarizable;
 
 /**
  * A visitor that travels the AST of a Java compilation unit and counts stuff that is useful in summarizing

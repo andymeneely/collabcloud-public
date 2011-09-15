@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.codeprocessor;
+package org.chaoticbits.collabcloud;
 
 public interface ISummaryToken {
 

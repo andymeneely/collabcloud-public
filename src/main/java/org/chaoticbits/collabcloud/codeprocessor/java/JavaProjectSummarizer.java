@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
+import org.chaoticbits.collabcloud.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.IProjectSummarizer;
 
 public class JavaProjectSummarizer implements IProjectSummarizer {

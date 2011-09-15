@@ -3,8 +3,8 @@ package org.chaoticbits.collabcloud.visualizer.color;
 import java.awt.Color;
 import java.util.Random;
 
-import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
-import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
+import org.chaoticbits.collabcloud.CloudWeights;
+import org.chaoticbits.collabcloud.ISummaryToken;
 
 public class RandomGrey implements IColorScheme {
 

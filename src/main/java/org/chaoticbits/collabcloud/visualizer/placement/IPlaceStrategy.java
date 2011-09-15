@@ -3,7 +3,7 @@ package org.chaoticbits.collabcloud.visualizer.placement;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 
-import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
+import org.chaoticbits.collabcloud.ISummaryToken;
 
 public interface IPlaceStrategy {
 

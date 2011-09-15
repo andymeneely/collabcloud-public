@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.chaoticbits.collabcloud.CloudWeights;
+import org.chaoticbits.collabcloud.ISummaryToken;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummaryToken;
 import org.junit.Test;
 

@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
 import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaColorScheme;

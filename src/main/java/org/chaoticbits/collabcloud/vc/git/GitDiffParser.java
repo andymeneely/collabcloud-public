@@ -3,8 +3,8 @@ package org.chaoticbits.collabcloud.vc.git;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.chaoticbits.collabcloud.codeprocessor.CloudWeights;
-import org.chaoticbits.collabcloud.codeprocessor.ISummaryToken;
+import org.chaoticbits.collabcloud.CloudWeights;
+import org.chaoticbits.collabcloud.ISummaryToken;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
 
 public class GitDiffParser {
