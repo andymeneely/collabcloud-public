@@ -40,7 +40,7 @@ public class SummarizerTest {
 		CloudWeights weights = JavaParser.parse(isPrime.getFile()).accept(new JavaSummarizeVisitor(isPrime), new CloudWeights());
 		assertEquals(
 				"include last word of package name",
-				1.0d,
+				0.5d,
 				lookUp(weights, new JavaPackageSummarizable("org.chaoticbits.collabcloud.testinputs"), "org.chaoticbits.collabcloud.testinputs"),
 				0.0000001);
 	}
@@ -55,7 +55,7 @@ public class SummarizerTest {
 	public void methodCalls() throws Exception {
 		CloudWeights weights = JavaParser.parse(contrivedExample.getFile()).accept(new JavaSummarizeVisitor(contrivedExample),
 				new CloudWeights());
-		assertEquals("methods called 5 times (*0.25), declared once ", 2.25d, lookUp(weights, contrivedExample, "methodCalledMultipleTimes"),
+		assertEquals("methods called 5 times (*0.20), declared once ", 2.0d, lookUp(weights, contrivedExample, "methodCalledMultipleTimes"),
 				0.0000001);
 	}
 
@@ -63,7 +63,7 @@ public class SummarizerTest {
 	public void externalMethodCalls() throws Exception {
 		CloudWeights weights = JavaParser.parse(contrivedExample.getFile()).accept(new JavaSummarizeVisitor(contrivedExample),
 				new CloudWeights());
-		assertEquals("external method calls", 0.25d, lookUp(weights, contrivedExample, "random"), 0.0000001);
+		assertEquals("external method calls", 0.20d, lookUp(weights, contrivedExample, "random"), 0.0000001);
 	}
 
 	@Test
@@ -84,9 +84,9 @@ public class SummarizerTest {
 	public void enumConstants() throws Exception {
 		CloudWeights weights = JavaParser.parse(contrivedExample.getFile()).accept(new JavaSummarizeVisitor(contrivedExample),
 				new CloudWeights());
-		assertEquals("include the enum declaration", 0.25d, lookUp(weights, contrivedExample, "Apples"), 0.0000001);
-		assertEquals("include the enum declaration", 0.25d, lookUp(weights, contrivedExample, "Bananas"), 0.0000001);
-		assertEquals("include the enum declaration", 0.25d, lookUp(weights, contrivedExample, "Oranges"), 0.0000001);
+		assertEquals("include the enum declaration", 0.1d, lookUp(weights, contrivedExample, "Apples"), 0.0000001);
+		assertEquals("include the enum declaration", 0.1d, lookUp(weights, contrivedExample, "Bananas"), 0.0000001);
+		assertEquals("include the enum declaration", 0.1d, lookUp(weights, contrivedExample, "Oranges"), 0.0000001);
 	}
 
 	@Test
