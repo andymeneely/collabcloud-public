@@ -1,11 +1,14 @@
 package org.chaoticbits.collabcloud.vc;
 
-public class Developer {
+import org.chaoticbits.collabcloud.ISummarizable;
+import org.chaoticbits.collabcloud.ISummaryToken;
+import org.chaoticbits.collabcloud.ITokenType;
+
+public class Developer implements ISummaryToken{
 	private String name = "";
 	private String email = "";
 
 	public Developer(String name, String email) {
-		super();
 		this.name = name;
 		this.email = email;
 	}
@@ -20,9 +23,26 @@ public class Developer {
 
 	@Override
 	public String toString() {
+		return getFullName();
+	}
+
+	public ISummarizable getParentSummarizable() {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	//TODO this should be interfaced out to get an image...or something
+	public String getToken() {
+		return name;
+	}
+
+	public String getFullName() {
 		return name + " <" + email + ">";
 	}
 
+	public ITokenType getType() {
+		return DeveloperTokenType.COMMITTER;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
