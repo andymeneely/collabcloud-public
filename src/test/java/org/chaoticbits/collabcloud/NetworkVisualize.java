@@ -178,7 +178,6 @@ public class NetworkVisualize extends JApplet {
 			log.info("Loading contribution network...");
 			loader = new GitLoader(new File("testgitrepo/.git"), GitLoaderTest.SECOND_COMMIT_ID);
 			Graph<ISummaryToken, Long> cn = loader.contributionNetwork();
-			cn.addVertex(new JavaSummaryToken(null, "something", "something", JavaTokenType.CLASS));
 			return cn;
 		} catch (IOException e) {
 			e.printStackTrace();
