@@ -13,6 +13,16 @@ import org.chaoticbits.collabcloud.codeprocessor.IProjectSummarizer;
 
 public class JavaProjectSummarizer implements IProjectSummarizer {
 
+	private CloudWeights weights;
+
+	public JavaProjectSummarizer() {
+		weights = new CloudWeights();
+	}
+
+	public JavaProjectSummarizer(CloudWeights weights) {
+		this.weights = weights;
+	}
+
 	/**
 	 * Summarize a whole directory of Java files
 	 * 
@@ -20,7 +30,6 @@ public class JavaProjectSummarizer implements IProjectSummarizer {
 	 */
 	public CloudWeights summarize(File pathToRepo) throws IOException {
 		List<File> files = new RecurseJavaFiles().loadRecursive(pathToRepo);
-		CloudWeights weights = new CloudWeights();
 		for (File file : files) {
 			CompilationUnit unit;
 			try {

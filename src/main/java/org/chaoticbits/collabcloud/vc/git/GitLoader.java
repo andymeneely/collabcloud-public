@@ -5,15 +5,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
 import org.chaoticbits.collabcloud.CloudWeights;
 import org.chaoticbits.collabcloud.ISummarizable;
+import org.chaoticbits.collabcloud.ISummaryToken;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
-import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassSummarizable;
+import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
 import org.chaoticbits.collabcloud.vc.Developer;
 import org.chaoticbits.collabcloud.vc.IVersionControlLoader;
+import org.chaoticbits.collabcloud.vc.TokenContributionNetwork;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -24,6 +28,8 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
+import edu.uci.ics.jung.graph.Graph;
+
 /**
  * Uses JGit to parse the given Git repository and traverses the commits to
  * 
@@ -32,10 +38,16 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
  */
 public class GitLoader implements IVersionControlLoader {
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(GitLoader.class);
-	
+
 	private FileRepository repo;
 	private ObjectId since;
 	private final GitDiffParser diffParser = new GitDiffParser();
+	private final Map<Developer, Set<ISummarizable>> contributions = new LinkedHashMap<Developer, Set<ISummarizable>>();
+	private boolean loaded = false;
+
+	// TODO Figure out when to pass these...
+	private CloudWeights weights = new CloudWeights();
+	private IWeightModifier modifier = new MultiplyModifier(1.1);
 
 	public GitLoader(File repoDir) throws IOException {
 		repo = new FileRepositoryBuilder().setGitDir(repoDir).readEnvironment().findGitDir().build();
@@ -46,16 +58,27 @@ public class GitLoader implements IVersionControlLoader {
 		since = repo.resolve(sinceSHA1);
 	}
 
+	public void markSince(ObjectId since) {
+		if (since != null)
+			this.since = since;
+	}
+
 	public Set<Developer> getDevelopers() {
-		checkSince();
-		Set<Developer> set = new HashSet<Developer>();
-		RevWalk rw = loadRevWalk();
-		Iterator<RevCommit> itr = rw.iterator();
-		while (itr.hasNext()) {
-			RevCommit next = itr.next();
-			set.add(new Developer(next.getAuthorIdent().getName(), next.getAuthorIdent().getEmailAddress()));
+		load();
+		return contributions.keySet();
+	}
+
+	public Set<ISummarizable> getFilesChanged() throws IOException {
+		load();
+		Set<ISummarizable> files = new HashSet<ISummarizable>();
+		for (Set<ISummarizable> set : contributions.values()) {
+			files.addAll(set);
 		}
-		return set;
+		return files;
+	}
+
+	public Set<ISummarizable> getFilesContributed(Developer dev) {
+		return contributions.get(dev);
 	}
 
 	private void checkSince() {
@@ -63,38 +86,33 @@ public class GitLoader implements IVersionControlLoader {
 			throw new IllegalAccessError("Mark the since variable first.");
 	}
 
-	public Set<ISummarizable> getFilesChanged() throws IOException {
-		checkSince();
-		return extractFiles(buildDiffString(), new HashSet<ISummarizable>());
-	}
-
-	private String buildDiffString() throws IOException {
-		RevWalk rw = loadRevWalk();
-		StringBuilder builder = new StringBuilder();
-		Iterator<RevCommit> itr = rw.iterator();
-		while (itr.hasNext()) {
-			RevCommit commit = itr.next();
-			RevCommit parent = commit.getParent(0); // TODO Handle multiple
-													// parents
-			log.debug("Building diffstring, visiting commit: " + commit.getId().name());
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			DiffFormatter formatter = new DiffFormatter(out);
-			formatter.setRepository(repo);
-			formatter.format(commit, parent);
-			builder.append(out.toString());
-		}
-		return builder.toString();
-	}
-
-	private Set<ISummarizable> extractFiles(String diffsString, Set<ISummarizable> set) {
-		Scanner scanner = new Scanner(diffsString);
-		while (scanner.hasNext()) {
-			String line = scanner.nextLine();
-			if (line.startsWith("+++") || line.startsWith("---")) {
-				set.add(new JavaClassSummarizable(new File(line.substring(6))));
+	private void load() {
+		if (!loaded) {
+			checkSince();
+			Iterator<RevCommit> itr = loadRevWalk().iterator();
+			while (itr.hasNext()) {
+				RevCommit commit = itr.next();
+				Developer dev = new Developer(commit.getAuthorIdent().getName(), commit.getAuthorIdent().getEmailAddress());
+				log.debug("Building diffstring, visiting commit: " + commit.getId().name());
+				for (int parentIndex = 0; parentIndex < commit.getParentCount(); parentIndex++) {
+					RevCommit parent = commit.getParent(parentIndex);
+					ByteArrayOutputStream diff = new ByteArrayOutputStream();
+					DiffFormatter formatter = new DiffFormatter(diff);
+					formatter.setRepository(repo);
+					try {
+						formatter.format(commit, parent);
+						Scanner scanner = new Scanner(diff.toString());
+						while (scanner.hasNextLine()) {
+							diffParser.processTextLine(scanner.nextLine(), weights, modifier, contributions, dev);
+						}
+					} catch (IOException e) {
+						System.err.println("IO Exception on commit " + commit.getId().toString());
+						e.printStackTrace();
+					}
+				}
 			}
+			loaded = true;
 		}
-		return set;
 	}
 
 	private RevWalk loadRevWalk() {
@@ -121,21 +139,38 @@ public class GitLoader implements IVersionControlLoader {
 		return repo;
 	}
 
-	public void markSince(ObjectId since) {
-		if (since != null)
-			this.since = since;
-	}
-
 	public ObjectId getSince() {
 		return since;
 	}
 
 	public CloudWeights crossWithDiff(CloudWeights weights, IWeightModifier modifier) throws IOException {
-		Scanner scanner = new Scanner(buildDiffString());
-		while (scanner.hasNextLine()) {
-			diffParser.processTextLine(weights, modifier, scanner.nextLine());
-		}
+		this.weights = weights;
+		this.modifier = modifier;
+		loaded = false; //TODO Total hack - fix this
+		load();
 		return weights;
 	}
 
+	public Graph<ISummaryToken, Long> contributionNetwork() {
+		load();
+		return new TokenContributionNetwork(contributions).build();
+	}
+
+	public String buildDiffString() throws IOException {
+		RevWalk rw = loadRevWalk();
+		StringBuilder builder = new StringBuilder();
+		Iterator<RevCommit> itr = rw.iterator();
+		while (itr.hasNext()) {
+			RevCommit commit = itr.next();
+			RevCommit parent = commit.getParent(0); // TODO Handle multiple
+													// parents
+			log.debug("Building diffstring, visiting commit: " + commit.getId().name());
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			DiffFormatter formatter = new DiffFormatter(out);
+			formatter.setRepository(repo);
+			formatter.format(commit, parent);
+			builder.append(out.toString());
+		}
+		return builder.toString();
+	}
 }

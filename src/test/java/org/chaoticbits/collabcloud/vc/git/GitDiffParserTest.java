@@ -4,13 +4,17 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.chaoticbits.collabcloud.CloudWeights;
+import org.chaoticbits.collabcloud.ISummarizable;
 import org.chaoticbits.collabcloud.ISummaryToken;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
 import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummaryToken;
+import org.chaoticbits.collabcloud.vc.Developer;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.After;
@@ -22,7 +26,11 @@ public class GitDiffParserTest {
 	private final IMocksControl ctrl = EasyMock.createControl();
 	private CloudWeights weights = ctrl.createMock(CloudWeights.class);
 	private IWeightModifier modifier = new MultiplyModifier(2.0);
+	@SuppressWarnings("unchecked")
 	private Entry<ISummaryToken, Double> entry = ctrl.createMock(Entry.class);
+	@SuppressWarnings("unchecked")
+	private Map<Developer, Set<ISummarizable>> contributions = ctrl.createMock(Map.class);
+	private Developer dev = ctrl.createMock(Developer.class);
 	private GitDiffParser parser;
 
 	@Before
@@ -39,32 +47,35 @@ public class GitDiffParserTest {
 	@Test
 	public void skipsDiffLine() throws Exception {
 		ctrl.replay();
+		
 		GitDiffParser parser = new GitDiffParser();
-		parser.processTextLine(weights, modifier, "diff");
-		ctrl.verify();
+		parser.processTextLine("diff", weights, modifier, contributions, dev);
 	}
 
 	@Test
 	public void skipsIndexLine() throws Exception {
 		ctrl.replay();
+		
 		GitDiffParser parser = new GitDiffParser();
-		parser.processTextLine(weights, modifier, "index");
-		ctrl.verify();
+		parser.processTextLine("index", weights, modifier, contributions, dev);
 	}
 
 	@Test
 	public void skipsAtLines() throws Exception {
 		ctrl.replay();
+		
 		GitDiffParser parser = new GitDiffParser();
-		parser.processTextLine(weights, modifier, "@@");
+		parser.processTextLine("@@", weights, modifier, contributions, dev);
 	}
 
 	@Test
 	public void skipsAllHeaderLines() throws Exception {
 		ctrl.replay();
-		parser.processTextLine(weights, modifier, "diff --git a/mancala/player/GreedyPlayer.java b/mancala/player/GreedyPlayer.java");
-		parser.processTextLine(weights, modifier, "index 7ace1e4..db95c9c 100644");
-		parser.processTextLine(weights, modifier, "@@ -24,7 +24,7 @@");
+		
+		parser.processTextLine("diff --git a/mancala/player/GreedyPlayer.java b/mancala/player/GreedyPlayer.java", weights, modifier,
+				contributions,dev);
+		parser.processTextLine("index 7ace1e4..db95c9c 100644", weights, modifier, contributions, dev);
+		parser.processTextLine("@@ -24,7 +24,7 @@", weights, modifier, contributions, dev);
 	}
 
 	@Test
@@ -76,7 +87,7 @@ public class GitDiffParserTest {
 		weights.put(token, 6.0);
 		expectLastCall().once();
 		ctrl.replay();
-		parser.processTextLine(weights, modifier, " 	public int getPlay(Board state) {");
+		parser.processTextLine(" 	public int getPlay(Board state) {", weights, modifier, contributions, dev);
 	}
 
 	@Test
@@ -84,7 +95,8 @@ public class GitDiffParserTest {
 		expect(weights.unsortedEntries()).andReturn(Collections.singleton(entry)).once();
 		expect(entry.getKey()).andReturn(token("get")).anyTimes();
 		ctrl.replay();
-		parser.processTextLine(weights, modifier, " 	public int getPlay(Board state) {");
+		
+		parser.processTextLine(" 	public int getPlay(Board state) {", weights, modifier, contributions, dev);
 	}
 
 	@Test
@@ -96,7 +108,9 @@ public class GitDiffParserTest {
 		weights.put(token, 6.0);
 		expectLastCall().times(3);
 		ctrl.replay();
-		parser.processTextLine(weights, modifier, "-		for (int play = 0; play < Board.SLOT_WIDTH; play++) { //A modification for testing");
+		
+		parser.processTextLine("-		for (int play = 0; play < Board.SLOT_WIDTH; play++) { //A modification for testing", weights, modifier,
+				contributions, dev);
 	}
 
 	private JavaSummaryToken token(String str) {
