@@ -40,11 +40,13 @@ public class LayoutTokens {
 	private final IPlaceStrategy placeStrategy;
 	private final SpiralIterator spiral;
 	private final IColorScheme colorScheme;
+	private final int maxTokens;
 
-	public LayoutTokens(int width, int height, IFontTransformer fontTrans, IHitCheck<Shape> checker, IPlaceStrategy placeStrategy,
-			SpiralIterator spiral, IColorScheme colorScheme) {
+	public LayoutTokens(int width, int height, int maxTokens, IFontTransformer fontTrans, IHitCheck<Shape> checker,
+			IPlaceStrategy placeStrategy, SpiralIterator spiral, IColorScheme colorScheme) {
 		this.width = width;
 		this.height = height;
+		this.maxTokens = maxTokens;
 		this.fontTrans = fontTrans;
 		this.checker = checker;
 		this.placeStrategy = placeStrategy;
@@ -68,7 +70,10 @@ public class LayoutTokens {
 		initImage(g2d);
 		LastHitCache<Shape> placedShapes = new LastHitCache<Shape>(checker);
 		List<Entry<ISummaryToken, Double>> entries = weights.sortedEntries();
+		int tokensHit = 0;
 		for (Entry<ISummaryToken, Double> entry : entries) {
+			if (tokensHit++ > maxTokens)
+				break;
 			Font font = fontTrans.transform(entry.getKey(), entry.getValue());
 			log.debug("Laying out " + entry.getKey() + "...[" + entry.getValue() + "]");
 			GlyphVector glyph = font.createGlyphVector(FONT_RENDER_CONTEXT, entry.getKey().getToken());
@@ -81,8 +86,8 @@ public class LayoutTokens {
 					g2d.fill(nextShape);
 					break;
 				}
-//				if (entry.getKey().getType() == JavaTokenType.CLASS)
-//					g2d.fillRect((int) next.getX(), (int) next.getY(), 3, 3);
+				// if (entry.getKey().getType() == JavaTokenType.CLASS)
+				// g2d.fillRect((int) next.getX(), (int) next.getY(), 3, 3);
 			}
 		}
 	}
