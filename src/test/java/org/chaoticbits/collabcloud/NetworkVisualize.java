@@ -176,7 +176,8 @@ public class NetworkVisualize extends JApplet {
 		GitLoader loader;
 		try {
 			log.info("Loading contribution network...");
-			loader = new GitLoader(new File("testgitrepo/.git"), GitLoaderTest.SECOND_COMMIT_ID);
+			loader = new GitLoader(new File("C:/data/jboss-as/.git"), "8321b7f693275c23eb9a515f8a6aed958d49b3b2");
+//			loader = new GitLoader(new File("testgitrepo/.git"), GitLoaderTest.SECOND_COMMIT_ID);
 			Graph<ISummaryToken, Long> cn = loader.contributionNetwork();
 			return cn;
 		} catch (IOException e) {
