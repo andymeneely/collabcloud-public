@@ -25,6 +25,8 @@ import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
 import org.chaoticbits.collabcloud.visualizer.font.BoundedLogFont;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
+import org.chaoticbits.collabcloud.visualizer.font.MathTransforms;
+import org.chaoticbits.collabcloud.visualizer.font.NonParametricFont;
 import org.chaoticbits.collabcloud.visualizer.placement.CenteredTokenWrapper;
 import org.chaoticbits.collabcloud.visualizer.placement.IPlaceStrategy;
 import org.chaoticbits.collabcloud.visualizer.placement.ParentNetworkPlacement;
@@ -67,15 +69,16 @@ public class SummarizeRepo {
 		PropertyConfigurator.configure("log4j.properties");
 
 		CloudWeights weights;
-		// weights = testBed();
+		weights = testBed();
 		// weights = thisRepo();
 		// weights = jenkins();
-		weights = jboss();
+		// weights = jboss();
 		// System.out.println("==Weights after Diff Adjustment==");
 		// System.out.println(weights);
-		IFontTransformer FONT_TRANSFORMER = new BoundedLogFont(INITIAL_FONT, weights, MAX_FONT_SIZE);
+		// IFontTransformer FONT_TRANSFORMER = new BoundedLogFont(INITIAL_FONT, weights, MAX_FONT_SIZE);
+		IFontTransformer FONT_TRANSFORMER = new NonParametricFont(INITIAL_FONT, weights, MathTransforms.fourthPower, MAX_FONT_SIZE);
 		IPlaceStrategy parentNetworkPlace = new CenteredTokenWrapper(new ParentNetworkPlacement(weights.tokens(), new Dimension(WIDTH / 2,
-				HEIGHT / 2), new Point2D.Double(2 * WIDTH / 3, 2 * HEIGHT / 3)));
+				HEIGHT / 2), new Point2D.Double(3 * WIDTH / 4, 3 * HEIGHT / 4)));
 		// IPlaceStrategy contributionNetworkPlaceStrategy = new CenteredTokenWrapper(new
 		// ContributionNetworkPlacement(weights.tokens(),
 		// developers, new Dimension(WIDTH / 2, HEIGHT / 2), new Point2D.Double(2 * WIDTH / 3, 2 * HEIGHT /
