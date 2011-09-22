@@ -78,10 +78,15 @@ public class LayoutTokens {
 			Font font = fontTrans.transform(entry.getKey(), entry.getValue());
 			log.debug("Laying out " + entry.getKey() + "...[" + entry.getValue() + "]");
 			GlyphVector glyph = font.createGlyphVector(FONT_RENDER_CONTEXT, entry.getKey().getToken());
-			spiral.resetCenter(placeStrategy.getStartingPlace(entry.getKey(), glyph.getOutline()));
+			Point2D startingPlace = placeStrategy.getStartingPlace(entry.getKey(), glyph.getOutline());
+			Shape nextShape = glyph.getOutline((float) startingPlace.getX(), (float) startingPlace.getY());
+			spiral.resetCenter(startingPlace);
+			Point2D last = startingPlace;
 			while (spiral.hasNext()) {
 				Point2D next = spiral.next();
-				Shape nextShape = glyph.getOutline((float) next.getX(), (float) next.getY());
+				nextShape = AffineTransform.getTranslateInstance(next.getX() - last.getX(), next.getY() - last.getY()).createTransformedShape(
+						nextShape);
+				last = next;
 				if (!placedShapes.hitNCache(nextShape)) {
 					g2d.setColor(colorScheme.lookup(entry.getKey(), weights));
 					g2d.fill(nextShape);
