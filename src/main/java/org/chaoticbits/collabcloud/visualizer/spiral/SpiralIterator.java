@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.visualizer;
+package org.chaoticbits.collabcloud.visualizer.spiral;
 
 import java.awt.geom.Point2D;
 import java.util.Iterator;
@@ -8,21 +8,8 @@ public class SpiralIterator implements Iterable<Point2D>, Iterator<Point2D> {
 	private final int maxSteps;
 	private Point2D center;
 	private double i;
-	private double step;
+	private double scale;
 	private double sqaushDown = 1.0d;
-
-	/**
-	 * Iterate over a center in a spiral
-	 * @param center
-	 * @param maxSize
-	 * @param numSteps
-	 */
-	public SpiralIterator(Point2D center, double maxSize, int numSteps) {
-		this.center = center;
-		this.maxSteps = numSteps;
-		this.i = 0.0d;
-		this.step = maxSize / numSteps;
-	}
 
 	/**
 	 * Iterate over a center in a spiral, with a squashdown.
@@ -38,9 +25,19 @@ public class SpiralIterator implements Iterable<Point2D>, Iterator<Point2D> {
 		this.sqaushDown = sqaushDown;
 		this.maxSteps = numSteps;
 		this.i = 0.0d;
-		this.step = maxSize / numSteps;
+		this.scale = maxSize / maxSteps;
 	}
-	
+
+	/**
+	 * Iterate over a center in a spiral
+	 * @param center
+	 * @param maxSize
+	 * @param numSteps
+	 */
+	public SpiralIterator(Point2D center, double maxSize, int numSteps) {
+		this(center, maxSize, numSteps, 1.0);
+	}
+
 	/**
 	 * Iterate over a center in a spiral, with a squashdown.
 	 * @param center
@@ -51,19 +48,16 @@ public class SpiralIterator implements Iterable<Point2D>, Iterator<Point2D> {
 	 *            of 0.5 is twice as high as wide.
 	 */
 	public SpiralIterator(double maxSize, int numSteps, double sqaushDown) {
-		this.sqaushDown = sqaushDown;
-		this.maxSteps = numSteps;
-		this.i = 0.0d;
-		this.step = maxSize / numSteps;
+		this(null, maxSize, numSteps, 1.0);
 	}
-	
+
 	/**
-	 * Resets the iterator to a new center. 
+	 * Resets the iterator to a new center.
 	 * @param center
 	 */
-	public void resetCenter(Point2D center){
+	public void resetCenter(Point2D center) {
 		this.center = center;
-		this.i=0.0d;
+		this.i = 0.0d;
 	}
 
 	public Iterator<Point2D> iterator() {
@@ -75,11 +69,12 @@ public class SpiralIterator implements Iterable<Point2D>, Iterator<Point2D> {
 	}
 
 	public Point2D next() {
-		if(center==null)
+		if (center == null)
 			throw new IllegalAccessError("Initialize spiral center first.");
-		double rTheta = i * step;
-		double x = sqaushDown * rTheta * Math.cos(rTheta) + center.getX();
-		double y = rTheta * Math.sin(rTheta) + center.getY();
+		double radius = i * scale;
+		double theta = radius;
+		double x = sqaushDown * radius * Math.cos(theta) + center.getX();
+		double y = radius * Math.sin(theta) + center.getY();
 		i++;
 		return new Point2D.Double(x, y);
 	}

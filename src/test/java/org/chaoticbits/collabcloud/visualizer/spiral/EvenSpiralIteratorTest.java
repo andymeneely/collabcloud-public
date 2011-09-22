@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.visualizer;
+package org.chaoticbits.collabcloud.visualizer.spiral;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -11,21 +11,22 @@ import java.util.Iterator;
 
 import junit.framework.Assert;
 
+import org.chaoticbits.collabcloud.visualizer.spiral.EvenSpiralIterator;
 import org.junit.Test;
 
-public class SpiralIteratorTest {
+public class EvenSpiralIteratorTest {
 
 	@Test
 	public void iterateOver100Width() throws Exception {
-		SpiralIterator itr = new SpiralIterator(new Point2D.Double(250, 250), 100.0d, 4);
+		EvenSpiralIterator itr = new EvenSpiralIterator(new Point2D.Double(250, 250), 100.0d, 4);
 		assertTrue(itr.hasNext());
-		assertPointEquals("start at center", new Point2D.Double(250, 250), itr.next());
+		assertPointEquals("not starting start at the center", new Point2D.Double(277.0123, 292.075), itr.next());
 		assertTrue(itr.hasNext());
-		assertPointEquals("larger", new Point2D.Double(274.78, 246.69), itr.next());
+		assertPointEquals("larger", new Point2D.Double(240.38, 320.053), itr.next());
 		assertTrue(itr.hasNext());
-		assertPointEquals("larger", new Point2D.Double(298.25, 236.88), itr.next());
+		assertPointEquals("larger", new Point2D.Double(193.302, 315.46), itr.next());
 		assertTrue(itr.hasNext());
-		assertPointEquals("largest", new Point2D.Double(319.13, 220.92), itr.next());
+		assertPointEquals("largest", new Point2D.Double(156.305, 284.95), itr.next());
 		assertFalse("No more", itr.hasNext());
 	}
 
@@ -36,13 +37,13 @@ public class SpiralIteratorTest {
 
 	@Test
 	public void isItsOwnIterator() throws Exception {
-		SpiralIterator itr = new SpiralIterator(new Point2D.Double(250, 250), 100.0d, 4);
+		EvenSpiralIterator itr = new EvenSpiralIterator(new Point2D.Double(250, 250), 100.0d, 4);
 		assertSame("Uses itself for an iterator", itr, itr.iterator());
 	}
 
 	@Test
 	public void removeNotSupported() throws Exception {
-		Iterator<Point2D> iterator = new SpiralIterator(new Point2D.Double(250, 250), 100.0d, 4).iterator();
+		Iterator<Point2D> iterator = new EvenSpiralIterator(new Point2D.Double(250, 250), 100.0d, 4).iterator();
 		try {
 			iterator.remove();
 			fail("Exception should have been thrown.");
@@ -53,16 +54,15 @@ public class SpiralIteratorTest {
 	
 	@Test
 	public void squashdown() throws Exception {
-		SpiralIterator itr = new SpiralIterator(new Point2D.Double(250, 250), 100.0d, 4, 2.5);
+		EvenSpiralIterator itr = new EvenSpiralIterator(new Point2D.Double(250, 250), 100.0d, 4, 2.5);
+		itr.next();
 		assertTrue(itr.hasNext());
-		assertPointEquals("start at center", new Point2D.Double(250, 250), itr.next());
-		assertTrue(itr.hasNext());
-		assertPointEquals("larger, but squashed", new Point2D.Double(311.95, 246.69), itr.next());
+		assertPointEquals("larger, but squashed", new Point2D.Double(225.96, 320.05), itr.next());
 	}
 	
 	@Test
 	public void initCenter() throws Exception {
-		SpiralIterator itr = new SpiralIterator(100.0d, 4, 2.5);
+		EvenSpiralIterator itr = new EvenSpiralIterator(100.0d, 4, 2.5);
 		try{
 			itr.next();
 			fail("exception should have been thrown");
@@ -75,11 +75,9 @@ public class SpiralIteratorTest {
 	
 	@Test
 	public void resetCenter() throws Exception {
-		SpiralIterator itr = new SpiralIterator(new Point2D.Double(250, 250), 100.0d, 4);
-		assertPointEquals("start at center", new Point2D.Double(250, 250), itr.next());
-		assertPointEquals("larger", new Point2D.Double(274.78, 246.69), itr.next());
+		EvenSpiralIterator itr = new EvenSpiralIterator(new Point2D.Double(250, 250), 100.0d, 4);
+		assertPointEquals("reset", new Point2D.Double(277.012, 292.075), itr.next());
 		itr.resetCenter(new Point2D.Double(150, 150));
-		assertPointEquals("start at a different center", new Point2D.Double(150, 150), itr.next());
-		assertPointEquals("larger, different center", new Point2D.Double(174.78, 146.69), itr.next());
+		assertPointEquals("larger, different center", new Point2D.Double(129.18, 195.46), itr.next());
 	}
 }

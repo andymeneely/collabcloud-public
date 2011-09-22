@@ -23,6 +23,7 @@ import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
 import org.chaoticbits.collabcloud.visualizer.placement.IPlaceStrategy;
+import org.chaoticbits.collabcloud.visualizer.spiral.SpiralIterator;
 
 /**
  * The main class for laying out tokens on an image.
