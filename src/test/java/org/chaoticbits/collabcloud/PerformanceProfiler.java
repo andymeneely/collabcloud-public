@@ -1,6 +1,10 @@
 package org.chaoticbits.collabcloud;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -18,9 +22,18 @@ public class PerformanceProfiler {
 
 	private Map<String, Long> totalActivity = new HashMap<String, Long>();
 	private Map<String, Long> pendingActivity = new HashMap<String, Long>();
+	private Map<String, Long> activityCounts = new HashMap<String, Long>();
 
 	public void start(String activity) {
+		increment(activity);
 		pendingActivity.put(activity, System.currentTimeMillis());
+	}
+
+	private void increment(String activity) {
+		Long count = activityCounts.get(activity);
+		if (count == null)
+			count = 0L;
+		activityCounts.put(activity, count + 1);
 	}
 
 	public void finish(String activity) {
@@ -32,8 +45,18 @@ public class PerformanceProfiler {
 	public String report() {
 		String str = "";
 		Set<Entry<String, Long>> set = totalActivity.entrySet();
-		for (Entry<String, Long> entry : set) {
-			str += entry.getKey() + ":\t" + entry.getValue();
+		if (!set.isEmpty()) {
+			List<Entry<String, Long>> list = new ArrayList<Entry<String, Long>>(set.size());
+			list.addAll(set);
+			Collections.sort(list, new Comparator<Entry<String, Long>>() {
+				public int compare(Entry<String, Long> o1, Entry<String, Long> o2) {
+					return -1 * o1.getValue().compareTo(o2.getValue());
+				}
+			});
+			str += "===Performance Results===\n";
+			for (Entry<String, Long> entry : list) {
+				str += entry.getKey() + ":\t" + entry.getValue() + "ms\t" + activityCounts.get(entry.getKey()) + "x\n";
+			}
 		}
 		return str;
 	}
@@ -47,9 +70,9 @@ public class PerformanceProfiler {
 	}
 
 	private long timeTaken(String activity, long now) {
-		Long time = pendingActivity.get(activity);
-		if (time == null)
+		Long started = pendingActivity.get(activity);
+		if (started == null)
 			return 0l;
-		return time - now;
+		return now - started;
 	}
 }
