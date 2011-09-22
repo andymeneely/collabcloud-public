@@ -21,9 +21,7 @@ import org.chaoticbits.collabcloud.vc.git.GitLoaderTest;
 import org.chaoticbits.collabcloud.visualizer.Intersector;
 import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.LayoutTokens;
-import org.chaoticbits.collabcloud.visualizer.SpiralIterator;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
-import org.chaoticbits.collabcloud.visualizer.font.BoundedLogFont;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
 import org.chaoticbits.collabcloud.visualizer.font.MathTransforms;
 import org.chaoticbits.collabcloud.visualizer.font.NonParametricFont;
@@ -31,12 +29,14 @@ import org.chaoticbits.collabcloud.visualizer.placement.CenteredTokenWrapper;
 import org.chaoticbits.collabcloud.visualizer.placement.IPlaceStrategy;
 import org.chaoticbits.collabcloud.visualizer.placement.ParentNetworkPlacement;
 import org.chaoticbits.collabcloud.visualizer.placement.RandomPlacement;
+import org.chaoticbits.collabcloud.visualizer.spiral.SpiralIterator;
 
 public class SummarizeRepo {
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 800;
+	private static final int MAX_TOKENS = 300;
 	private static final double LEAF_CUTOFF = 1.0d;
-	private static final int SPIRAL_STEPS = 1000;
+	private static final int SPIRAL_STEPS = 500;
 	private static final double SPIRAL_MAX_RADIUS = 350.0d;
 	private static final double SQUASHDOWN = 1;
 	private static final SpiralIterator spiral = new SpiralIterator(SPIRAL_MAX_RADIUS, SPIRAL_STEPS, SQUASHDOWN);
@@ -67,7 +67,6 @@ public class SummarizeRepo {
 
 	public static void main(String[] args) throws ParseException, IOException {
 		PropertyConfigurator.configure("log4j.properties");
-
 		CloudWeights weights;
 		weights = testBed();
 		// weights = thisRepo();
@@ -83,8 +82,9 @@ public class SummarizeRepo {
 		// ContributionNetworkPlacement(weights.tokens(),
 		// developers, new Dimension(WIDTH / 2, HEIGHT / 2), new Point2D.Double(2 * WIDTH / 3, 2 * HEIGHT /
 		// 3)));
-		new LayoutTokens(WIDTH, HEIGHT, 300, FONT_TRANSFORMER, checker, parentNetworkPlace, spiral, COLOR_SCHEME).makeImage(weights, new File(
-				"output/summarizerepo.png"), "PNG");
+		new LayoutTokens(WIDTH, HEIGHT, MAX_TOKENS, FONT_TRANSFORMER, checker, parentNetworkPlace, spiral, COLOR_SCHEME).makeImage(weights,
+				new File("output/summarizerepo.png"), "PNG");
+		// System.out.println(PerformanceProfiler.getInstance().report());
 	}
 
 	private static CloudWeights jboss() throws IOException {
