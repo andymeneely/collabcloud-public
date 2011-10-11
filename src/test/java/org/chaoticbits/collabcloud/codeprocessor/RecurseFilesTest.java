@@ -1,5 +1,6 @@
 package org.chaoticbits.collabcloud.codeprocessor;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -28,6 +29,16 @@ public class RecurseFilesTest {
 		File dir = new File("testgitrepo/mancala/game/BatchGame.java");
 		List<File> list = new RecurseJavaFiles().loadRecursive(dir);
 		assertEquals(0, list.size());
+	}
+
+	@Test
+	public void withDirectories() throws Exception {
+		File dir = new File("testgitrepo/mancala");
+		List<File> list = new RecurseJavaFiles(true).loadRecursive(dir);
+		sort(list);
+		assertEquals("testgitrepo\\mancala", list.get(0).getPath());
+		assertEquals("testgitrepo\\mancala\\game", list.get(2).getPath());
+		assertEquals("testgitrepo\\mancala\\player", list.get(6).getPath());
 	}
 
 	private void sort(List<File> list) {

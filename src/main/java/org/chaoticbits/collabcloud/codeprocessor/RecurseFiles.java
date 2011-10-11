@@ -8,9 +8,15 @@ import java.util.List;
 public class RecurseFiles {
 
 	private final FilenameFilter filter;
+	private final boolean includeDirectories;
 
 	public RecurseFiles(FilenameFilter filter) {
+		this(filter, false);
+	}
+
+	public RecurseFiles(FilenameFilter filter, boolean includeDirectories) {
 		this.filter = filter;
+		this.includeDirectories = includeDirectories;
 	}
 
 	/**
@@ -21,6 +27,8 @@ public class RecurseFiles {
 	public List<File> loadRecursive(File topDir) {
 		List<File> list = new ArrayList<File>();
 		if (topDir.isDirectory()) {
+			if(includeDirectories)
+				list.add(topDir);
 			File[] files = topDir.listFiles();
 			for (File file : files) {
 				if (file.isDirectory())
