@@ -6,15 +6,10 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.Set;
 
-import org.chaoticbits.collabcloud.CloudWeights;
 import org.chaoticbits.collabcloud.ISummarizable;
-import org.chaoticbits.collabcloud.codeprocessor.IncrementModifier;
-import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassSummarizable;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummaryToken;
 import org.chaoticbits.collabcloud.vc.Developer;
-import org.chaoticbits.collabcloud.vc.git.GitLoader;
-import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Test;
 
 public class SVNLoaderTest {
@@ -29,25 +24,22 @@ public class SVNLoaderTest {
 
 	@Test
 	public void allThreeDevs() throws Exception {
-		SVNLoader gitLoader = new SVNLoader(new File(TESTSVN_REPO), 1L, 6L);
+		SVNLoader gitLoader = new SVNLoader(new File(TESTSVN_REPO), "/trunk/", 1L, 6L);
 		Set<Developer> developers = gitLoader.getDevelopers();
 		assertEquals("Only 3 developers", 3, developers.size());
 		assertTrue("Contains Andy Meneely", developers.contains(new Developer("Andy Meneely", "andy.meneely@gmail.com")));
 		assertTrue("Contains Andy Programmer", developers.contains(new Developer("Andy Programmer", "apmeneel@ncsu.edu")));
 		assertTrue("Contains Kelly Doctor", developers.contains(new Developer("Kelly Doctor", "andy@se.rit.edu")));
 	}
-	// @Test
-	// public void bunchOfFiles() throws Exception {
-	// GitLoader gitLoader = new GitLoader(GIT_DIR);
-	// ObjectId since = gitLoader.getRepo().resolve(SECOND_COMMIT_ID);
-	// gitLoader.markSince(since);
-	// Set<ISummarizable> artifacts = gitLoader.getFilesChanged();
-	// assertTrue(artifacts.contains(new JavaClassSummarizable(new
-	// File("mancala/player/TimedNegaScoutPlayer.java"))));
-	// assertTrue(artifacts.contains(new JavaClassSummarizable(new
-	// File("mancala/player/GreedyPlayer.java"))));
-	// assertEquals("Only 2 files changed", 2, artifacts.size());
-	// }
+
+	@Test
+	public void bunchOfFiles() throws Exception {
+		SVNLoader svnLoader = new SVNLoader(new File(TESTSVN_REPO), "/trunk/", 3L, 6L);
+		Set<ISummarizable> artifacts = svnLoader.getFilesChanged();
+		assertEquals("Only 2 files changed", 2, artifacts.size());
+		assertTrue(artifacts.contains(new JavaClassSummarizable(new File("mancala/player/TimedNegaScoutPlayer.java"))));
+		assertTrue(artifacts.contains(new JavaClassSummarizable(new File("mancala/player/GreedyPlayer.java"))));
+	}
 	//
 	// @Test
 	// public void updateCloudWeightsMultiply() throws Exception {
