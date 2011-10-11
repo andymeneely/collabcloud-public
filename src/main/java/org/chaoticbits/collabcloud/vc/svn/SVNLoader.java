@@ -51,7 +51,7 @@ public class SVNLoader implements IVersionControlLoader {
 				Collection<SVNLogEntry> logEntries = (Collection<SVNLogEntry>) repo.log(new String[] { "" }, null, startRevision, endRevision,
 						true, true);
 				for (SVNLogEntry logEntry : logEntries) {
-					devs.add(new Developer(logEntry.getAuthor(), ""));
+					devs.add(new SVNDeveloperParser().parse(logEntry.getAuthor()));
 				}
 				loaded = true;
 			} catch (SVNException e) {

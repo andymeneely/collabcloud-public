@@ -29,14 +29,13 @@ public class SVNLoaderTest {
 
 	@Test
 	public void allThreeDevs() throws Exception {
-		SVNLoader gitLoader = new SVNLoader(new File(TESTSVN_REPO), 1L, 2L);
+		SVNLoader gitLoader = new SVNLoader(new File(TESTSVN_REPO), 1L, 6L);
 		Set<Developer> developers = gitLoader.getDevelopers();
 		assertEquals("Only 3 developers", 3, developers.size());
-		assertTrue(developers.contains(new Developer("Andy Meneely", "andy.meneely@gmail.com")));
-		assertTrue(developers.contains(new Developer("Andy Programmer", "apmeneel@ncsu.edu")));
-		assertTrue(developers.contains(new Developer("Kelly Doctor", "andy@se.rit.edu")));
+		assertTrue("Contains Andy Meneely", developers.contains(new Developer("Andy Meneely", "andy.meneely@gmail.com")));
+		assertTrue("Contains Andy Programmer", developers.contains(new Developer("Andy Programmer", "apmeneel@ncsu.edu")));
+		assertTrue("Contains Kelly Doctor", developers.contains(new Developer("Kelly Doctor", "andy@se.rit.edu")));
 	}
-
 	// @Test
 	// public void bunchOfFiles() throws Exception {
 	// GitLoader gitLoader = new GitLoader(GIT_DIR);
