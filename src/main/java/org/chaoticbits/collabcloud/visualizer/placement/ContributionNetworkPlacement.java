@@ -9,6 +9,7 @@ import java.util.Set;
 import org.chaoticbits.collabcloud.ISummaryToken;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
@@ -42,6 +43,15 @@ public class ContributionNetworkPlacement implements IPlaceStrategy {
 		if (layout == null)
 			computeLayout();
 		return centered(token);
+	}
+
+	/**
+	 * Primarily used for unit tests - not needed for typical use
+	 * @param layout
+	 */
+	public void set(AbstractLayout<ISummaryToken, Long> layout) {
+		this.layout = layout;
+		this.layout.setSize(size);
 	}
 
 	/*

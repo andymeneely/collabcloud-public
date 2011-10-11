@@ -12,9 +12,9 @@ public class CloudWeightsTest {
 	@Test
 	public void testToString() throws Exception {
 		CloudWeights weights = new CloudWeights();
-		assertEquals("",weights.toString());
+		assertEquals("", weights.toString());
 		weights.put(token("a"), 50.123);
-		assertEquals("a:\t50.123\n",weights.toString());
+		assertEquals("a:\t50.123\n", weights.toString());
 	}
 
 	private ISummaryToken token(String string) {
