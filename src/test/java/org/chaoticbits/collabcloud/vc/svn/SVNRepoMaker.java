@@ -81,8 +81,8 @@ public class SVNRepoMaker {
 				editor.applyTextDelta(svnpath, null);
 				Scanner scanner = new Scanner(file);
 				StringBuffer sb = new StringBuffer();
-				while (scanner.hasNext())
-					sb.append(scanner.next());
+				while (scanner.hasNextLine())
+					sb.append(scanner.nextLine() + "\r\n");
 				scanner.close();
 				String checksum = new SVNDeltaGenerator().sendDelta(svnpath, new ByteArrayInputStream(sb.toString().getBytes()), editor, true);
 				editor.closeFile(svnpath, checksum);
