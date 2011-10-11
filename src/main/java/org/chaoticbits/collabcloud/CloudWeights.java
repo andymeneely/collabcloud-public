@@ -11,6 +11,8 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
+
 
 /**
  * A simple wrapper for the table of identifiers and mappings to weights
@@ -100,5 +102,10 @@ public class CloudWeights {
 	 */
 	public Set<ISummaryToken> tokens() {
 		return weights.keySet();
+	}
+	
+	
+	public CloudWeights intersectWith(CloudWeights weights, IWeightModifier modifier){
+		throw new IllegalStateException("unimplemented!");
 	}
 }

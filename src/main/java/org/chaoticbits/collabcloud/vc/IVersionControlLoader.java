@@ -13,5 +13,5 @@ public interface IVersionControlLoader {
 
 	public abstract Set<ISummarizable> getFilesChanged() throws IOException;
 
-	public abstract CloudWeights crossWithDiff(CloudWeights weights, IWeightModifier modifier) throws IOException;
+	public abstract CloudWeights getCloudWeights() throws IOException;
 }

@@ -15,7 +15,9 @@ import org.chaoticbits.collabcloud.ISummarizable;
 import org.chaoticbits.collabcloud.ISummaryToken;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
 import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
+import org.chaoticbits.collabcloud.codeprocessor.java.JavaProjectSummarizer;
 import org.chaoticbits.collabcloud.vc.Developer;
+import org.chaoticbits.collabcloud.vc.DiffParser;
 import org.chaoticbits.collabcloud.vc.IVersionControlLoader;
 import org.chaoticbits.collabcloud.vc.TokenContributionNetwork;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -41,12 +43,13 @@ public class GitLoader implements IVersionControlLoader {
 
 	private FileRepository repo;
 	private ObjectId since;
-	private final GitDiffParser diffParser = new GitDiffParser();
+	private final DiffParser diffParser = new DiffParser();
 	private final Map<Developer, Set<ISummarizable>> contributions = new LinkedHashMap<Developer, Set<ISummarizable>>();
 	private boolean loaded = false;
 
 	// TODO Figure out when to pass these...
 	private CloudWeights weights = new CloudWeights();
+	@Deprecated
 	private IWeightModifier modifier = new MultiplyModifier(1.1);
 
 	public GitLoader(File repoDir) throws IOException {
@@ -99,11 +102,13 @@ public class GitLoader implements IVersionControlLoader {
 					ByteArrayOutputStream diff = new ByteArrayOutputStream();
 					DiffFormatter formatter = new DiffFormatter(diff);
 					formatter.setRepository(repo);
+					ISummarizable currentSummarizable = null;
 					try {
 						formatter.format(commit, parent);
 						Scanner scanner = new Scanner(diff.toString());
 						while (scanner.hasNextLine()) {
-							diffParser.processTextLine(scanner.nextLine(), weights, modifier, contributions, dev);
+							currentSummarizable = diffParser.processTextLine(scanner.nextLine(), weights, contributions, dev,
+									currentSummarizable);
 						}
 					} catch (IOException e) {
 						System.err.println("IO Exception on commit " + commit.getId().toString());
@@ -143,10 +148,24 @@ public class GitLoader implements IVersionControlLoader {
 		return since;
 	}
 
+	@Deprecated
 	public CloudWeights crossWithDiff(CloudWeights weights, IWeightModifier modifier) throws IOException {
 		this.weights = weights;
 		this.modifier = modifier;
-		loaded = false; //TODO Total hack - fix this
+		loaded = false; // TODO Total hack - fix this
+		load();
+		return weights;
+	}
+
+	/**
+	 * Based on {@link DiffParser}, return a set of CloudWeights that counts each token. Each token is
+	 * counted once. Use this CloudWeights to intersect with the CloudWeights returned from somethign like a
+	 * {@link JavaProjectSummarizer} to weigh it.
+	 * 
+	 * @return {@link CloudWeights}
+	 * @throws {@link IOException}
+	 */
+	public CloudWeights getCloudWeights() throws IOException {
 		load();
 		return weights;
 	}
@@ -173,4 +192,5 @@ public class GitLoader implements IVersionControlLoader {
 		}
 		return builder.toString();
 	}
+
 }
