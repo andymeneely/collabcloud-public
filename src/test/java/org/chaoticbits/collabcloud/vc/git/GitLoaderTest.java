@@ -1,6 +1,7 @@
 package org.chaoticbits.collabcloud.vc.git;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 import org.chaoticbits.collabcloud.CloudWeights;
 import org.chaoticbits.collabcloud.ISummarizable;
+import org.chaoticbits.collabcloud.ISummaryToken;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassSummarizable;
 import org.chaoticbits.collabcloud.vc.Developer;
 import org.chaoticbits.collabcloud.vc.DiffToken;
@@ -19,8 +21,9 @@ public class GitLoaderTest {
 	public static final String SECOND_COMMIT_ID = "bac7225dfb6ce2eb84c38f019defad21197514b6";
 
 	private static final File GIT_DIR = new File("testgitrepo/.git");
-	
-	private DiffToken timedNegaScout = new DiffToken(new JavaClassSummarizable(new File("mancala/player/TimedNegaScoutPlayer.java")), "TimedNegaScoutPlayer", "");
+
+	private DiffToken timedNegaScout = new DiffToken(new JavaClassSummarizable(new File("mancala/player/TimedNegaScoutPlayer.java")),
+			"TimedNegaScoutPlayer", "");
 	private DiffToken greedyPlayer = new DiffToken(new JavaClassSummarizable(new File("mancala/player/GreedyPlayer.java")), "GreedyPlayer", "");
 	private DiffToken getPlay = new DiffToken(new JavaClassSummarizable(new File("mancala/player/TimedNegaScoutPlayer.java")), "getPlay", "");
 	private DiffToken setLog = new DiffToken(null, "setLog", "");
@@ -56,12 +59,15 @@ public class GitLoaderTest {
 		gitLoader.markSince(since);
 
 		CloudWeights weights = gitLoader.getCloudWeights();
-		//the timedNegaScout cloud weight here is null!! why!?!?!?!
-		assertEquals(3.0, weights.get(timedNegaScout), 0.001);
-		assertEquals(2.0, weights.get(greedyPlayer), 0.001);
+		// the timedNegaScout cloud weight here is null!! why!?!?!?!
+		ISummaryToken next = weights.tokens().iterator().next();
+		next.getParentSummarizable();
+		assertNotNull("Token " + next + " should not have a null parent", next.getParentSummarizable());
 		assertEquals(5.0, weights.get(getPlay), 0.001);
 		assertEquals(0.0, weights.get(setLog), 0.001);
 		assertEquals(17.0, weights.get(play), 0.001);
+		assertEquals(2.0, weights.get(greedyPlayer), 0.001);
+		assertEquals(3.0, weights.get(timedNegaScout), 0.001);
 	}
 
 	@Test

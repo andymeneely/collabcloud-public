@@ -106,9 +106,13 @@ public class GitLoader implements IVersionControlLoader {
 					try {
 						formatter.format(commit, parent);
 						Scanner scanner = new Scanner(diff.toString());
-						while (scanner.hasNextLine()) {
-							currentSummarizable = diffParser.processTextLine(scanner.nextLine(), weights, contributions, dev,
-									currentSummarizable);
+						while (scanner.hasNextLine()) { // scan until the diff part
+							String line = scanner.nextLine();
+							if (diffParser.isFile(line)) {
+								currentSummarizable = diffParser.makeSummarizable(line);
+							}
+							if (currentSummarizable != null)
+								diffParser.processTextLine(line, weights, contributions, dev, currentSummarizable);
 						}
 					} catch (IOException e) {
 						System.err.println("IO Exception on commit " + commit.getId().toString());

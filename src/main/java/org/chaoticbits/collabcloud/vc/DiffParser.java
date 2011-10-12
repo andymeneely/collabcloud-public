@@ -21,7 +21,7 @@ public class DiffParser {
 	public DiffParser() {}
 
 	public ISummarizable processTextLine(String line, CloudWeights weights, ISummarizable summarizable) {
-		if (isFile(line) || ignoreIt(line))
+		if (ignoreIt(line))
 			return summarizable;
 		if (entries == null)
 			entries = weights.unsortedEntries();
@@ -34,23 +34,32 @@ public class DiffParser {
 		return summarizable;
 	}
 
-	public ISummarizable processTextLine(String line, CloudWeights weights, Map<Developer, Set<ISummarizable>> contributions, Developer developer,
-			ISummarizable summarizable) {
+	public ISummarizable processTextLine(String line, CloudWeights weights, Map<Developer, Set<ISummarizable>> contributions,
+			Developer developer, ISummarizable summarizable) {
 		if (isFile(line)) {
-			return addContribution(developer, contributions, line);
+			addContribution(developer, contributions, line);
 		}
 		return processTextLine(line, weights, summarizable);
 	}
 
-	private boolean isFile(String line) {
+	public boolean isFile(String line) {
 		return line.startsWith("+++");
+	}
+
+	/**
+	 * Requires that the line starts with +++ from the diff format
+	 * @param plusLine
+	 * @return
+	 */
+	public JavaClassSummarizable makeSummarizable(String plusLine) {
+		return new JavaClassSummarizable(new File(plusLine.substring(6)));
 	}
 
 	private JavaClassSummarizable addContribution(Developer developer, Map<Developer, Set<ISummarizable>> contributions, String line) {
 		Set<ISummarizable> files = contributions.get(developer);
 		if (files == null)
 			files = new LinkedHashSet<ISummarizable>();
-		JavaClassSummarizable summarizable = new JavaClassSummarizable(new File(line.substring(6)));
+		JavaClassSummarizable summarizable = makeSummarizable(line);
 		files.add(summarizable);
 		contributions.put(developer, files);
 		return summarizable;
