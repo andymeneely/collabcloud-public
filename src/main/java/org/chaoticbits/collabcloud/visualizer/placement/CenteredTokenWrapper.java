@@ -20,6 +20,7 @@ public class CenteredTokenWrapper implements IPlaceStrategy {
 		this.place = place;
 	}
 
+	//TODO Remove the Shape from this method
 	public Point2D getStartingPlace(ISummaryToken token, Shape shape) {
 		Point2D ul = place.getStartingPlace(token, shape);
 		Rectangle2D bounds = shape.getBounds2D();
