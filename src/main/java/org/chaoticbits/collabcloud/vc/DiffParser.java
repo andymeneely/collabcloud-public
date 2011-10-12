@@ -16,15 +16,12 @@ public class DiffParser {
 	private final String[] ignorePrefixes = { "index", "diff", "@@", "Index:" };
 	private final String javaDelimiters = "[ ,;\\(\\)\\[\\]<>\\{\\}\\.:&\\|\\/\\+\\-]";
 	private final Pattern wordRegex = Pattern.compile("[a-zA-Z][\\w]+");
-	private Set<Entry<ISummaryToken, Double>> entries;
 
 	public DiffParser() {}
 
 	public ISummarizable processTextLine(String line, CloudWeights weights, ISummarizable summarizable) {
 		if (ignoreIt(line))
 			return summarizable;
-		if (entries == null)
-			entries = weights.unsortedEntries();
 		String[] lineTokens = line.split(javaDelimiters);
 		for (String lineToken : lineTokens) {
 			lineToken = lineToken.trim();
