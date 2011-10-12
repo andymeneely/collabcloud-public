@@ -10,4 +10,6 @@ public interface ISummaryToken {
 	
 	abstract public ITokenType getType();
 	
+	abstract public <T> T accept(ISummaryTokenVisitor<T> visitor);
+	
 }

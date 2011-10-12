@@ -2,9 +2,10 @@ package org.chaoticbits.collabcloud.vc;
 
 import org.chaoticbits.collabcloud.ISummarizable;
 import org.chaoticbits.collabcloud.ISummaryToken;
+import org.chaoticbits.collabcloud.ISummaryTokenVisitor;
 import org.chaoticbits.collabcloud.ITokenType;
 
-public class Developer implements ISummaryToken{
+public class Developer implements ISummaryToken {
 	private String name = "";
 	private String email = "";
 
@@ -30,7 +31,7 @@ public class Developer implements ISummaryToken{
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	//TODO this should be interfaced out to get an image...or something
+	// TODO this should be interfaced out to get an image...or something
 	public String getToken() {
 		return name;
 	}
@@ -42,7 +43,7 @@ public class Developer implements ISummaryToken{
 	public ITokenType getType() {
 		return DeveloperTokenType.COMMITTER;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -72,5 +73,9 @@ public class Developer implements ISummaryToken{
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	public <T> T accept(ISummaryTokenVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 }

@@ -3,13 +3,11 @@ package org.chaoticbits.collabcloud.vc;
 import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.chaoticbits.collabcloud.CloudWeights;
 import org.chaoticbits.collabcloud.ISummarizable;
-import org.chaoticbits.collabcloud.ISummaryToken;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaClassSummarizable;
 
 public class DiffParser {

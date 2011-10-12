@@ -2,8 +2,8 @@ package org.chaoticbits.collabcloud.vc;
 
 import org.chaoticbits.collabcloud.ISummarizable;
 import org.chaoticbits.collabcloud.ISummaryToken;
+import org.chaoticbits.collabcloud.ISummaryTokenVisitor;
 import org.chaoticbits.collabcloud.ITokenType;
-import org.chaoticbits.collabcloud.codeprocessor.java.JavaSummaryToken;
 
 public class DiffToken implements ISummaryToken {
 
@@ -73,4 +73,8 @@ public class DiffToken implements ISummaryToken {
 		return token + "(" + fullName + ", " + summarizable + ")";
 	}
 
+	public <T> T accept(ISummaryTokenVisitor<T> visitor) {
+		return visitor.visit(this);
+	}
+	
 }

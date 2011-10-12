@@ -2,6 +2,7 @@ package org.chaoticbits.collabcloud.codeprocessor.java;
 
 import org.chaoticbits.collabcloud.ISummarizable;
 import org.chaoticbits.collabcloud.ISummaryToken;
+import org.chaoticbits.collabcloud.ISummaryTokenVisitor;
 
 /**
  * A specific element of a Java class. Could be a method name, variable name,
@@ -74,5 +75,9 @@ public class JavaSummaryToken implements ISummaryToken {
 	@Override
 	public String toString() {
 		return token + "(" + type + ", " + fullName + ", " + summarizable + ")";
+	}
+	
+	public <T> T accept(ISummaryTokenVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 }
