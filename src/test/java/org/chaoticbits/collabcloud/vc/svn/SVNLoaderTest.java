@@ -48,8 +48,8 @@ public class SVNLoaderTest {
 		SVNLoader svnLoader = new SVNLoader(new File(TESTSVN_REPO), "/trunk/", 4L, 6L);
 
 		CloudWeights weights = svnLoader.getCloudWeights();
-		assertEquals(1.0, weights.get(timedNegaScout), 0.001);
-		assertEquals(2.0, weights.get(greedyPlayer), 0.001);
+		assertEquals(2.0, weights.get(timedNegaScout), 0.001);
+		assertEquals(4.0, weights.get(greedyPlayer), 0.001);
 		assertEquals(2.0, weights.get(getPlay), 0.001);
 		assertEquals(0.0, weights.get(setLog), 0.001);
 		assertEquals(18.0, weights.get(play), 0.001);
