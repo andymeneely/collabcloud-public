@@ -103,9 +103,4 @@ public class CloudWeights {
 	public Set<ISummaryToken> tokens() {
 		return weights.keySet();
 	}
-	
-	
-	public CloudWeights intersectWith(CloudWeights weights, IWeightModifier modifier){
-		throw new IllegalStateException("unimplemented!");
-	}
 }

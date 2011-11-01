@@ -19,9 +19,18 @@ public class DeveloperTest {
 		assertFalse(new Developer("abc", "def").equals(new Developer("abc", null)));
 		assertFalse(new Developer("abc", "def").equals(null));
 		assertEquals(new Developer(null, null),new Developer(null, null));
-	
+		try{
+			something();
+		} catch(Exception e){
+			
+		}
+		Thread.currentThread().getStackTrace();
 	}
 	
+	private void something() {
+		throw new IllegalStateException("unimplemented!");
+	}
+
 	@Test
 	public void getDeveloperStuff() throws Exception {
 		Developer dev = new Developer("abc", "def");
