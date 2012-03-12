@@ -1,8 +1,5 @@
 package org.chaoticbits.collabcloud;
 
-
-
-
 import japa.parser.ParseException;
 
 import java.awt.Dimension;
@@ -15,7 +12,6 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.chaoticbits.collabcloud.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
 import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaColorScheme;
@@ -26,9 +22,8 @@ import org.chaoticbits.collabcloud.visualizer.Intersector;
 import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.LayoutTokens;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
+import org.chaoticbits.collabcloud.visualizer.font.BoundedLogFont;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
-import org.chaoticbits.collabcloud.visualizer.font.MathTransforms;
-import org.chaoticbits.collabcloud.visualizer.font.NonParametricFont;
 import org.chaoticbits.collabcloud.visualizer.placement.CenteredTokenWrapper;
 import org.chaoticbits.collabcloud.visualizer.placement.IPlaceStrategy;
 import org.chaoticbits.collabcloud.visualizer.placement.ParentNetworkPlacement;
@@ -38,7 +33,7 @@ import org.chaoticbits.collabcloud.visualizer.spiral.SpiralIterator;
 public class SummarizeRepo {
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 800;
-	private static final int MAX_TOKENS = 300;
+	private static final int MAX_TOKENS = 100;
 	private static final double LEAF_CUTOFF = 1.0d;
 	private static final int SPIRAL_STEPS = 500;
 	private static final double SPIRAL_MAX_RADIUS = 350.0d;
@@ -51,9 +46,11 @@ public class SummarizeRepo {
 	private static final String THIS_REPO_SECOND_COMMIT_ID = "4cfde077a84185b06117bcff5d47c53644463b1f";
 	private static final File JENKINS_REPO = new File("c:/data/jenkins");
 	private static final String JENKINS_BACK_LIMIT_COMMIT_ID = "df1094651bdefeda57d974a97907521eb21aef7b";
+	private static final File JUNIT_REPO = new File("g:/data/junit");
+	private static final String JUNIT_BACK_LIMIT_COMMIT_ID = "403f761da11bdaf9a03538139e7ae51601c36b0e";
 	private static final Random RAND = new Random();
-	private static final IPlaceStrategy RANDOM_PLACE_STRATEGY = new CenteredTokenWrapper(new RandomPlacement(RAND, new Rectangle2D.Double(
-			WIDTH / 4, HEIGHT / 4, WIDTH / 4, HEIGHT / 4)));
+	private static final IPlaceStrategy RANDOM_PLACE_STRATEGY = new CenteredTokenWrapper(new RandomPlacement(RAND, new Rectangle2D.Double(WIDTH / 4,
+			HEIGHT / 4, WIDTH / 4, HEIGHT / 4)));
 
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SummarizeRepo.class);
 	private static IWeightModifier modifier = new MultiplyModifier(1.2);
@@ -72,22 +69,24 @@ public class SummarizeRepo {
 	public static void main(String[] args) throws ParseException, IOException {
 		PropertyConfigurator.configure("log4j.properties");
 		CloudWeights weights;
-		weights = testBed();
+		// weights = testBed();
+		weights = junit();
 		// weights = thisRepo();
 		// weights = jenkins();
 		// weights = jboss();
 		// System.out.println("==Weights after Diff Adjustment==");
 		// System.out.println(weights);
-		// IFontTransformer FONT_TRANSFORMER = new BoundedLogFont(INITIAL_FONT, weights, MAX_FONT_SIZE);
-		IFontTransformer FONT_TRANSFORMER = new NonParametricFont(INITIAL_FONT, weights, MathTransforms.fourthPower, MAX_FONT_SIZE);
-		IPlaceStrategy parentNetworkPlace = new CenteredTokenWrapper(new ParentNetworkPlacement(weights.tokens(), new Dimension(WIDTH / 2,
-				HEIGHT / 2), new Point2D.Double(3 * WIDTH / 4, 3 * HEIGHT / 4)));
+		IFontTransformer FONT_TRANSFORMER = new BoundedLogFont(INITIAL_FONT, weights, MAX_FONT_SIZE);
+		// IFontTransformer FONT_TRANSFORMER = new NonParametricFont(INITIAL_FONT, weights,
+		// MathTransforms.fourthPower, MAX_FONT_SIZE);
+		IPlaceStrategy parentNetworkPlace = new CenteredTokenWrapper(new ParentNetworkPlacement(weights.tokens(), new Dimension(WIDTH / 2, HEIGHT / 2),
+				new Point2D.Double(3 * WIDTH / 4, 3 * HEIGHT / 4)));
 		// IPlaceStrategy contributionNetworkPlaceStrategy = new CenteredTokenWrapper(new
 		// ContributionNetworkPlacement(weights.tokens(),
 		// developers, new Dimension(WIDTH / 2, HEIGHT / 2), new Point2D.Double(2 * WIDTH / 3, 2 * HEIGHT /
 		// 3)));
-		new LayoutTokens(WIDTH, HEIGHT, MAX_TOKENS, FONT_TRANSFORMER, checker, parentNetworkPlace, spiral, COLOR_SCHEME).makeImage(weights,
-				new File("output/summarizerepo.png"), "PNG");
+		new LayoutTokens(WIDTH, HEIGHT, MAX_TOKENS, FONT_TRANSFORMER, checker, parentNetworkPlace, spiral, COLOR_SCHEME).makeImage(weights, new File(
+				"output/summarizerepo.png"), "PNG");
 		// System.out.println(PerformanceProfiler.getInstance().report());
 	}
 
@@ -104,9 +103,15 @@ public class SummarizeRepo {
 		log.info("Summarizing the project...");
 		CloudWeights weights = new JavaProjectSummarizer().summarize(new File(JENKINS_REPO.getAbsolutePath()));
 		log.info("Weighting against the repo...");
-		// weights = new GitLoader(new File(JENKINS_REPO.getAbsolutePath() + "/.git"),
-		// JENKINS_BACK_LIMIT_COMMIT_ID).crossWithDiff(weights,
-		// modifier);
+		weights = new GitLoader(new File(JENKINS_REPO.getAbsolutePath() + "/.git"), JENKINS_BACK_LIMIT_COMMIT_ID).crossWithDiff(weights, modifier);
+		return weights;
+	}
+
+	private static CloudWeights junit() throws IOException {
+		log.info("Summarizing the project...");
+		CloudWeights weights = new JavaProjectSummarizer().summarize(new File(JUNIT_REPO.getAbsolutePath()));
+		log.info("Weighting against the repo...");
+		weights = new GitLoader(new File(JUNIT_REPO.getAbsolutePath() + "/.git"), JUNIT_BACK_LIMIT_COMMIT_ID).crossWithDiff(weights, modifier);
 		return weights;
 	}
 
