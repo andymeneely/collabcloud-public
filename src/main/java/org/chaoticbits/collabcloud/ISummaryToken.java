@@ -2,6 +2,7 @@ package org.chaoticbits.collabcloud;
 
 public interface ISummaryToken {
 
+	//TODO A token should have multiple summarizables
 	abstract public ISummarizable getParentSummarizable();
 
 	abstract public String getToken();
