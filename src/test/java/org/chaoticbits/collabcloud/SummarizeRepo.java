@@ -7,9 +7,12 @@ import java.awt.Font;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
@@ -62,7 +65,7 @@ public class SummarizeRepo {
 	private static final Intersector intersector = new Intersector(10, LEAF_CUTOFF);
 	private static final IHitCheck<Shape> checker = new IHitCheck<Shape>() {
 		public boolean hits(Shape a, Shape b) {
-			return intersector.intersect(a, b);
+			return intersector.hits(a, b);
 		}
 	};
 
@@ -85,8 +88,11 @@ public class SummarizeRepo {
 		// ContributionNetworkPlacement(weights.tokens(),
 		// developers, new Dimension(WIDTH / 2, HEIGHT / 2), new Point2D.Double(2 * WIDTH / 3, 2 * HEIGHT /
 		// 3)));
-		new LayoutTokens(WIDTH, HEIGHT, MAX_TOKENS, FONT_TRANSFORMER, checker, parentNetworkPlace, spiral, COLOR_SCHEME).makeImage(weights, new File(
+		BufferedImage bi = new LayoutTokens(WIDTH, HEIGHT, MAX_TOKENS, FONT_TRANSFORMER, checker, parentNetworkPlace, spiral, COLOR_SCHEME).makeImage(weights, new File(
 				"output/summarizerepo.png"), "PNG");
+		log.info("Writing image...");
+		ImageIO.write(bi, "PNG", new File("output/summarizerepo.png"));
+		log.info("Done!");
 		// System.out.println(PerformanceProfiler.getInstance().report());
 	}
 

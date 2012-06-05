@@ -97,7 +97,7 @@ public class RandomFun {
 					nextShape = rotateInstance.createTransformedShape(nextShape);
 				}
 				for (Shape placed : placedShapes) {
-					if (intersector.intersect(nextShape, placed)) {
+					if (intersector.hits(nextShape, placed)) {
 						canPlace = false;
 						int randColor = (int) (Math.random() * 200.0f + 25.0f);
 						g2d.setColor(new Color(randColor, randColor, randColor));

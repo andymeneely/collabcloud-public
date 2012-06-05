@@ -32,7 +32,8 @@ import org.chaoticbits.collabcloud.visualizer.spiral.SpiralIterator;
  * 
  */
 public class LayoutTokens {
-	private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(new AffineTransform(), true, true);
+	private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(new AffineTransform(), true,
+			true);
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LayoutTokens.class);
 	private final int width;
 	private final int height;
@@ -55,19 +56,17 @@ public class LayoutTokens {
 		this.colorScheme = colorScheme;
 	}
 
-	public void makeImage(CloudWeights weights, File outputImageFile, String imageFormat) throws IOException {
+	public BufferedImage makeImage(CloudWeights weights, File outputImageFile, String imageFormat) {
 		log.info("Laying out tokens...");
 		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setTransform(new AffineTransform()); // fixes upside down problem
 		setRenderingHints(g2d);
 		layoutTokens(g2d, weights);
-		log.info("Writing image...");
-		ImageIO.write(bi, "PNG", new File("output/summarizerepo.png"));
-		log.info("Done!");
+		return bi;
 	}
 
-	private void layoutTokens(Graphics2D g2d, CloudWeights weights) throws IOException {
+	private void layoutTokens(Graphics2D g2d, CloudWeights weights) {
 		initImage(g2d);
 		LastHitCache<Shape> placedShapes = new LastHitCache<Shape>(checker);
 		List<Entry<ISummaryToken, Double>> entries = weights.sortedEntries();
@@ -84,8 +83,8 @@ public class LayoutTokens {
 			Point2D last = startingPlace;
 			while (spiral.hasNext()) {
 				Point2D next = spiral.next();
-				nextShape = AffineTransform.getTranslateInstance(next.getX() - last.getX(), next.getY() - last.getY()).createTransformedShape(
-						nextShape);
+				nextShape = AffineTransform.getTranslateInstance(next.getX() - last.getX(), next.getY() - last.getY())
+						.createTransformedShape(nextShape);
 				last = next;
 				if (!placedShapes.hitNCache(nextShape)) {
 					g2d.setColor(colorScheme.lookup(entry.getKey(), weights));
@@ -99,7 +98,8 @@ public class LayoutTokens {
 	}
 
 	private void setRenderingHints(Graphics2D g2d) {
-		RenderingHints renderHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		RenderingHints renderHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
 		renderHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHints(renderHints);
 	}
