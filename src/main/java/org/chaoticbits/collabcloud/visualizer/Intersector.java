@@ -5,7 +5,9 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Intersector {
+import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
+
+public class Intersector implements IHitCheck<Shape>{
 
 	private final int recursiveDepth;
 	private boolean cutOffSmallLeaf = false;
@@ -25,7 +27,7 @@ public class Intersector {
 		this.cutOffLeafSize = cutOffLeafSize;
 	}
 
-	public boolean intersect(Shape a, Shape b) {
+	public boolean hits(Shape a, Shape b) {
 		Rectangle2D aBounds = a.getBounds2D();
 		Rectangle2D bBounds = b.getBounds2D();
 		return intersectsRecursive(a, aBounds, b, bBounds, recursiveDepth);
@@ -65,4 +67,6 @@ public class Intersector {
 		boxes.add(new Rectangle2D.Double(box.getCenterX(), box.getCenterY(), box.getWidth() / 2.0d, box.getHeight() / 2.0d));// LR
 		return boxes;
 	}
+
+	
 }
