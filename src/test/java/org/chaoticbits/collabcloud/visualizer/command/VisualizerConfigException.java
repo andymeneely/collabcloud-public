@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.visualizer;
+package org.chaoticbits.collabcloud.visualizer.command;
 
 public class VisualizerConfigException extends Exception {
 

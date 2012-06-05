@@ -8,8 +8,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Random;
+import java.util.Set;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.chaoticbits.collabcloud.CloudWeights;
 import org.chaoticbits.collabcloud.codeprocessor.MultiplyModifier;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaColorScheme;
@@ -18,7 +22,6 @@ import org.chaoticbits.collabcloud.vc.IVersionControlLoader;
 import org.chaoticbits.collabcloud.vc.git.GitLoader;
 import org.chaoticbits.collabcloud.visualizer.Intersector;
 import org.chaoticbits.collabcloud.visualizer.LayoutTokens;
-import org.chaoticbits.collabcloud.visualizer.VisualizerConfigException;
 import org.chaoticbits.collabcloud.visualizer.font.BoundedLogFont;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
 import org.chaoticbits.collabcloud.visualizer.placement.CenteredTokenWrapper;
@@ -32,24 +35,25 @@ import org.chaoticbits.collabcloud.visualizer.spiral.SpiralIterator;
  * 
  */
 public class Visualize {
+	private static final String PROPS_PREFIX = "collabcloud.visualize.";
 
 	private final File srcTree;
-	private String since = "";
+
+	@Property private String since = "";
 	// TODO create an auto-detect loader so users don't need to set it
-	private IVersionControlLoader loader = null;
-	private int width = 800;
-	private int height = 800;
-	private int maxTokens = 100;
-	private double leafCutoff = 1.0d;
-	private int spiralSteps = 500;
+	@Property private IVersionControlLoader loader = null;
+	@Property private int width = 800;
+	@Property private int height = 800;
+	@Property private int maxTokens = 100;
+	@Property private double leafCutoff = 1.0d;
+	@Property private int spiralSteps = 500;
 	// TODO Make this parameter computable from the width/height
-	private double spiralMaxRadius = 350.0d;
+	@Property private double spiralMaxRadius = 350.0d;
 	// TODO Make this parameter computable from the width/height
-	private double squashdown = 1;
-	private SpiralIterator spiral = new SpiralIterator(spiralMaxRadius, spiralSteps, squashdown);
-	private long randSeed = System.nanoTime();
-	private int maxFontSize = 50;
-	private String font = "Lucida Sans";
+	@Property private double squashdown = 1;
+	@Property private long randSeed = System.nanoTime();
+	@Property private int maxFontSize = 50;
+	@Property private String font = "Lucida Sans";
 
 	public Visualize(File srcTree) {
 		this.srcTree = srcTree;
@@ -65,8 +69,8 @@ public class Visualize {
 		Random rand = new Random(randSeed);
 		LayoutTokens layoutTokens = new LayoutTokens(width, height, maxTokens, fontTransformer, new Intersector(10,
 				leafCutoff), new CenteredTokenWrapper(new ParentNetworkPlacement(weights.tokens(), new Dimension(
-				width / 2, height / 2), new Point2D.Double(3 * width / 4, 3 * height / 4))), spiral,
-				new JavaColorScheme(rand, 20));
+				width / 2, height / 2), new Point2D.Double(3 * width / 4, 3 * height / 4))), new SpiralIterator(
+				spiralMaxRadius, spiralSteps, squashdown), new JavaColorScheme(rand, 20));
 		BufferedImage bi = layoutTokens.makeImage(weights, new File("output/summarizerepo.png"), "PNG");
 		return bi;
 	}
@@ -80,6 +84,30 @@ public class Visualize {
 		if (!errors.isEmpty())
 			throw new VisualizerConfigException("Missing the following properties: "
 					+ errors.toString().substring(1, errors.toString().length() - 1));
+	}
+
+	public Visualize useGit() throws VisualizerConfigException {
+		try {
+			loader = new GitLoader(srcTree);
+			return this;
+		} catch (IOException e) {
+			throw new VisualizerConfigException(e);
+		}
+	}
+
+	public Visualize load(Properties props) throws VisualizerConfigException {
+		try {
+			Properties myProps = new Properties();
+			Set<Entry<Object, Object>> set = props.entrySet();
+			for (Entry<Object, Object> entry : set) {
+				if (entry.getKey().toString().startsWith(PROPS_PREFIX))
+					myProps.put(entry.getKey().toString().substring(PROPS_PREFIX.length()), entry.getValue());
+			}
+			BeanUtils.populate(this, myProps);
+			return this;
+		} catch (Exception e) {
+			throw new VisualizerConfigException(e);
+		}
 	}
 
 	public Visualize since(String sinceCommit) {
@@ -105,55 +133,35 @@ public class Visualize {
 
 	public void setMaxTokens(int maxTokens) {
 		this.maxTokens = maxTokens;
+
 	}
 
-	public Visualize setLeafCutoff(double leafCutoff) {
+	public void setLeafCutoff(double leafCutoff) {
 		this.leafCutoff = leafCutoff;
-		return this;
 	}
 
-	public Visualize setSpiralSteps(int spiralSteps) {
+	public void setSpiralSteps(int spiralSteps) {
 		this.spiralSteps = spiralSteps;
-		return this;
 	}
 
-	public Visualize setSpiralMaxRadius(double spiralMaxRadius) {
+	public void setSpiralMaxRadius(double spiralMaxRadius) {
 		this.spiralMaxRadius = spiralMaxRadius;
-		return this;
 	}
 
-	public Visualize setSquashdown(double squashdown) {
+	public void setSquashdown(double squashdown) {
 		this.squashdown = squashdown;
-		return this;
 	}
 
-	public Visualize setSpiral(SpiralIterator spiral) {
-		this.spiral = spiral;
-		return this;
-	}
-
-	public Visualize setRandSeed(long randSeed) {
+	public void setRandSeed(long randSeed) {
 		this.randSeed = randSeed;
-		return this;
 	}
 
-	public Visualize setMaxFontSize(int maxFontSize) {
+	public void setMaxFontSize(int maxFontSize) {
 		this.maxFontSize = maxFontSize;
-		return this;
 	}
 
-	public Visualize setFont(String font) {
+	public void setFont(String font) {
 		this.font = font;
-		return this;
-	}
-
-	public Visualize useGit() throws VisualizerConfigException {
-		try {
-			loader = new GitLoader(srcTree);
-			return this;
-		} catch (IOException e) {
-			throw new VisualizerConfigException(e);
-		}
 	}
 
 	public File getSrcTree() {
@@ -196,15 +204,11 @@ public class Visualize {
 		return squashdown;
 	}
 
-	public SpiralIterator getSpiral() {
-		return spiral;
-	}
-
 	public long getRandSeed() {
 		return randSeed;
 	}
 
-	public double getMaxFontSize() {
+	public int getMaxFontSize() {
 		return maxFontSize;
 	}
 
