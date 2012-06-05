@@ -36,7 +36,7 @@ public class RepoCloudView extends ViewPart {
 	 */
 	public void createPartControl(Composite parent) {
 		canvas = new Canvas(parent, SWT.NONE);
-		canvas.addPaintListener(new RepoCloudPaintListener());
+		canvas.addPaintListener(new RepoCloudPaintListener(parent));
 		setFocus();
 	}
 
