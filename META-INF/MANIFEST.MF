@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CollabCloud
-Bundle-SymbolicName: CollabCloud; singleton:=true
+Bundle-SymbolicName: org.chaoticbits.CollabCloud;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.chaoticbits.collabcloud.eclipse.Activator
 Require-Bundle: org.eclipse.ui,
@@ -12,7 +12,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: target/dependency/,
  .,
- target/dependency/antlr-runtime-3.4.jar,
+  target/dependency/antlr-runtime-3.4.jar,
  target/dependency/app-1.0.0-v20070606.jar,
  target/dependency/build-3.3.0-v20070612.jar,
    target/dependency/cglib-nodep-2.2.jar,
