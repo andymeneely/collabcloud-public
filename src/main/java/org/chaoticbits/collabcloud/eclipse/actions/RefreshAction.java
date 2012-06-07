@@ -5,6 +5,7 @@ import org.chaoticbits.collabcloud.eclipse.RepoCloudView;
 import org.eclipse.jface.action.Action;
 
 public class RefreshAction extends Action {
+	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(RefreshAction.class);
 
 	private final RepoCloudView view;
 
@@ -17,6 +18,7 @@ public class RefreshAction extends Action {
 
 	@Override
 	public void run() {
+		log.info("Refresh initialized.");
 		view.getCanvas().redraw();
 		view.getCanvas().update();
 	}

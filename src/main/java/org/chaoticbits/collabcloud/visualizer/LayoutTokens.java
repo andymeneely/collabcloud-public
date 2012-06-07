@@ -63,6 +63,7 @@ public class LayoutTokens {
 		g2d.setTransform(new AffineTransform()); // fixes upside down problem
 		setRenderingHints(g2d);
 		layoutTokens(g2d, weights);
+		log.info("Done laying out tokens.");
 		return bi;
 	}
 

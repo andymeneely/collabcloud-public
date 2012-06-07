@@ -2,10 +2,13 @@ package org.chaoticbits.collabcloud.eclipse.actions;
 
 import org.chaoticbits.collabcloud.eclipse.Activator;
 import org.chaoticbits.collabcloud.eclipse.RepoCloudView;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 public class SetSrcTreeAction extends Action {
+	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SetSrcTreeAction.class);
+
 	private final RepoCloudView view;
 
 	public SetSrcTreeAction(RepoCloudView view) {
@@ -17,6 +20,17 @@ public class SetSrcTreeAction extends Action {
 
 	@Override
 	public void run() {
-		MessageDialog.openInformation(view.getCanvas().getShell(), "Repository Cloud", "Set source tree! Not implemented (yet)");
+		ContainerSelectionDialog dialog = new ContainerSelectionDialog(view.getCanvas().getShell(), null, false,
+				"Select your source tree root:");
+		dialog.setTitle("Source Code Selection");
+		dialog.open();
+		Object[] results = dialog.getResult();
+		if (results != null) {
+			for (Object result : results) {
+				IPath path = (IPath) result;
+				log.info("Setting srcTree to " + path.toPortableString());
+				Activator.getDefault().getPluginPreferences().setValue("srcTree", path.toPortableString().substring(1));
+			}
+		}
 	}
 }

@@ -17,6 +17,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 
 public class RepoCloudPaintListener implements PaintListener {
+	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(RepoCloudPaintListener.class);
 
 	private final Composite parent;
 
@@ -27,8 +28,14 @@ public class RepoCloudPaintListener implements PaintListener {
 	public void paintControl(PaintEvent event) {
 		Visualize v;
 		try {
-			v = new Visualize(new File("C:/local/workspaces/workspace/CollabCloud/testgitrepo")).useGit().since(
-					"bac7225dfb6ce2eb84c38f019defad21197514b6");
+			File srcTree;
+			String srcTreeString = Activator.getDefault().getPluginPreferences().getString("srcTree");
+			if (srcTreeString == null || srcTreeString.length() == 0) {
+				srcTree = new File("C:/local/workspaces/workspace/CollabCloud/testgitrepo");
+			} else
+				srcTree = new File(srcTreeString);
+			log.info("Loading source tree of: " + srcTree.toString());
+			v = new Visualize(srcTree).useGit().since("bac7225dfb6ce2eb84c38f019defad21197514b6");
 			BufferedImage bi = v.call();
 			DirectColorModel colorModel = (DirectColorModel) bi.getColorModel();
 			PaletteData palette = new PaletteData(colorModel.getRedMask(), colorModel.getGreenMask(),
