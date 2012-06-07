@@ -1,5 +1,6 @@
 package org.chaoticbits.collabcloud.eclipse;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -27,6 +28,7 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		PropertyConfigurator.configure(getBundle().getEntry("log4j.properties"));
 		plugin = this;
 	}
 
