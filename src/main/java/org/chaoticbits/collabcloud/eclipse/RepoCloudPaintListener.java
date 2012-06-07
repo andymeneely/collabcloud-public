@@ -6,8 +6,6 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import org.chaoticbits.collabcloud.visualizer.command.Visualize;
 import org.chaoticbits.collabcloud.visualizer.command.VisualizerConfigException;
 import org.eclipse.swt.events.PaintEvent;
@@ -32,7 +30,6 @@ public class RepoCloudPaintListener implements PaintListener {
 			v = new Visualize(new File("C:/local/workspaces/workspace/CollabCloud/testgitrepo")).useGit().since(
 					"bac7225dfb6ce2eb84c38f019defad21197514b6");
 			BufferedImage bi = v.call();
-			ImageIO.write(bi, "PNG", new File("c:/local/SWT_AWT_IMAGE.png"));
 			DirectColorModel colorModel = (DirectColorModel) bi.getColorModel();
 			PaletteData palette = new PaletteData(colorModel.getRedMask(), colorModel.getGreenMask(),
 					colorModel.getBlueMask());
