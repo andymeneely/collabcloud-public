@@ -1,8 +1,16 @@
 package org.chaoticbits.collabcloud.eclipse;
 
+import org.chaoticbits.collabcloud.eclipse.actions.RefreshAction;
+import org.chaoticbits.collabcloud.eclipse.actions.SetSrcTreeAction;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -38,12 +46,26 @@ public class RepoCloudView extends ViewPart {
 		canvas = new Canvas(parent, SWT.NONE);
 		canvas.addPaintListener(new RepoCloudPaintListener(parent));
 		setFocus();
+		buildMenu();
 	}
 
 	/**
-	 * Passing the focus request to the viewer's control.
+	 * Passing the focus request to the view's canvas.
 	 */
 	public void setFocus() {
 		canvas.setFocus();
+	}
+
+	/**
+	 * Create and hook the different actions used in the view
+	 */
+	private void buildMenu() {
+		SetSrcTreeAction setSrcTree = new SetSrcTreeAction(canvas.getParent());
+		getViewSite().getActionBars().getMenuManager().add(setSrcTree);
+		getViewSite().getActionBars().getToolBarManager().add(setSrcTree);
+
+		RefreshAction refresh = new RefreshAction(canvas.getParent());
+		getViewSite().getActionBars().getMenuManager().add(refresh);
+		getViewSite().getActionBars().getToolBarManager().add(refresh);
 	}
 }
