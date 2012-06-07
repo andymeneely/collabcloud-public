@@ -1,3 +1,20 @@
 h1. What is it?
 
 Nothing yet. But hopefully it'll be a really cool tool eventually.
+
+h2. Eclipse plug-in & Maven dependencies
+
+h3. Installing on a new development machine
+
+If you are installing this on a fresh copy, then you need to run this command outside of Eclipse in the root directory (with a copy of Maven on your classpath) to copy the dependencies:
+
+$ mvn dependency:copy-dependencies
+
+This will copy all of the relevant dependencies (including SWT, Eclipse, and everything else) to the target/dependency folder, which gets included on the plug-in classpath.
+
+h3. Installing a new dependency 
+
+Do the following:
+* Add the dependency to the Maven pom.xml
+* Run mvn dependency:copy-dependencies
+* Update the jars.extra.classpath to have all of those new jars (including transitive dependencies)
