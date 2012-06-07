@@ -38,7 +38,7 @@ public class RepoCloudPaintListener implements PaintListener {
 					colorModel.getBlueMask());
 			ImageData data = new ImageData(v.getWidth(), v.getHeight(), colorModel.getPixelSize(), palette);
 			WritableRaster raster = bi.getRaster();
-			int[] pixelArray = new int[3];
+			int[] pixelArray = new int[4];
 			for (int y = 0; y < data.height; y++) {
 				for (int x = 0; x < data.width; x++) {
 					raster.getPixel(x, y, pixelArray);
