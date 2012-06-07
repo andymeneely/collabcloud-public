@@ -1,16 +1,16 @@
 package org.chaoticbits.collabcloud.eclipse.actions;
 
 import org.chaoticbits.collabcloud.eclipse.Activator;
+import org.chaoticbits.collabcloud.eclipse.RepoCloudView;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Composite;
 
 public class StopAction extends Action {
 
-	private final Composite parent;
+	private final RepoCloudView view;
 
-	public StopAction(Composite parent) {
-		this.parent = parent;
+	public StopAction(RepoCloudView view) {
+		this.view = view;
 		setText("Stop");
 		setToolTipText("Halt the current visualization process");
 		setImageDescriptor(Activator.getImageDescriptor("icons/progress_stop.gif"));
@@ -18,7 +18,7 @@ public class StopAction extends Action {
 
 	@Override
 	public void run() {
-		MessageDialog.openInformation(parent.getShell(), "Repository Cloud", "Refresh! Not implemented (yet)");
+		MessageDialog.openInformation(view.getCanvas().getShell(), "Repository Cloud", "Stop! Not implemented (yet)");
 	}
 
 }

@@ -1,16 +1,15 @@
 package org.chaoticbits.collabcloud.eclipse.actions;
 
 import org.chaoticbits.collabcloud.eclipse.Activator;
+import org.chaoticbits.collabcloud.eclipse.RepoCloudView;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Composite;
 
 public class RefreshAction extends Action {
 
-	private final Composite parent;
+	private final RepoCloudView view;
 
-	public RefreshAction(Composite parent) {
-		this.parent = parent;
+	public RefreshAction(RepoCloudView view) {
+		this.view = view;
 		setText("Refresh");
 		setToolTipText("Refresh visualization");
 		setImageDescriptor(Activator.getImageDescriptor("icons/refresh.gif"));
@@ -18,7 +17,8 @@ public class RefreshAction extends Action {
 
 	@Override
 	public void run() {
-		MessageDialog.openInformation(parent.getShell(), "Repository Cloud", "Refresh! Not implemented (yet)");
+		view.getCanvas().redraw();
+		view.getCanvas().update();
 	}
 
 }
