@@ -21,7 +21,8 @@ import org.chaoticbits.collabcloud.codeprocessor.java.JavaColorScheme;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaProjectSummarizer;
 import org.chaoticbits.collabcloud.vc.git.GitLoader;
 import org.chaoticbits.collabcloud.vc.git.GitLoaderTest;
-import org.chaoticbits.collabcloud.visualizer.Intersector;
+import org.chaoticbits.collabcloud.visualizer.AWTIntersector;
+import org.chaoticbits.collabcloud.visualizer.HierarchicalBoxIntersector;
 import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.chaoticbits.collabcloud.visualizer.LayoutTokens;
 import org.chaoticbits.collabcloud.visualizer.color.IColorScheme;
@@ -62,7 +63,7 @@ public class SummarizeRepo {
 	private static IColorScheme COLOR_SCHEME = new JavaColorScheme(RAND, 20);
 	private static double MAX_FONT_SIZE = 50.0d;
 
-	private static final Intersector intersector = new Intersector(10, LEAF_CUTOFF);
+	private static final AWTIntersector intersector = new AWTIntersector(10, LEAF_CUTOFF);
 	private static final IHitCheck<Shape> checker = new IHitCheck<Shape>() {
 		public boolean hits(Shape a, Shape b) {
 			return intersector.hits(a, b);

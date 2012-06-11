@@ -1,46 +1,49 @@
 package org.chaoticbits.collabcloud.visualizer;
 
-import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 
-public class Intersector implements IHitCheck<Shape>{
+abstract public class HierarchicalBoxIntersector<T> implements IHitCheck<T> {
 
 	private final int recursiveDepth;
 	private boolean cutOffSmallLeaf = false;
 	private double cutOffLeafSize = 1.0d;
 
-	public Intersector() {
+	public HierarchicalBoxIntersector() {
 		recursiveDepth = 10;
 	}
 
-	public Intersector(int recursiveDepth) {
+	public HierarchicalBoxIntersector(int recursiveDepth) {
 		this.recursiveDepth = recursiveDepth;
 	}
 
-	public Intersector(int recursiveDepth, double cutOffLeafSize) {
+	public HierarchicalBoxIntersector(int recursiveDepth, double cutOffLeafSize) {
 		this.recursiveDepth = recursiveDepth;
 		cutOffSmallLeaf = true;
 		this.cutOffLeafSize = cutOffLeafSize;
 	}
 
-	public boolean hits(Shape a, Shape b) {
-		Rectangle2D aBounds = a.getBounds2D();
-		Rectangle2D bBounds = b.getBounds2D();
+	public boolean hits(T a, T b) {
+		Rectangle2D aBounds = getBounds2D(a);
+		Rectangle2D bBounds = getBounds2D(b);
 		return intersectsRecursive(a, aBounds, b, bBounds, recursiveDepth);
 	}
 
-	private boolean intersectsRecursive(Shape a, Rectangle2D aBox, Shape b, Rectangle2D bBox, int depth) {
+	protected abstract Rectangle2D getBounds2D(T path);
+
+	protected abstract boolean intersects(T path, Rectangle2D box);
+
+	private boolean intersectsRecursive(T a, Rectangle2D aBox, T b, Rectangle2D bBox, int depth) {
 		if (depth <= 0)
 			return aBox.intersects(bBox); // hit our depth check - call it at whatever the boxes say
 		if (cutOffSmallLeaf && boxesTooSmall(aBox, bBox))
 			return aBox.intersects(bBox); // box is very small now - call it at the boxes now
 		if (!aBox.intersects(bBox))
 			return false; // Boxes don't intersect each other, no intersect here, prune!
-		if (!a.intersects(aBox) || !b.intersects(bBox))
+		if (!intersects(a, aBox) || !intersects(b, bBox))
 			return false; // One box is just whitespace, no intersect here, prune!!
 
 		// Ok, shapes intersect the boxes and boxes intersect each other - keep diving down
@@ -55,8 +58,8 @@ public class Intersector implements IHitCheck<Shape>{
 	}
 
 	private boolean boxesTooSmall(Rectangle2D aBox, Rectangle2D bBox) {
-		return aBox.getWidth() < cutOffLeafSize || aBox.getHeight() < cutOffLeafSize || bBox.getWidth() < cutOffLeafSize
-				|| bBox.getHeight() < cutOffLeafSize;
+		return aBox.getWidth() < cutOffLeafSize || aBox.getHeight() < cutOffLeafSize
+				|| bBox.getWidth() < cutOffLeafSize || bBox.getHeight() < cutOffLeafSize;
 	}
 
 	private List<Rectangle2D> makeBoxes(Rectangle2D box) {
@@ -64,9 +67,9 @@ public class Intersector implements IHitCheck<Shape>{
 		boxes.add(new Rectangle2D.Double(box.getX(), box.getY(), box.getWidth() / 2.0d, box.getHeight() / 2.0d)); // UL
 		boxes.add(new Rectangle2D.Double(box.getCenterX(), box.getY(), box.getWidth() / 2.0d, box.getHeight() / 2.0d));// UR
 		boxes.add(new Rectangle2D.Double(box.getX(), box.getCenterY(), box.getWidth() / 2.0d, box.getHeight() / 2.0d)); // LL
-		boxes.add(new Rectangle2D.Double(box.getCenterX(), box.getCenterY(), box.getWidth() / 2.0d, box.getHeight() / 2.0d));// LR
+		boxes.add(new Rectangle2D.Double(box.getCenterX(), box.getCenterY(), box.getWidth() / 2.0d,
+				box.getHeight() / 2.0d));// LR
 		return boxes;
 	}
 
-	
 }

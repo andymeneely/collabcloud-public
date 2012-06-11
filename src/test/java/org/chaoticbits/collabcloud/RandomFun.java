@@ -20,7 +20,7 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
-import org.chaoticbits.collabcloud.visualizer.Intersector;
+import org.chaoticbits.collabcloud.visualizer.AWTIntersector;
 
 public class RandomFun {
 
@@ -73,7 +73,7 @@ public class RandomFun {
 		Font font = new Font("Lucida Sans", Font.PLAIN, 150);
 		FontRenderContext frc = new FontRenderContext(null, true, true);
 		Set<Shape> placedShapes = new HashSet<Shape>();
-		Intersector intersector = new Intersector(10, 15.0d);
+		AWTIntersector intersector = new AWTIntersector(10, 15.0d);
 		for (Entry<String, Float> entry : map.entrySet()) {
 			System.out.printf("Laying out %s... ", entry.getKey());
 			char[] chars = entry.getKey().toCharArray();

@@ -20,7 +20,7 @@ import org.chaoticbits.collabcloud.codeprocessor.java.JavaColorScheme;
 import org.chaoticbits.collabcloud.codeprocessor.java.JavaProjectSummarizer;
 import org.chaoticbits.collabcloud.vc.IVersionControlLoader;
 import org.chaoticbits.collabcloud.vc.git.GitLoader;
-import org.chaoticbits.collabcloud.visualizer.Intersector;
+import org.chaoticbits.collabcloud.visualizer.AWTIntersector;
 import org.chaoticbits.collabcloud.visualizer.LayoutTokens;
 import org.chaoticbits.collabcloud.visualizer.font.BoundedLogFont;
 import org.chaoticbits.collabcloud.visualizer.font.IFontTransformer;
@@ -67,7 +67,7 @@ public class Visualize {
 		IFontTransformer fontTransformer = new BoundedLogFont(new Font(font, Font.BOLD, maxFontSize), weights,
 				maxFontSize);
 		Random rand = new Random(randSeed);
-		LayoutTokens layoutTokens = new LayoutTokens(width, height, maxTokens, fontTransformer, new Intersector(10,
+		LayoutTokens layoutTokens = new LayoutTokens(width, height, maxTokens, fontTransformer, new AWTIntersector(10,
 				leafCutoff), new CenteredTokenWrapper(new ParentNetworkPlacement(weights.tokens(), new Dimension(
 				width / 2, height / 2), new Point2D.Double(3 * width / 4, 3 * height / 4))), new SpiralIterator(
 				spiralMaxRadius, spiralSteps, squashdown), new JavaColorScheme(rand, 20));
