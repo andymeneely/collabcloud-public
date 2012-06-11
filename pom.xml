@@ -76,6 +76,11 @@
 			<version>3.3.0-v3346</version>
 		</dependency>
 		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>draw2d</artifactId>
+			<version>3.2.100-v20070529</version>
+		</dependency>
+		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.16</version>
