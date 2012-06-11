@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public enum WordExample {
+public enum AWTWordExample {
 
 	AM_SIMPLE_NOT_INTERSECT(bigA(), bigM()), AM_INSIDE_NOT_INTERSECT(bigA(), insideM()), AM_INTERSECT(bigA(), intersectM()), AM_INTERSECT2(
 			bigA(), intersectM2()), AM_REALLY_CLOSE_NO_INTERSECT(bigA(), reallyCloseM()), AM_REALLY_CLOSE_INTERSECT(bigA(),
@@ -43,7 +43,7 @@ public enum WordExample {
 	private final Shape first;
 	private final Shape second;
 
-	private WordExample(Shape first, Shape second) {
+	private AWTWordExample(Shape first, Shape second) {
 		this.first = first;
 		this.second = second;
 	}
@@ -101,7 +101,7 @@ public enum WordExample {
 
 	public static void main(String[] args) throws IOException {
 		// Output these to buffered images for visual comparison
-		for (WordExample eg : WordExample.values()) {
+		for (AWTWordExample eg : AWTWordExample.values()) {
 			BufferedImage bi = new BufferedImage(600, 600, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setColor(Color.WHITE);
