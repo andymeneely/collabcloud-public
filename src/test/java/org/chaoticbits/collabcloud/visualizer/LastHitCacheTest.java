@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.chaoticbits.collabcloud.visualizer.LastHitCache;
 import org.chaoticbits.collabcloud.visualizer.LastHitCache.IHitCheck;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;

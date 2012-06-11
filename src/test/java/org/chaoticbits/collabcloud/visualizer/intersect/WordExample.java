@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.visualizer;
+package org.chaoticbits.collabcloud.visualizer.intersect;
 
 import java.awt.Color;
 import java.awt.Font;

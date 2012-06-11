@@ -1,4 +1,4 @@
-package org.chaoticbits.collabcloud.visualizer;
+package org.chaoticbits.collabcloud.visualizer.intersect;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

@@ -1,10 +1,11 @@
-package org.chaoticbits.collabcloud.visualizer;
+package org.chaoticbits.collabcloud.visualizer.intersect;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Shape;
 
+import org.chaoticbits.collabcloud.visualizer.Intersector;
 import org.junit.Test;
 
 public class ShapeIntersectTest {
