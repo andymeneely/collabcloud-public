@@ -33,6 +33,7 @@ import org.chaoticbits.collabcloud.visualizer.placement.IPlaceStrategy;
 import org.chaoticbits.collabcloud.visualizer.placement.ParentNetworkPlacement;
 import org.chaoticbits.collabcloud.visualizer.placement.RandomPlacement;
 import org.chaoticbits.collabcloud.visualizer.spiral.SpiralIterator;
+import org.eclipse.osgi.service.resolver.NativeCodeDescription;
 
 public class SummarizeRepo {
 	private static final int WIDTH = 800;
@@ -48,13 +49,13 @@ public class SummarizeRepo {
 	private static final File JBOSS_AS_REPO = new File("c:/data/jboss-as");
 	private static final String JBOSS_AS_COMMIT_ID = "8321b7f693275c23eb9a515f8a6aed958d49b3b2";
 	private static final String THIS_REPO_SECOND_COMMIT_ID = "4cfde077a84185b06117bcff5d47c53644463b1f";
-	private static final File JENKINS_REPO = new File("c:/data/jenkins");
+	private static final File JENKINS_REPO = new File("c:/local/data/jenkins");
 	private static final String JENKINS_BACK_LIMIT_COMMIT_ID = "df1094651bdefeda57d974a97907521eb21aef7b";
-	private static final File JUNIT_REPO = new File("g:/data/junit");
+	private static final File JUNIT_REPO = new File("c:/local/data/junit");
 	private static final String JUNIT_BACK_LIMIT_COMMIT_ID = "403f761da11bdaf9a03538139e7ae51601c36b0e";
 	private static final Random RAND = new Random();
-	private static final IPlaceStrategy RANDOM_PLACE_STRATEGY = new CenteredTokenWrapper(new RandomPlacement(RAND, new Rectangle2D.Double(WIDTH / 4,
-			HEIGHT / 4, WIDTH / 4, HEIGHT / 4)));
+	private static final IPlaceStrategy RANDOM_PLACE_STRATEGY = new CenteredTokenWrapper(new RandomPlacement(RAND,
+			new Rectangle2D.Double(WIDTH / 4, HEIGHT / 4, WIDTH / 4, HEIGHT / 4)));
 
 	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SummarizeRepo.class);
 	private static IWeightModifier modifier = new MultiplyModifier(1.2);
@@ -73,8 +74,8 @@ public class SummarizeRepo {
 	public static void main(String[] args) throws ParseException, IOException {
 		PropertyConfigurator.configure("log4j.properties");
 		CloudWeights weights;
-		 weights = testBed();
-//		weights = junit();
+		// weights = testBed();
+		weights = junit();
 		// weights = thisRepo();
 		// weights = jenkins();
 		// weights = jboss();
@@ -83,14 +84,15 @@ public class SummarizeRepo {
 		IFontTransformer FONT_TRANSFORMER = new BoundedLogFont(INITIAL_FONT, weights, MAX_FONT_SIZE);
 		// IFontTransformer FONT_TRANSFORMER = new NonParametricFont(INITIAL_FONT, weights,
 		// MathTransforms.fourthPower, MAX_FONT_SIZE);
-		IPlaceStrategy parentNetworkPlace = new CenteredTokenWrapper(new ParentNetworkPlacement(weights.tokens(), new Dimension(WIDTH / 2, HEIGHT / 2),
-				new Point2D.Double(3 * WIDTH / 4, 3 * HEIGHT / 4)));
+		IPlaceStrategy parentNetworkPlace = new CenteredTokenWrapper(new ParentNetworkPlacement(weights.tokens(),
+				new Dimension(WIDTH / 2, HEIGHT / 2), new Point2D.Double(3 * WIDTH / 4, 3 * HEIGHT / 4)));
 		// IPlaceStrategy contributionNetworkPlaceStrategy = new CenteredTokenWrapper(new
 		// ContributionNetworkPlacement(weights.tokens(),
 		// developers, new Dimension(WIDTH / 2, HEIGHT / 2), new Point2D.Double(2 * WIDTH / 3, 2 * HEIGHT /
 		// 3)));
-		BufferedImage bi = new LayoutTokens(WIDTH, HEIGHT, MAX_TOKENS, FONT_TRANSFORMER, checker, parentNetworkPlace, spiral, COLOR_SCHEME).makeImage(weights, new File(
-				"output/summarizerepo.png"), "PNG");
+		BufferedImage bi = new LayoutTokens(WIDTH, HEIGHT, MAX_TOKENS, FONT_TRANSFORMER, checker, parentNetworkPlace,
+				spiral, COLOR_SCHEME).makeImage(weights, new File("output/summarizerepo.png"), "PNG");
+		// log.info("Shape-box intersection took: " + AWTIntersector.boxIntersectMS + "ms");
 		log.info("Writing image...");
 		ImageIO.write(bi, "PNG", new File("output/summarizerepo.png"));
 		log.info("Done!");
@@ -110,7 +112,8 @@ public class SummarizeRepo {
 		log.info("Summarizing the project...");
 		CloudWeights weights = new JavaProjectSummarizer().summarize(new File(JENKINS_REPO.getAbsolutePath()));
 		log.info("Weighting against the repo...");
-		weights = new GitLoader(new File(JENKINS_REPO.getAbsolutePath() + "/.git"), JENKINS_BACK_LIMIT_COMMIT_ID).crossWithDiff(weights, modifier);
+		weights = new GitLoader(new File(JENKINS_REPO.getAbsolutePath() + "/.git"), JENKINS_BACK_LIMIT_COMMIT_ID)
+				.crossWithDiff(weights, modifier);
 		return weights;
 	}
 
@@ -118,7 +121,8 @@ public class SummarizeRepo {
 		log.info("Summarizing the project...");
 		CloudWeights weights = new JavaProjectSummarizer().summarize(new File(JUNIT_REPO.getAbsolutePath()));
 		log.info("Weighting against the repo...");
-		weights = new GitLoader(new File(JUNIT_REPO.getAbsolutePath() + "/.git"), JUNIT_BACK_LIMIT_COMMIT_ID).crossWithDiff(weights, modifier);
+		weights = new GitLoader(new File(JUNIT_REPO.getAbsolutePath() + "/.git"), JUNIT_BACK_LIMIT_COMMIT_ID)
+				.crossWithDiff(weights, modifier);
 		return weights;
 	}
 
@@ -126,7 +130,8 @@ public class SummarizeRepo {
 		log.info("Summarizing the project...");
 		CloudWeights weights = new JavaProjectSummarizer().summarize(new File(THIS_REPO.getAbsolutePath() + "/src"));
 		log.info("Weighting against the repo...");
-		weights = new GitLoader(new File(THIS_REPO.getAbsolutePath() + "/.git"), THIS_REPO_SECOND_COMMIT_ID).crossWithDiff(weights, modifier);
+		weights = new GitLoader(new File(THIS_REPO.getAbsolutePath() + "/.git"), THIS_REPO_SECOND_COMMIT_ID)
+				.crossWithDiff(weights, modifier);
 		return weights;
 	}
 
@@ -134,7 +139,8 @@ public class SummarizeRepo {
 		log.info("Summarizing the project...");
 		CloudWeights weights = new JavaProjectSummarizer().summarize(TEST_BED);
 		log.info("Weighting against the repo...");
-		GitLoader gitLoader = new GitLoader(new File(TEST_BED.getAbsolutePath() + "/.git"), GitLoaderTest.SECOND_COMMIT_ID);
+		GitLoader gitLoader = new GitLoader(new File(TEST_BED.getAbsolutePath() + "/.git"),
+				GitLoaderTest.SECOND_COMMIT_ID);
 		weights = gitLoader.crossWithDiff(weights, modifier);
 		// TODO load contribution network stuff too
 		return weights;
