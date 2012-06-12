@@ -73,8 +73,8 @@ public class SummarizeRepo {
 	public static void main(String[] args) throws ParseException, IOException {
 		PropertyConfigurator.configure("log4j.properties");
 		CloudWeights weights;
-		// weights = testBed();
-		weights = junit();
+		 weights = testBed();
+//		weights = junit();
 		// weights = thisRepo();
 		// weights = jenkins();
 		// weights = jboss();
