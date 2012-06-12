@@ -1,9 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="target/dependency/cglib-nodep-2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/collections-generic-4.01.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/colt-1.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/commons-beanutils-1.8.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/commons-logging-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/concurrent-1.3.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/easymock-3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/javaparser-1.0.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/javassist-3.15.0-GA.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/jsch-0.1.44-1.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/jung-algorithms-2.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/jung-api-2.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/jung-graph-impl-2.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/jung-io-2.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/jung-samples-2.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/jung-visualization-2.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/junit-4.8.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/objenesis-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/powermock-api-easymock-1.4.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/powermock-api-support-1.4.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/powermock-core-1.4.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/powermock-module-junit4-1.4.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/powermock-module-junit4-common-1.4.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/powermock-reflect-1.4.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/stax-api-1.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/wstx-asl-3.2.6.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="target/dependency" sourcepath="target/dependency"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
