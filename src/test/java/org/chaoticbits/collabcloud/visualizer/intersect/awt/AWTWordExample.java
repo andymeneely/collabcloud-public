@@ -28,13 +28,13 @@ public enum AWTWordExample {
 	private static Font FONT;
 	private static FontRenderContext FRC;
 
-	private static Font getFont() {
+	public static Font getFont() {
 		if (FONT == null)
 			FONT = new Font("Franklin Gothic", Font.PLAIN, 150);
 		return FONT;
 	}
 
-	private static FontRenderContext getFRC() {
+	public static FontRenderContext getFRC() {
 		if (FRC == null)
 			FRC = new FontRenderContext(null, true, true);
 		return FRC;
@@ -93,7 +93,7 @@ public enum AWTWordExample {
 		return makeShape(deriveFont, getFRC(), "oranges", 200, 156);
 	}
 
-	private static Shape makeShape(Font font, FontRenderContext frc, String string, float x, float y) {
+	public static Shape makeShape(Font font, FontRenderContext frc, String string, float x, float y) {
 		char[] chars = string.toCharArray();
 		Shape aShape = font.layoutGlyphVector(frc, chars, 0, chars.length, 0).getOutline(x, y);
 		return aShape;
