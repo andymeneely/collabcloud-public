@@ -15,6 +15,13 @@
             class="org.chaoticbits.collabcloud.eclipse.RepoCloudView"
             id="org.chaoticbits.collabcloud.eclipse.RepoCloudView">
       </view>
+      <view
+            name="Graph Repo Cloud"
+            icon="icons/sample.gif"
+            category="CollabCloud_View"
+            class="org.chaoticbits.collabcloud.eclipse.ZestfulCloudView"
+            id="org.chaoticbits.collabcloud.eclipse.ZestfulCloudView">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
@@ -25,6 +32,12 @@
                relative="org.eclipse.ui.views.TaskList"
                relationship="right"
                id="org.chaoticbits.collabcloud.eclipse.RepoCloudView">
+         </view>
+          <view
+               ratio="0.5"
+               relative="org.eclipse.ui.views.TaskList"
+               relationship="right"
+               id="org.chaoticbits.collabcloud.eclipse.ZestfulCloudView">
          </view>
       </perspectiveExtension>
    </extension>
