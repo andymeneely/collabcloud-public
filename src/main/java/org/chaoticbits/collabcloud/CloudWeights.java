@@ -19,6 +19,8 @@ import org.chaoticbits.collabcloud.codeprocessor.IWeightModifier;
  * 
  * @author andy
  * 
+ * Making a change to try to commit
+ * 
  */
 public class CloudWeights {
 	private final Map<ISummaryToken, Double> weights = new LinkedHashMap<ISummaryToken, Double>();

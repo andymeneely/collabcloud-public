@@ -2,3 +2,4 @@
 *.class
 target/*
 testsvn/repo/*
+.DS_Store
